@@ -1,5 +1,9 @@
 import { useState } from "react";
 import { postRequest } from "../utils/api";
+import { Button } from "./ui/button";
+
+
+
 
 interface RegisterProps {
   onRegisterSuccess: () => void;
@@ -77,7 +81,7 @@ export function Register({ onRegisterSuccess }: RegisterProps) {
           value={birthdate}
           onChange={(e) => setBirthdate(e.target.value)}
         />
-        <button type="submit">Register</button>
+        <Button type="submit">Register</Button>
       </form>
       {message && <p>{message}</p>}
     </section>
