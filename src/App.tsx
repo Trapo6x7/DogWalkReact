@@ -1,27 +1,33 @@
-import { useState } from 'react';
-import { Welcome } from './components/Welcome';
+import { useState, useEffect } from 'react';
 import { Login } from './components/Login';
+import { Register } from './components/Register';
+import { Welcome } from './components/Welcome';
 
-function App() {
-  const [page, setPage] = useState('home'); // Gère la page actuelle
+export default function App() {
+  const [page, setPage] = useState<'login' | 'register' | 'welcome'>('login');
 
-  let currentPage;
-  if (page === 'home') {
-    currentPage = <Welcome />;
-  } 
-  else if (page === 'login') {
-    currentPage = <Login />;
-  }
+  const handleRegisterSuccess = () => {
+    localStorage.setItem('authToken', 'fake-jwt-token'); // à remplacer par le vrai token plus tard
+    setPage('welcome');
+  };
+
+  const handleLoginSuccess = () => {
+    localStorage.setItem('authToken', 'fake-jwt-token'); // à remplacer aussi
+    setPage('welcome');
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      setPage('welcome');
+    }
+  }, []);
 
   return (
-    <main>
-      {currentPage}
-      <nav>
-        <button onClick={() => setPage('home')}>Home</button>
-        <button onClick={() => setPage('login')}>Login</button>
-      </nav>
-    </main>
+    <>
+      {page === 'login' && <Login onLoginSuccess={handleLoginSuccess} onGoToRegister={() => setPage('register')} />}
+      {page === 'register' && <Register onRegisterSuccess={handleRegisterSuccess} />}
+      {page === 'welcome' && <Welcome />}
+    </>
   );
 }
-
-export default App;

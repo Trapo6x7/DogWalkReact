@@ -13,11 +13,14 @@ interface ApiResponse<T> {
       const response = await fetch(`${BASE_URL}${endpoint}`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/ld+json',
+          'Accept': 'application/ld+json',
         },
         body: JSON.stringify(body),
       });
   
+    console.log('Réponse du serveur:', response); 
+    
       if (!response.ok) {
         throw new Error('Erreur lors de la requête');
       }
