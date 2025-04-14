@@ -2,9 +2,6 @@ import { useState } from "react";
 import { postRequest } from "../utils/api";
 import { Button } from "./ui/button";
 
-
-
-
 interface RegisterProps {
   onRegisterSuccess: () => void;
 }
@@ -46,12 +43,24 @@ export function Register({ onRegisterSuccess }: RegisterProps) {
 
     if (response.error) {
       setMessage(response.error);
+      return;
+    }
+
+    const loginResponse = await postRequest<{ token: string }>("/login_check", {
+      username: email, password: password,
+    });
+
+    if (loginResponse.error) {
+      setMessage(
+        "Inscription réussie, mais échec de la connexion automatique."
+      );
     } else {
-      // Connexion de l'utilisateur après l'inscription
-      setMessage("Inscription réussie et connecté !");
+      localStorage.setItem("authToken", loginResponse.data.token);
+      setMessage("Inscription réussie et connexion automatique !");
       onRegisterSuccess();
     }
   };
+
 
   return (
     <section>
