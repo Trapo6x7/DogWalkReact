@@ -33,11 +33,21 @@ interface ApiResponse<T> {
   };
   
   // Fonction pour faire une requête GET générique
-  export const getRequest = async <T>(endpoint: string): Promise<ApiResponse<T>> => {
+  export const getRequest = async <T>(
+    endpoint: string,
+    headers: Record<string, string> = {}
+  ): Promise<ApiResponse<T>> => {
     try {
-      const response = await fetch(`${BASE_URL}${endpoint}`);
+      const response = await fetch(`${BASE_URL}${endpoint}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          ...headers,
+        },
+      });
+  
       if (!response.ok) {
-        throw new Error('Erreur lors de la requête');
+        throw new Error("Erreur lors de la requête");
       }
   
       const data = await response.json();
@@ -46,4 +56,3 @@ interface ApiResponse<T> {
       return { data: null as any, error: error.message };
     }
   };
-  
