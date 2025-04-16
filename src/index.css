@@ -70,7 +70,6 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  color: var(--primary-brown);
   display: flex;
   min-width: 320px;
   min-height: 100vh;
@@ -80,14 +79,22 @@ body {
 }
 
 main {
-display: flex;
-flex-direction: column;
-gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 h1 {
-  font-size: 3.2em;
+  font-size: 1.5rem;
   line-height: 1.1;
+  color: var(--primary-brown);
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.1;
+  font-weight: 200;
+  color: var(--secondary-brown);
 }
 
 button {
@@ -97,8 +104,8 @@ button {
   font-size: 0.8rem;
   font-weight: 500;
   font-family: inherit;
-  background-color: var(--primary-brown);
-  color: var(--secondary-green);
+  color: var(--primary-brown);
+  background-color: var(--secondary-green);
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -113,6 +120,10 @@ button {
   color: var(--secondary-green);
   cursor: pointer;
   transition: border-color 0.25s;
+}
+
+.bg-card2{
+  color: #da915d;
 }
 
 @theme inline {
@@ -195,4 +206,3 @@ button {
     @apply bg-background text-foreground;
   }
 }
-

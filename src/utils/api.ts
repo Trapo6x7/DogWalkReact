@@ -19,7 +19,7 @@ interface ApiResponse<T> {
         body: JSON.stringify(body),
       });
   
-    console.log('Réponse du serveur:', response); 
+    // console.log('Réponse du serveur:', response); 
     
       if (!response.ok) {
         throw new Error('Erreur lors de la requête');
@@ -56,3 +56,5 @@ interface ApiResponse<T> {
       return { data: null as any, error: error.message };
     }
   };
+
+  
