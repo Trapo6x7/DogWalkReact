@@ -91,7 +91,7 @@ export function Me() {
   };
 
   return (
-    <Card className="w-full max-w-sm bg-card h-[15rem] flex flex-col justify-between">
+    <Card className="w-full max-w-sm bg-card h-[13rem] flex flex-col justify-between">
       <CardHeader className="flex items-center gap-4">
       
           <div className="relative">
