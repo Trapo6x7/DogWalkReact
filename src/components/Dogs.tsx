@@ -35,10 +35,15 @@ export function Dogs() {
   }, []);
 
   return (
-    <Card className="w-full max-w-sm bg-card h-[13rem] flex flex-col justify-between">
+    <Card className="w-full max-w-sm bg-card h-[13rem] flex flex-col justify-around">
       <CardHeader>
-        <CardTitle> <h1>Mes chiens</h1></CardTitle>
-        <CardDescription><p>Gérer mes compagnons à quatre pattes</p></CardDescription>
+        <CardTitle>
+          {" "}
+          <h1>Mes chiens</h1>
+        </CardTitle>
+        <CardDescription>
+          {/* <p>Gérer mes compagnons à quatre pattes</p> */}
+        </CardDescription>
       </CardHeader>
 
       <CardContent>
@@ -53,7 +58,9 @@ export function Dogs() {
                   <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden">
                     {dog.image ? (
                       <img
-                        src={`${import.meta.env.VITE_API_URL}/uploads/images/${dog.image}`}
+                        src={`${import.meta.env.VITE_API_URL}/uploads/images/${
+                          dog.image
+                        }`}
                         alt={dog.name}
                         className="w-full h-full object-cover"
                       />

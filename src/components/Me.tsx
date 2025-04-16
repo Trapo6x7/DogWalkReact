@@ -91,12 +91,12 @@ export function Me() {
   };
 
   return (
-    <Card className="w-full max-w-sm bg-card h-[13rem] flex flex-col justify-between">
+    <Card className="w-full max-w-sm bg-card h-[13rem] flex flex-col justify-around">
       <CardHeader className="flex items-center gap-4">
       
           <div className="relative">
             {/* Avatar ou image de profil */}
-            <div className="w-20 h-20 rounded-full bg-gray-200 overflow-hidden">
+            <div className="w-30 h-30 rounded-full bg-gray-200 overflow-hidden">
               {userData?.imageFilename ? (
                 <img
                   src={`${import.meta.env.VITE_API_URL}/uploads/images/${
