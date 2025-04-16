@@ -6,6 +6,7 @@ export interface UserData {  // Renamed from User to avoid conflicts
   dogs: Dog[];
   birthdate: string;
   score: number;
+  description?: string;
 }
 
 export interface Dog {
