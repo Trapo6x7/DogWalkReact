@@ -1,8 +1,11 @@
 import { Dogs } from "./Dogs";
 import { Me } from "./Me";
 
+
 export function Welcome() {
   return (
+    <>
+
     <section id="home" className="flex flex-wrap p-20 h-full">
       <article className="flex justify-center items-center w-1/3">
         <Me />
@@ -16,5 +19,6 @@ export function Welcome() {
         <Dogs />
       </article>
     </section>
+    </>
   );
 }
