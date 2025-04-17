@@ -39,6 +39,7 @@ export function EditProfileForm({
     };
   
     const handleSave = async (updatedData: UserData) => {
+      console.log(updatedData);
       if (!userData) {
         console.error("userData est null, impossible de sauvegarder.");
         return;
@@ -64,12 +65,11 @@ export function EditProfileForm({
   
         console.log("Profil mis à jour avec succès");
   
-        // Mettre à jour userData localement après la sauvegarde
         setUserData(updatedData);
   
-        // Rafraîchir les données dans le parent
-        onRefresh(); // Appeler la fonction pour mettre à jour les données
-        onCancel(); // Revenir à l'état normal
+      
+        onRefresh();
+        onCancel(); 
       } catch (error) {
         console.error("Erreur:", error);
       }

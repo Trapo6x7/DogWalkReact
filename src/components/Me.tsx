@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
-import { ProfileCard } from "./ProfileCard"; // Assure-toi de bien importer ProfileCard
-import { Button } from "./ui/button"; // Si tu utilises un bouton ici
+import { ProfileCard } from "./ProfileCard";
+import { Button } from "./ui/button";
 import { getRequest } from "../utils/api";
 import { UserData } from "../types/Interfaces";
 import { EditProfileForm } from "./EditProfileForm";
+import EditPasswordForm from "./EditPasswordForm"; // Import du formulaire de changement de mot de passe
 
 function calculateAge(birthdate: string): number {
-  const birthDate = new Date(birthdate); // Convertir la date de naissance en objet Date
-  const today = new Date(); // Obtenir la date actuelle
-  let age = today.getFullYear() - birthDate.getFullYear(); // Calculer la différence d'années
+  const birthDate = new Date(birthdate);
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
 
-  // Vérifier si l'anniversaire de cette année est déjà passé
   const monthDiff = today.getMonth() - birthDate.getMonth();
   if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-    age--; // Réduire l'âge si l'anniversaire n'est pas encore passé
+    age--;
   }
 
   return age;
@@ -21,7 +21,8 @@ function calculateAge(birthdate: string): number {
 
 export function Me() {
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [isEditing, setIsEditing] = useState(false); // État pour basculer entre affichage et édition
+  const [isEditing, setIsEditing] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false); // État pour afficher le formulaire de changement de mot de passe
 
   const fetchUser = async () => {
     const token = localStorage.getItem("authToken");
@@ -49,22 +50,29 @@ export function Me() {
 
   return (
     <div>
-      {isEditing ? (
-        // Afficher le formulaire de modification si isEditing est true
+      {isChangingPassword ? (
+        
+        <EditPasswordForm
+       
+ 
+        />
+      ) : isEditing ? (
+      
         <EditProfileForm
           userData={userData}
-          onCancel={() => setIsEditing(false)} // Revenir à l'affichage du profil
+          onCancel={() => setIsEditing(false)}
           onSave={(updatedData: UserData) => {
-            // Typage explicite de updatedData
-            setUserData(updatedData); // Mettre à jour les données utilisateur
-            setIsEditing(false); // Revenir à l'affichage du profil
+            setUserData(updatedData);
+            setIsEditing(false);
           }}
           onRefresh={onRefresh}
         />
       ) : (
-        // Afficher le profil si isEditing est false
+       
         <ProfileCard
-          title={` ${userData?.name?? "..."} . ${userData?.birthdate ? calculateAge(userData.birthdate) : "N/A"}`}
+          title={` ${userData?.name ?? "..."} . ${
+            userData?.birthdate ? calculateAge(userData.birthdate) : "N/A"
+          }`}
           headerContent={
             <div className="relative">
               <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden">
@@ -82,17 +90,16 @@ export function Me() {
                   </div>
                 )}
               </div>
-              {/* Bouton pour modifier la photo de profil */}
               <Button
                 className="absolute bottom-0 right-0 p-2 rounded-full"
-                onClick={() => document.getElementById("upload-photo")?.click()} // Ouvre l'input file
+                onClick={() => document.getElementById("upload-photo")?.click()}
               >
                 +
               </Button>
               <input
                 type="file"
                 id="upload-photo"
-                style={{ display: "none" }} // Cache l'input file
+                style={{ display: "none" }}
                 accept="image/*"
                 onChange={async (e) => {
                   const file = e.target.files?.[0];
@@ -115,7 +122,7 @@ export function Me() {
 
                       if (response.ok) {
                         const updatedUser = await response.json();
-                        setUserData(updatedUser); // Met à jour l'image de l'utilisateur
+                        setUserData(updatedUser);
                         alert("Photo de profil mise à jour avec succès !");
                       } else {
                         alert(
@@ -132,12 +139,20 @@ export function Me() {
             </div>
           }
           footerContent={
-            <Button
-              className="w-full sm:w-1/2"
-              onClick={() => setIsEditing(true)} // Passer en mode édition
-            >
-              Modifier ma bio
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button
+                className="w-full sm:w-1/2"
+                onClick={() => setIsEditing(true)}
+              >
+                Modifier ma bio
+              </Button>
+              <Button
+                className="w-full sm:w-1/2 bg-blue-500 hover:bg-blue-600 text-white"
+                onClick={() => setIsChangingPassword(true)} 
+              >
+                Changer mot de passe
+              </Button>
+            </div>
           }
         >
           <article className="flex flex-col items-center py-8 overflow-y-hidden ">
