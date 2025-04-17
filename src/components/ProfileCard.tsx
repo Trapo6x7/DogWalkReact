@@ -15,6 +15,7 @@ type ProfileCardProps = {
   footerContent?: React.ReactNode;
 };
 
+
 export function ProfileCard({
   title,
   description,
@@ -23,9 +24,9 @@ export function ProfileCard({
   footerContent,
 }: ProfileCardProps) {
   return (
-    <Card className="w-full bg-white/80 backdrop-blur-sm flex">
-      <div className="p-6 space-y-6">
-        <CardHeader className="flex items-center gap-6 p-0">
+    <Card className="w-full bg-white/80 backdrop-blur-sm pt-3">
+      <div className="p-6 space-y-6 flex flex-col gap-4">
+        <CardHeader className="flex items-center justify-center gap-6 p-0">
           {headerContent}
           <div className="space-y-1">
             <CardTitle className="text-lg">{title}</CardTitle>
