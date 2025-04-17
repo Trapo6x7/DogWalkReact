@@ -6,6 +6,7 @@ interface EditProfileFormProps {
   userData: UserData | null;
   onCancel: () => void;
   onSave: (updatedData: UserData) => void;
+  onRefresh : () => void;
 }
 
 export function EditProfileForm({
