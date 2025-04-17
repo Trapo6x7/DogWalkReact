@@ -5,9 +5,10 @@ import { ProfileCard } from "./ProfileCard";
 
 interface RegisterProps {
   onRegisterSuccess: () => void;
+  onGoToLogin: () => void; // Nouvelle prop pour la navigation
 }
 
-export function Register({ onRegisterSuccess }: RegisterProps) {
+export function Register({ onRegisterSuccess, onGoToLogin }: RegisterProps) {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [birthdate, setBirthdate] = useState("");
@@ -103,6 +104,15 @@ export function Register({ onRegisterSuccess }: RegisterProps) {
           />
           <Button type="submit" className="w-full text-white">
             S'inscrire
+          </Button>
+          <Button
+            className="w-full bg-gray-600 text-white"
+            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+              e.preventDefault();
+              onGoToLogin(); // Appel de la fonction de navigation
+            }}
+          >
+            Retour à la connexion
           </Button>
         </form>
         {message && (

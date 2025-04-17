@@ -26,11 +26,14 @@ export default function App() {
       {page === "login" && (
         <Login
           onLoginSuccess={handleLoginSuccess}
-          onGoToRegister={() => setPage("register")}
+          onGoToRegister={() => setPage("register")} // Naviguer vers la page d'inscription
         />
       )}
       {page === "register" && (
-        <Register onRegisterSuccess={handleRegisterSuccess} />
+        <Register
+          onRegisterSuccess={handleRegisterSuccess}
+          onGoToLogin={() => setPage("login")} // Naviguer vers la page de connexion
+        />
       )}
       {page === "welcome" && <Welcome />}
     </>
