@@ -39,6 +39,11 @@ export function Me() {
     }
   };
 
+  // Fonction pour rafraîchir les données utilisateur
+  const onRefresh = () => {
+    fetchUser();
+  };
+
   useEffect(() => {
     fetchUser();
   }, []);
@@ -51,15 +56,17 @@ export function Me() {
           userData={userData}
           onCancel={() => setIsEditing(false)} // Revenir à l'affichage du profil
           onSave={(updatedData: UserData) => {
-            // Typage explicite de updatedData
             setUserData(updatedData); // Mettre à jour les données utilisateur
             setIsEditing(false); // Revenir à l'affichage du profil
           }}
+          onRefresh={onRefresh} // Passer la fonction onRefresh
         />
       ) : (
         // Afficher le profil si isEditing est false
         <ProfileCard
-          title={` ${userData?.name?? "..."} . ${userData?.birthdate ? calculateAge(userData.birthdate) : "N/A"}`}
+          title={` ${userData?.name ?? "..."} . ${
+            userData?.birthdate ? calculateAge(userData.birthdate) : "N/A"
+          }`}
           headerContent={
             <div className="relative">
               <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden">
@@ -77,53 +84,6 @@ export function Me() {
                   </div>
                 )}
               </div>
-              {/* Bouton pour modifier la photo de profil */}
-              <Button
-                className="absolute bottom-0 right-0 p-2 rounded-full"
-                onClick={() => document.getElementById("upload-photo")?.click()} // Ouvre l'input file
-              >
-                +
-              </Button>
-              <input
-                type="file"
-                id="upload-photo"
-                style={{ display: "none" }} // Cache l'input file
-                accept="image/*"
-                onChange={async (e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const formData = new FormData();
-                    formData.append("file", file);
-
-                    try {
-                      const token = localStorage.getItem("authToken");
-                      const response = await fetch(
-                        `${import.meta.env.VITE_API_URL}/api/users/image`,
-                        {
-                          method: "POST",
-                          headers: {
-                            Authorization: `Bearer ${token}`,
-                          },
-                          body: formData,
-                        }
-                      );
-
-                      if (response.ok) {
-                        const updatedUser = await response.json();
-                        setUserData(updatedUser); // Met à jour l'image de l'utilisateur
-                        alert("Photo de profil mise à jour avec succès !");
-                      } else {
-                        alert(
-                          "Erreur lors de la mise à jour de la photo de profil."
-                        );
-                      }
-                    } catch (error) {
-                      console.error("Erreur :", error);
-                      alert("Une erreur est survenue.");
-                    }
-                  }
-                }}
-              />
             </div>
           }
           footerContent={
