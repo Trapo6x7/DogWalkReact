@@ -1,15 +1,9 @@
 import { useState } from "react";
-
-import { UserData } from "../types/Interfaces";
+import { useAuth } from "../context/AuthContext";
 import EditProfileForm from "./EditProfileForm";
 
-interface NavbarProps {
-  userData: UserData | null;
-  onLogout: () => void;
-  onLoginSuccess: () => void;
-}
-
-export function Navbar({ userData, onLogout, onLoginSuccess }: NavbarProps) {
+export function Navbar() {
+  const { user, logout } = useAuth();
   const [showEditProfile, setShowEditProfile] = useState(false);
 
   const handleNavigation = (path: string) => {
@@ -30,15 +24,15 @@ export function Navbar({ userData, onLogout, onLoginSuccess }: NavbarProps) {
 
           <nav className="flex gap-1">
             {/* Affichage conditionnel du formulaire de modification du profil */}
-            {showEditProfile && userData && (
+            {showEditProfile && user && (
               <div>
                 <EditProfileForm
-                  userData={userData}
+                  userData={user}
                   onCancel={() => setShowEditProfile(false)}
                   onSave={(updatedData) => {
                     console.log("Profil mis à jour :", updatedData);
                   }}
-                  onRefresh={onLoginSuccess}
+                  onRefresh={() => {}}
                 />
               </div>
             )}
@@ -51,7 +45,7 @@ export function Navbar({ userData, onLogout, onLoginSuccess }: NavbarProps) {
             </a>
 
             {/* Bouton de déconnexion */}
-            <a onClick={onLogout} className="p-2 w-15 z-75 cursor-pointer">
+            <a onClick={logout} className="p-2 w-15 z-75 cursor-pointer">
               <img src="/logout.png" alt="Déconnexion" />
             </a>
           </nav>

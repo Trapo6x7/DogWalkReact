@@ -1,17 +1,14 @@
 import React, { useState } from "react";
-import { ProfileCard } from "./ProfileCard"; // Import du composant ProfileCard
-import { UserData } from "../types/Interfaces";
+import { ProfileCard } from "./ProfileCard";
 import { Button } from "./ui/button";
+import { useAuth } from "../context/AuthContext"; // <-- Import du hook useAuth
 
 interface EditPasswordFormProps {
-  userData: UserData | null;
   onCancel: () => void;
 }
 
-const EditPasswordForm: React.FC<EditPasswordFormProps> = ({
-  userData,
-  onCancel,
-}) => {
+const EditPasswordForm: React.FC<EditPasswordFormProps> = ({ onCancel }) => {
+  const { user, token, refreshUser } = useAuth();
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -34,7 +31,6 @@ const EditPasswordForm: React.FC<EditPasswordFormProps> = ({
     }
 
     try {
-      const token = localStorage.getItem("authToken");
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/users/updatepassword`,
         {
@@ -44,7 +40,7 @@ const EditPasswordForm: React.FC<EditPasswordFormProps> = ({
             "Content-Type": "application/ld+json",
           },
           body: JSON.stringify({
-            oldPassword: oldPassword,
+            oldPassword,
             password: newPassword,
           }),
         }
@@ -60,20 +56,18 @@ const EditPasswordForm: React.FC<EditPasswordFormProps> = ({
       setOldPassword("");
       setNewPassword("");
       setConfirmPassword("");
+      refreshUser();
     } catch (err) {
-      setError(
-        "Impossible de mettre à jour le mot de passe. Veuillez réessayer plus tard."
-      );
+      setError("Impossible de mettre à jour le mot de passe. Veuillez réessayer plus tard.");
     }
   };
 
   return (
     <div className="edit-password-form bg-[#FBFFEE] rounded-lg">
-      {/* Utilisation de ProfileCard */}
-      {userData && (
+      {/* Affichage du profil si dispo */}
+      {user && (
         <div className="mb-6">
-          <ProfileCard userData={userData} 
-          customClass="h-auto"/>
+          <ProfileCard userData={user} customClass="h-auto" />
         </div>
       )}
 
@@ -82,10 +76,7 @@ const EditPasswordForm: React.FC<EditPasswordFormProps> = ({
         {success && <p className="text-green-500 text-center">{success}</p>}
 
         <div>
-          <label
-            htmlFor="currentPassword"
-            className="font-medium text-secondary-brown"
-          >
+          <label htmlFor="oldPassword" className="font-medium text-secondary-brown">
             Mot de passe actuel
           </label>
           <input
@@ -99,10 +90,7 @@ const EditPasswordForm: React.FC<EditPasswordFormProps> = ({
         </div>
 
         <div>
-          <label
-            htmlFor="newPassword"
-            className="font-medium text-secondary-brown"
-          >
+          <label htmlFor="newPassword" className="font-medium text-secondary-brown">
             Nouveau mot de passe
           </label>
           <input
@@ -116,10 +104,7 @@ const EditPasswordForm: React.FC<EditPasswordFormProps> = ({
         </div>
 
         <div>
-          <label
-            htmlFor="confirmPassword"
-            className="font-medium text-secondary-brown"
-          >
+          <label htmlFor="confirmPassword" className="font-medium text-secondary-brown">
             Confirmer le nouveau mot de passe
           </label>
           <input
@@ -131,20 +116,21 @@ const EditPasswordForm: React.FC<EditPasswordFormProps> = ({
             className="p-2 rounded bg-neutral-white border border-secondary-brown w-full"
           />
         </div>
+
         <div className="flex gap-4 mt-4 justify-center">
-        <Button
-          type="button"
-          onClick={onCancel}
-          className="bg-secondary-green text-secondary-brown px-4 py-2 rounded"
-        >
-          Annuler
-        </Button>
-        <Button
-          type="submit"
-          className="bg-primary-green text-primary-brown px-4 py-2 rounded mt-4"
-        >
-          Mettre à jour
-        </Button>
+          <Button
+            type="button"
+            onClick={onCancel}
+            className="bg-secondary-green text-secondary-brown px-4 py-2 rounded"
+          >
+            Annuler
+          </Button>
+          <Button
+            type="submit"
+            className="bg-primary-green text-primary-brown px-4 py-2 rounded mt-4"
+          >
+            Mettre à jour
+          </Button>
         </div>
       </form>
     </div>

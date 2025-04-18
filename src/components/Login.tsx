@@ -1,43 +1,43 @@
 import { useState } from "react";
-import { postRequest } from "../utils/api";
+import { useAuth } from "../context/AuthContext";
 import { Button } from "./ui/button";
-import { ProfileCard } from "./ProfileCard"; // Réutilisation de ProfileCard pour la cohérence
+import { ProfileCard } from "./ProfileCard";
 
 interface LoginProps {
-  onLoginSuccess: () => void;
   onGoToRegister: () => void;
+  onLoginSuccess: () => void;
 }
 
-export function Login({ onLoginSuccess, onGoToRegister }: LoginProps) {
+export function Login({ onGoToRegister }: LoginProps) {
+  const { login } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const response = await postRequest<{ token: string }>("/login_check", {
-      username,
-      password,
-    });
 
-    if (response.error) {
-      setErrorMessage(response.error);
-    } else {
-      localStorage.setItem("authToken", response.data.token);
-      onLoginSuccess();
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/login_check`, {
+        method: "POST",
+        headers: { "Content-Type": "application/ld+json" },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Nom d'utilisateur ou mot de passe incorrect.");
+      }
+
+      const { token } = await response.json();
+      login(token); // Appel de la méthode login du contexte
+    } catch (error: any) {
+      setErrorMessage(error.message);
     }
   };
 
   return (
     <section className="flex justify-center items-center h-screen w-120">
-      <ProfileCard
-        title="Bienvenue !"
-        headerContent={
-          <div className="text-center">
-          </div>
-        }
-        footerContent={<></>}
-      >
+      <ProfileCard title="Bienvenue !" footerContent={<></>} customClass="h-auto">
         <form onSubmit={handleLogin} className="flex flex-col gap-4">
           <input
             type="text"

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { UserData } from "../types/Interfaces";
-import EditPasswordForm from "./EditPasswordForm"; // Import du composant EditPasswordForm
-import { ProfileCard } from "./ProfileCard"; // Import du composant ProfileCard
+import EditPasswordForm from "./EditPasswordForm";
+import { ProfileCard } from "./ProfileCard";
+import { useAuth } from "../context/AuthContext"; // 🔥 Import du context
 
 interface EditProfileFormProps {
   userData: UserData | null;
@@ -16,6 +17,8 @@ export function EditProfileForm({
   onCancel,
   onRefresh,
 }: EditProfileFormProps & { onRefresh: () => void }) {
+  const { user, token,  refreshUser } = useAuth(); 
+
   const [userData, setUserData] = useState<UserData | null>(initialUserData);
   const [formData, setFormData] = useState<UserData>(
     initialUserData ?? {
@@ -61,13 +64,12 @@ export function EditProfileForm({
     }
 
     try {
-      const token = localStorage.getItem("authToken");
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/users/${userData.id}`,
         {
           method: "PATCH",
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`, // 🔥 Utilisation du token depuis le context
             "Content-Type": "application/merge-patch+json",
           },
           body: JSON.stringify(updatedData),
@@ -77,11 +79,11 @@ export function EditProfileForm({
       if (!response.ok) {
         throw new Error("Erreur lors de la mise à jour du profil");
       }
+
       const updatedUser = await response.json();
       setUserData(updatedUser);
       onRefresh();
       onCancel();
-      // window.location.reload();
     } catch (error) {
       console.error("Erreur:", error);
     }
@@ -89,8 +91,6 @@ export function EditProfileForm({
 
   return (
     <div className="fixed top-100 right-5 transform -translate-y-1/2 bg-[#FBFFEE] p-6 rounded-lg z-50 w-full max-w-md">
-      {" "}
-      {/* Utilisation de ProfileCard */}
       {userData && (
         <div className="mb-6">
           <ProfileCard userData={userData} customClass="h-auto" />
@@ -114,10 +114,7 @@ export function EditProfileForm({
           className="p-2 rounded bg-neutral-white border border-secondary-brown"
         />
 
-        <label
-          htmlFor="description"
-          className="font-medium text-secondary-brown"
-        >
+        <label htmlFor="description" className="font-medium text-secondary-brown">
           Description
         </label>
         <textarea
@@ -128,9 +125,7 @@ export function EditProfileForm({
           placeholder="Description"
           className="p-2 rounded bg-neutral-white border border-secondary-brown"
         />
-        {/* Affichage du compteur de caractères */}
         <div className="text-sm text-gray-500">{charCount}/140 caractères</div>
-        {/* Affichage du message d'avertissement */}
         {isLimitExceeded && (
           <div className="text-sm text-red-500">
             Vous avez dépassé la limite de 140 caractères !
@@ -153,9 +148,9 @@ export function EditProfileForm({
           </Button>
         </div>
       </form>
-      {/* Ajout du composant EditPasswordForm */}
+
       <div className="mt-8 w-full flex flex-col items-center">
-        <EditPasswordForm userData={userData} onCancel={onCancel} />
+        <EditPasswordForm onCancel={onCancel} />
       </div>
     </div>
   );
