@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const EditPasswordForm: React.FC = () => {
-  const [currentPassword, setCurrentPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
@@ -27,13 +27,14 @@ const EditPasswordForm: React.FC = () => {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/users/updatepassword`,
         {
-          method: "PATCH",
+          method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/merge-patch+json",
+            "Content-Type": "application/ld+json",
           },
           body: JSON.stringify({
-            password: newPassword
+            oldPassword: oldPassword,
+            password: newPassword,
           }),
         }
       );
@@ -45,7 +46,7 @@ const EditPasswordForm: React.FC = () => {
       }
 
       setSuccess("Mot de passe mis à jour avec succès.");
-      setCurrentPassword("");
+      setOldPassword("");
       setNewPassword("");
       setConfirmPassword("");
     } catch (err) {
@@ -66,9 +67,9 @@ const EditPasswordForm: React.FC = () => {
         <label htmlFor="currentPassword">Mot de passe actuel</label>
         <input
           type="password"
-          id="currentPassword"
-          value={currentPassword}
-          onChange={(e) => setCurrentPassword(e.target.value)}
+          id="oldPassword"
+          value={oldPassword}
+          onChange={(e) => setOldPassword(e.target.value)}
           required
         />
       </div>
