@@ -48,6 +48,7 @@ export function Me({ userData }: MeProps) {
             </div>
           }
           footerContent={<></>}
+          customClass="h-50"
         >
           <article className="flex flex-col items-center py-8 overflow-y-hidden ">
             <p>{userData.description}</p>

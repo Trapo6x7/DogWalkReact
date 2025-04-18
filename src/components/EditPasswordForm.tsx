@@ -72,7 +72,8 @@ const EditPasswordForm: React.FC<EditPasswordFormProps> = ({
       {/* Utilisation de ProfileCard */}
       {userData && (
         <div className="mb-6">
-          <ProfileCard userData={userData} />
+          <ProfileCard userData={userData} 
+          customClass="h-auto"/>
         </div>
       )}
 

@@ -39,6 +39,7 @@ export function Dogs() {
         </div>
       }
       footerContent={<Button className="w-full sm:w-1/2">Ajouter un chien</Button>}
+      customClass="h-50"
     >  
      <article className="flex flex-col items-center py-8">
       {userData?.dogs && userData.dogs.length > 0 ? (

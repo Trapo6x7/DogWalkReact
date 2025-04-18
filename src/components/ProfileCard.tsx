@@ -15,6 +15,7 @@ type ProfileCardProps = {
   children?: React.ReactNode;
   footerContent?: React.ReactNode;
   userData?: UserData;
+  customClass?: string;
 };
 
 
@@ -24,9 +25,10 @@ export function ProfileCard({
   headerContent,
   children,
   footerContent,
+  customClass = "",
 }: ProfileCardProps) {
   return (
-    <Card className="w-full h-auto bg-[#FBFFEE] backdrop-blur-sm pt-3">
+    <Card className={`w-full bg-[#FBFFEE] backdrop-blur-sm pt-3 ${customClass}`}>
       <div className="p-6 space-y-6 flex flex-col gap-4">
         <CardHeader className="flex items-center justify-center gap-6 p-0">
           {headerContent}

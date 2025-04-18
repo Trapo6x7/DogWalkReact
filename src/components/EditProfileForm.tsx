@@ -76,11 +76,12 @@ export function EditProfileForm({
 <div className="fixed top-100 right-5 transform -translate-y-1/2 bg-[#FBFFEE] p-6 rounded-lg z-50 w-full max-w-md">      {/* Utilisation de ProfileCard */}
       {userData && (
         <div className="mb-6">
-          <ProfileCard userData={userData} />
+          <ProfileCard userData={userData} 
+          customClass="h-auto" />
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
         <h2 className="text-xl font-bold text-primary-brown text-center">
           Modifier le profil
         </h2>
