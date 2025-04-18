@@ -1,3 +1,4 @@
+import { UserData } from "../types/Interfaces";
 import {
   Card,
   CardHeader,
@@ -8,11 +9,12 @@ import {
 } from "./ui/card";
 
 type ProfileCardProps = {
-  title: string;
+  title?: string;
   description?: string;
   headerContent?: React.ReactNode;
   children?: React.ReactNode;
   footerContent?: React.ReactNode;
+  userData?: UserData;
 };
 
 
@@ -24,7 +26,7 @@ export function ProfileCard({
   footerContent,
 }: ProfileCardProps) {
   return (
-    <Card className="w-full h-auto bg-white/80 backdrop-blur-sm pt-3">
+    <Card className="w-full h-auto bg-[#FBFFEE] backdrop-blur-sm pt-3">
       <div className="p-6 space-y-6 flex flex-col gap-4">
         <CardHeader className="flex items-center justify-center gap-6 p-0">
           {headerContent}

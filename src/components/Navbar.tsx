@@ -1,26 +1,23 @@
 import { useState } from "react";
 
-export function Navbar() {
-  const [currentPage, setCurrentPage] = useState("/");
+import { UserData } from "../types/Interfaces";
+import EditProfileForm from "./EditProfileForm";
+
+interface NavbarProps {
+  userData: UserData | null;
+  onLogout: () => void;
+  onLoginSuccess: () => void;
+}
+
+export function Navbar({ userData, onLogout, onLoginSuccess }: NavbarProps) {
+  const [showEditProfile, setShowEditProfile] = useState(false);
 
   const handleNavigation = (path: string) => {
-    setCurrentPage(path);
+    console.log(`Navigation vers ${path}`);
   };
-const handleLogout = (event: React.MouseEvent<HTMLAnchorElement>) => {
-  event.preventDefault(); // Empêche le comportement par défaut de l'élément <a>
-  
-  // Suppression du token d'authentification
-  localStorage.removeItem("authToken"); // Si le token est stocké dans localStorage
-  sessionStorage.removeItem("authToken"); // Si le token est stocké dans sessionStorage
-
-  // Redirection vers la page de connexion
-  window.location.href = "/login"; // Remplacez "/login" par la route de votre page de connexion
-
-  console.log("Déconnexion effectuée");
-};
 
   return (
-    <header className="flex justify-around bg-white/80">
+    <header className="flex justify-around bg-[#FBFFEE]">
       <nav className="container mx-auto py-1">
         <div className="flex items-center justify-between">
           {/* Logo */}
@@ -31,14 +28,33 @@ const handleLogout = (event: React.MouseEvent<HTMLAnchorElement>) => {
             <img src="/mimilogo.png" alt="" />
           </a>
 
-          {/* Bouton de déconnexion */}
-          <a
-            href="#"
-            onClick={handleLogout}
-            className="px-4 py-2 text-white rounded transition-colors duration-200 w-20"
-          >
-            <img src="/logout.png" alt="" />
-          </a>
+          <nav className="flex gap-1">
+            {/* Affichage conditionnel du formulaire de modification du profil */}
+            {showEditProfile && userData && (
+              <div>
+                <EditProfileForm
+                  userData={userData}
+                  onCancel={() => setShowEditProfile(false)}
+                  onSave={(updatedData) => {
+                    console.log("Profil mis à jour :", updatedData);
+                  }}
+                  onRefresh={onLoginSuccess}
+                />
+              </div>
+            )}
+            {/* Bouton pour afficher le formulaire de modification du profil */}
+            <a
+              onClick={() => setShowEditProfile(!showEditProfile)}
+              className="p-2 w-15 z-75"
+            >
+              <img src="/settingsdogwalk.png" alt="Modifier le profil" />
+            </a>
+
+            {/* Bouton de déconnexion */}
+            <a onClick={onLogout} className="p-2 w-15 z-75 cursor-pointer">
+              <img src="/logout.png" alt="Déconnexion" />
+            </a>
+          </nav>
         </div>
       </nav>
     </header>

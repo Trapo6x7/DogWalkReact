@@ -1,6 +1,17 @@
 import React, { useState } from "react";
+import { ProfileCard } from "./ProfileCard"; // Import du composant ProfileCard
+import { UserData } from "../types/Interfaces";
+import { Button } from "./ui/button";
 
-const EditPasswordForm: React.FC = () => {
+interface EditPasswordFormProps {
+  userData: UserData | null;
+  onCancel: () => void;
+}
+
+const EditPasswordForm: React.FC<EditPasswordFormProps> = ({
+  userData,
+  onCancel,
+}) => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -57,49 +68,85 @@ const EditPasswordForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="edit-password-form">
-      <h2>Mettre à jour le mot de passe</h2>
+    <div className="edit-password-form bg-[#FBFFEE] p-6 rounded-lg ">
+      {/* Utilisation de ProfileCard */}
+      {userData && (
+        <div className="mb-6">
+          <ProfileCard userData={userData} />
+        </div>
+      )}
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {success && <p style={{ color: "green" }}>{success}</p>}
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        {error && <p className="text-red-500 text-center">{error}</p>}
+        {success && <p className="text-green-500 text-center">{success}</p>}
 
-      <div>
-        <label htmlFor="currentPassword">Mot de passe actuel</label>
-        <input
-          type="password"
-          id="oldPassword"
-          value={oldPassword}
-          onChange={(e) => setOldPassword(e.target.value)}
-          required
-        />
-      </div>
+        <div>
+          <label
+            htmlFor="currentPassword"
+            className="font-medium text-secondary-brown"
+          >
+            Mot de passe actuel
+          </label>
+          <input
+            type="password"
+            id="oldPassword"
+            value={oldPassword}
+            onChange={(e) => setOldPassword(e.target.value)}
+            required
+            className="p-2 rounded bg-neutral-white border border-secondary-brown w-full"
+          />
+        </div>
 
-      <div>
-        <label htmlFor="newPassword">Nouveau mot de passe</label>
-        <input
-          type="password"
-          id="newPassword"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          required
-        />
-      </div>
+        <div>
+          <label
+            htmlFor="newPassword"
+            className="font-medium text-secondary-brown"
+          >
+            Nouveau mot de passe
+          </label>
+          <input
+            type="password"
+            id="newPassword"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            required
+            className="p-2 rounded bg-neutral-white border border-secondary-brown w-full"
+          />
+        </div>
 
-      <div>
-        <label htmlFor="confirmPassword">
-          Confirmer le nouveau mot de passe
-        </label>
-        <input
-          type="password"
-          id="confirmPassword"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          required
-        />
-      </div>
-
-      <button type="submit">Mettre à jour</button>
-    </form>
+        <div>
+          <label
+            htmlFor="confirmPassword"
+            className="font-medium text-secondary-brown"
+          >
+            Confirmer le nouveau mot de passe
+          </label>
+          <input
+            type="password"
+            id="confirmPassword"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+            className="p-2 rounded bg-neutral-white border border-secondary-brown w-full"
+          />
+        </div>
+        <div className="flex gap-4 mt-4 justify-center">
+        <Button
+          type="button"
+          onClick={onCancel}
+          className="bg-secondary-green text-secondary-brown px-4 py-2 rounded"
+        >
+          Annuler
+        </Button>
+        <Button
+          type="submit"
+          className="bg-primary-green text-primary-brown px-4 py-2 rounded mt-4"
+        >
+          Mettre à jour
+        </Button>
+        </div>
+      </form>
+    </div>
   );
 };
 

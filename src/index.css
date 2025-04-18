@@ -133,6 +133,19 @@ button {
   font-style: normal;
 }
 
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  min-height: 93%;
+  gap: 1%;
+  padding: 1% 0;
+}
+
+footer img{
+  width: 2rem;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
