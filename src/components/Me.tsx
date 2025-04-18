@@ -35,7 +35,9 @@ export function Me({ userData }: MeProps) {
               <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden">
                 {userData.imageFilename ? (
                   <img
-                    src={`${import.meta.env.VITE_API_URL}/uploads/images/${userData.imageFilename}`}
+                    src={`${import.meta.env.VITE_API_URL}/uploads/images/${
+                      userData.imageFilename
+                    }`}
                     alt="Profile"
                     className="w-full h-full object-cover"
                   />
@@ -50,8 +52,8 @@ export function Me({ userData }: MeProps) {
           footerContent={<></>}
           customClass="h-50"
         >
-          <article className="flex flex-col items-center py-8 overflow-y-hidden ">
-            <p>{userData.description}</p>
+          <article className="flex flex-wrap items-center justify-center h-full w-full py-8 px-6 overflow-hidden">
+            <p className="text-center">{userData.description}</p>
           </article>
         </ProfileCard>
       )}

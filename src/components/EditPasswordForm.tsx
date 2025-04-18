@@ -68,7 +68,7 @@ const EditPasswordForm: React.FC<EditPasswordFormProps> = ({
   };
 
   return (
-    <div className="edit-password-form bg-[#FBFFEE] p-6 rounded-lg ">
+    <div className="edit-password-form bg-[#FBFFEE] rounded-lg">
       {/* Utilisation de ProfileCard */}
       {userData && (
         <div className="mb-6">

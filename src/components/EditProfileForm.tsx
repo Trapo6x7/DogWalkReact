@@ -29,8 +29,23 @@ export function EditProfileForm({
       description: "",
     }
   );
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  const [charCount, setCharCount] = useState(0);
+  const [isLimitExceeded, setIsLimitExceeded] = useState(false);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
+    if (name === "description") {
+      setCharCount(value.length);
+      if (value.length > 140) {
+        setIsLimitExceeded(true);
+        return;
+      } else {
+        setIsLimitExceeded(false);
+      }
+    }
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -73,14 +88,14 @@ export function EditProfileForm({
   };
 
   return (
-<div className="fixed top-100 right-5 transform -translate-y-1/2 bg-[#FBFFEE] p-6 rounded-lg z-50 w-full max-w-md">      {/* Utilisation de ProfileCard */}
+    <div className="fixed top-100 right-5 transform -translate-y-1/2 bg-[#FBFFEE] p-6 rounded-lg z-50 w-full max-w-md">
+      {" "}
+      {/* Utilisation de ProfileCard */}
       {userData && (
         <div className="mb-6">
-          <ProfileCard userData={userData} 
-          customClass="h-auto" />
+          <ProfileCard userData={userData} customClass="h-auto" />
         </div>
       )}
-
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
         <h2 className="text-xl font-bold text-primary-brown text-center">
           Modifier le profil
@@ -105,8 +120,7 @@ export function EditProfileForm({
         >
           Description
         </label>
-        <input
-          type="text"
+        <textarea
           id="description"
           name="description"
           value={formData.description}
@@ -114,6 +128,14 @@ export function EditProfileForm({
           placeholder="Description"
           className="p-2 rounded bg-neutral-white border border-secondary-brown"
         />
+        {/* Affichage du compteur de caractères */}
+        <div className="text-sm text-gray-500">{charCount}/140 caractères</div>
+        {/* Affichage du message d'avertissement */}
+        {isLimitExceeded && (
+          <div className="text-sm text-red-500">
+            Vous avez dépassé la limite de 140 caractères !
+          </div>
+        )}
 
         <div className="flex gap-4 mt-4 justify-center">
           <Button
@@ -131,13 +153,9 @@ export function EditProfileForm({
           </Button>
         </div>
       </form>
-
       {/* Ajout du composant EditPasswordForm */}
-      <div className="mt-8">
-        <EditPasswordForm
-          userData={userData}
-          onCancel={onCancel}
-        />
+      <div className="mt-8 w-full flex flex-col items-center">
+        <EditPasswordForm userData={userData} onCancel={onCancel} />
       </div>
     </div>
   );
