@@ -17,9 +17,9 @@ export function Navbar({ userData, onLogout, onLoginSuccess }: NavbarProps) {
   };
 
   return (
-    <header className="flex justify-around bg-[#FBFFEE]">
+    <header className="flex justify-around items-center bg-[#FBFFEE]">
       <nav className="container mx-auto py-1">
-        <div className="flex items-center justify-between">
+        <div className="flex justify-between">
           {/* Logo */}
           <a
             onClick={() => handleNavigation("/")}
@@ -45,9 +45,9 @@ export function Navbar({ userData, onLogout, onLoginSuccess }: NavbarProps) {
             {/* Bouton pour afficher le formulaire de modification du profil */}
             <a
               onClick={() => setShowEditProfile(!showEditProfile)}
-              className="p-2 w-15 z-75"
+              className="p-2 w-19 z-75"
             >
-              <img src="/settingsdogwalk.png" alt="Modifier le profil" />
+              <img src="/iconprofile.png" alt="Modifier le profil" />
             </a>
 
             {/* Bouton de déconnexion */}

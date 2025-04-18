@@ -53,7 +53,9 @@ export function Me({ userData }: MeProps) {
           customClass="h-50"
         >
           <article className="flex flex-wrap items-center justify-center h-full w-full py-8 px-6 overflow-hidden">
-            <p className="text-center">{userData.description}</p>
+            <p className="text-center overflow-hidden text-ellipsis whitespace-normal">
+              {userData.description}
+            </p>
           </article>
         </ProfileCard>
       )}
