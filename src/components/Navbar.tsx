@@ -11,7 +11,7 @@ export function Navbar() {
   };
 
   return (
-    <header className="flex justify-around items-center bg-[#FBFFEE]">
+    <header className="flex justify-around items-center px-6 bg-[#FBFFEE]">
       <nav className="container mx-auto py-1">
         <div className="flex justify-between">
           {/* Logo */}
