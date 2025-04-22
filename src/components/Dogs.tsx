@@ -112,7 +112,7 @@ export function Dogs() {
         footerContent={<></>}
         customClass="h-[10%]"
       >
-        <article className="flex flex-col items-center py-8 space-y-4">
+        <article className="flex flex-wrap items-center justify-center h-full w-full py-8 px-6 overflow-hidden">
           {userData?.dogs && userData.dogs.length > 0 ? (
             <div className="space-y-4 w-full">
               {userData.dogs.map((dog) => (

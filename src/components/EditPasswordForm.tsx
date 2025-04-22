@@ -63,11 +63,11 @@ const EditPasswordForm: React.FC<EditPasswordFormProps> = ({ onCancel }) => {
   };
 
   return (
-    <div className="edit-password-form bg-[#FBFFEE] rounded-lg">
+    <div className="fixed top-65 right-5 transform -translate-y-1/2 bg-[#FBFFEE] p-6 rounded-lg z-50 w-full max-w-md">
       {/* Affichage du profil si dispo */}
       {user && (
         <div className="mb-6">
-          <ProfileCard userData={user} customClass="h-auto" />
+          <ProfileCard title="Changez votre mot de passe" userData={user} customClass="h-auto" />
         </div>
       )}
 

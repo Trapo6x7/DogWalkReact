@@ -90,7 +90,7 @@ export function EditProfileForm({
   };
 
   return (
-    <div className="fixed top-100 right-5 transform -translate-y-1/2 bg-[#FBFFEE] p-6 rounded-lg z-50 w-full max-w-md">
+    <div className="fixed top-60 right-5 transform -translate-y-1/2 bg-[#FBFFEE] p-6 rounded-lg z-50 w-full max-w-md">
       {userData && (
         <div className="mb-6">
           <ProfileCard userData={userData} customClass="h-auto" />
@@ -148,10 +148,6 @@ export function EditProfileForm({
           </Button>
         </div>
       </form>
-
-      <div className="mt-8 w-full flex flex-col items-center">
-        <EditPasswordForm onCancel={onCancel} />
-      </div>
     </div>
   );
 }
