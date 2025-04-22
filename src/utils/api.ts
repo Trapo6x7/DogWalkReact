@@ -38,7 +38,7 @@ export const getRequest = async <T>(
     const response = await fetch(`${BASE_URL}${endpoint}`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/ld+json",
         ...headers,
       },
     });

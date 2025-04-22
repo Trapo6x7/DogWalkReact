@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { useAuth } from "../context/AuthContext";
 import { ProfileCard } from "./ProfileCard";
@@ -12,28 +12,57 @@ export function AddDogs({ onCancel, onRefresh }: AddDogsProps) {
   const { token } = useAuth();
 
   const [dogName, setDogName] = useState("");
-  const [dogRace, setDogRace] = useState("");
+  const [dogRaceId, setDogRaceId] = useState("");
   const [dogGender, setDogGender] = useState("");
   const [dogBirthdate, setDogBirthdate] = useState("");
+
+  const [races, setRaces] = useState<{ id: number; name: string }[]>([]);
+
+  useEffect(() => {
+    const fetchRaces = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/races`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/ld+json",
+            },
+          }
+        );
+
+        if (!response.ok)
+          throw new Error("Erreur lors de la récupération des races");
+
+        const data = await response.json();
+        setRaces(data["member"]);
+        console.log(data);
+      } catch (error) {
+        console.error("Erreur lors du chargement des races :", error);
+      }
+    };
+
+    fetchRaces();
+  }, [token]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const dogData = {
       name: dogName,
-      race: dogRace,
+      race: `/api/races/${dogRaceId}`, // API Platform relation
       gender: dogGender,
       birthdate: dogBirthdate,
     };
-console.log(dogData);
+
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/dogs`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/ld+json", 
+          "Content-Type": "application/ld+json",
         },
-        body: JSON.stringify(dogData), 
+        body: JSON.stringify(dogData),
       });
 
       if (!response.ok) {
@@ -52,9 +81,7 @@ console.log(dogData);
       <ProfileCard
         title="Ajouter un chien"
         customClass="h-auto"
-        headerContent={
-          <></>
-        }
+        headerContent={<></>}
       >
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-4">
           <label className="font-medium text-secondary-brown">Nom</label>
@@ -68,14 +95,23 @@ console.log(dogData);
           />
 
           <label className="font-medium text-secondary-brown">Race</label>
-          <input
-            type="text"
-            value={dogRace}
-            onChange={(e) => setDogRace(e.target.value)}
-            placeholder="Race"
+          <select
+            value={dogRaceId}
+            onChange={(e) => setDogRaceId(e.target.value)}
             className="p-2 rounded bg-neutral-white border border-secondary-brown"
             required
-          />
+          >
+            <option value="">Sélectionner une race</option>
+            {races && races.length > 0 ? (
+              races.map((race) => (
+                <option key={race.id} value={race.id}>
+                  {race.name}
+                </option>
+              ))
+            ) : (
+              <option>Chargement...</option> // Option pour afficher pendant le chargement
+            )}
+          </select>
 
           <label className="font-medium text-secondary-brown">Sexe</label>
           <select
@@ -110,7 +146,6 @@ console.log(dogData);
             </Button>
             <Button
               type="submit"
-              onClick={onRefresh}
               className="bg-primary-green text-primary-brown px-4 py-2 rounded"
             >
               Ajouter
