@@ -14,4 +14,6 @@ export interface Dog {
   name: string;
   race: string;
   image?: string;
+  user: string; 
 }
+

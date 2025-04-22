@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { getRequest } from "../utils/api";
+import { getRequest, deleteRequest } from "../utils/api"; // Assure-toi que deleteRequest existe
 import { UserData } from "../types/Interfaces";
 import { ProfileCard } from "./ProfileCard";
 import AddDogs from "./AddDogs";
@@ -11,12 +11,58 @@ export function Dogs() {
 
   const fetchUserDogs = async () => {
     const token = localStorage.getItem("authToken");
-    const response = await getRequest<UserData>("/me", {
+
+    // Récupérer les données utilisateur depuis "/api/me"
+    const response = await getRequest<UserData>("/api/me", {
       Authorization: `Bearer ${token}`,
     });
 
     if (!response.error) {
-      setUserData(response.data);
+      const fetchedUserData = response.data;
+      // Stocker les données utilisateur dans l'état
+      setUserData(fetchedUserData);
+    } else {
+      console.error("Erreur lors de la récupération des données utilisateur");
+    }
+  };
+
+  const handleDeleteDog = async (dogId: string) => {
+    const token = localStorage.getItem("authToken");
+
+    if (!userData) {
+      console.error("Utilisateur non trouvé");
+      return;
+    }
+
+  
+    const dog = userData.dogs.find((d) => d.id.toString() === dogId);
+    if (!dog) {
+      console.error("Le chien n'a pas été trouvé.");
+      return;
+    }
+
+    const isUserOwner = dog.user === "/api/me";
+    console.log(dog, isUserOwner);
+    if (!isUserOwner) {
+      console.error("Vous ne pouvez supprimer que vos propres chiens.");
+      return;
+    }
+
+    try {
+      const response = await deleteRequest(`/api/dogs/${dogId}`, {
+        Authorization: `Bearer ${token}`,
+      });
+
+      if (response.ok) {
+        fetchUserDogs(); 
+      } else {
+        console.error(
+          "Erreur lors de la suppression du chien :",
+          response.error
+        );
+      }
+    } catch (error) {
+      console.error("Erreur:", error);
     }
   };
 
@@ -55,14 +101,19 @@ export function Dogs() {
               {userData.dogs.map((dog) => (
                 <div
                   key={dog.id}
-                  className="flex items-center justify-between p-4 rounded-lg border bg-muted"
+                  className="flex items-center justify-between p-4 rounded-lg "
                 >
                   <div>
                     <h3 className="font-semibold">{dog.name}</h3>
                     <p className="text-sm text-muted-foreground">{dog.race}</p>
                   </div>
-                  <Button variant="outline" size="sm">
-                    Modifier
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleDeleteDog(dog.id.toString())} 
+                    className="text-red-500" 
+                  >
+                    Supprimer
                   </Button>
                 </div>
               ))}
@@ -74,8 +125,8 @@ export function Dogs() {
           )}
         </article>
       </ProfileCard>
-  
-      {/* 🔥 On le sort de la Card pour éviter qu’il soit dans chaque chien */}
+
+    
       {showAddDogForm && (
         <AddDogs
           onCancel={() => setShowAddDogForm(false)}
@@ -84,5 +135,4 @@ export function Dogs() {
       )}
     </>
   );
-  
 }
