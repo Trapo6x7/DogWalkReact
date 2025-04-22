@@ -7,7 +7,6 @@ export function Me() {
   const { user, setUser } = useAuth();
   const [userData, setUserData] = useState(user);
 
-
   function calculateAge(birthdate: string): number {
     const birthDate = new Date(birthdate);
     const today = new Date();
@@ -95,7 +94,7 @@ export function Me() {
             
           }
           footerContent={<></>}
-          customClass="h-50"
+          customClass="h-[10%]"
         >
           <article className="flex flex-wrap items-center justify-center h-full w-full py-8 px-6 overflow-hidden">
             <p className="text-center overflow-hidden text-ellipsis whitespace-normal">

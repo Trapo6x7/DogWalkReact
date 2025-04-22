@@ -13,7 +13,7 @@ export interface Dog {
   id: number;
   name: string;
   race: string;
-  image?: string;
+  imageFilename?: string;
   user: string; 
 }
 

@@ -48,18 +48,12 @@ console.log(dogData);
   };
 
   return (
-    <div className="fixed top-100 right-5 transform -translate-y-1/2 bg-[#FBFFEE] p-6 rounded-lg z-50 w-full max-w-md">
+    <div className="fixed top-80 right-5 transform -translate-y-1/2 bg-[#FBFFEE] p-6 rounded-lg z-50 w-full max-w-md">
       <ProfileCard
         title="Ajouter un chien"
         customClass="h-auto"
         headerContent={
-          <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden mx-auto">
-            <img
-              src="/dwlogopatte.png"
-              alt="Ajout de chien"
-              className="w-full h-full object-cover"
-            />
-          </div>
+          <></>
         }
       >
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-4">

@@ -1,26 +1,23 @@
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { getRequest, deleteRequest } from "../utils/api"; // Assure-toi que deleteRequest existe
+import { getRequest, deleteRequest } from "../utils/api";
 import { UserData } from "../types/Interfaces";
 import { ProfileCard } from "./ProfileCard";
-import AddDogs from "./AddDogs";
 
 export function Dogs() {
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [showAddDogForm, setShowAddDogForm] = useState(false);
+
+  console.log(userData);
 
   const fetchUserDogs = async () => {
     const token = localStorage.getItem("authToken");
 
-    // Récupérer les données utilisateur depuis "/api/me"
     const response = await getRequest<UserData>("/api/me", {
       Authorization: `Bearer ${token}`,
     });
 
     if (!response.error) {
-      const fetchedUserData = response.data;
-      // Stocker les données utilisateur dans l'état
-      setUserData(fetchedUserData);
+      setUserData(response.data);
     } else {
       console.error("Erreur lors de la récupération des données utilisateur");
     }
@@ -34,15 +31,14 @@ export function Dogs() {
       return;
     }
 
-  
     const dog = userData.dogs.find((d) => d.id.toString() === dogId);
     if (!dog) {
       console.error("Le chien n'a pas été trouvé.");
       return;
     }
 
+
     const isUserOwner = dog.user === "/api/me";
-    console.log(dog, isUserOwner);
     if (!isUserOwner) {
       console.error("Vous ne pouvez supprimer que vos propres chiens.");
       return;
@@ -54,15 +50,43 @@ export function Dogs() {
       });
 
       if (response.ok) {
-        fetchUserDogs(); 
+        fetchUserDogs();
       } else {
-        console.error(
-          "Erreur lors de la suppression du chien :",
-          response.error
-        );
+        console.error("Erreur lors de la suppression du chien :", response.error);
       }
     } catch (error) {
       console.error("Erreur:", error);
+    }
+  };
+
+  const handleDogImageUpload = async (dogId: string, file: File) => {
+    const token = localStorage.getItem("authToken");
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/dogs/${dogId}/image`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            // "Content-Type": "application/ld+json",
+          },
+          body: formData,
+        }
+      );
+
+      if (response.ok) {
+        fetchUserDogs();
+        alert("Photo du chien mise à jour !");
+      } else {
+        console.error("Erreur lors de la mise à jour de l'image du chien");
+        alert("Échec de la mise à jour.");
+      }
+    } catch (error) {
+      console.error("Erreur :", error);
+      alert("Une erreur est survenue.");
     }
   };
 
@@ -85,15 +109,8 @@ export function Dogs() {
             </div>
           </div>
         }
-        footerContent={
-          <Button
-            onClick={() => setShowAddDogForm(true)}
-            className="bg-primary-green text-primary-brown px-4 py-2 rounded"
-          >
-            Ajouter un chien
-          </Button>
-        }
-        customClass="h-50"
+        footerContent={<></>}
+        customClass="h-[10%]"
       >
         <article className="flex flex-col items-center py-8 space-y-4">
           {userData?.dogs && userData.dogs.length > 0 ? (
@@ -101,17 +118,50 @@ export function Dogs() {
               {userData.dogs.map((dog) => (
                 <div
                   key={dog.id}
-                  className="flex items-center justify-between p-4 rounded-lg "
+                  className="flex items-center justify-between p-4 rounded-lg"
                 >
-                  <div>
-                    <h3 className="font-semibold">{dog.name}</h3>
-                    <p className="text-sm text-muted-foreground">{dog.race}</p>
+                  <div className="flex items-center gap-4">
+                    <div className="relative">
+                      <div className="w-16 h-16 rounded-full bg-gray-200 overflow-hidden">
+                        <img
+                          src={`${import.meta.env.VITE_API_URL}/uploads/images/${
+                            dog.imageFilename
+                          }`}
+                          alt={`Photo de ${dog.name}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <Button
+                        className="absolute bottom-0 right-0 p-1 text-xs rounded-full bg-green-500 text-white"
+                        onClick={() =>
+                          document.getElementById(`upload-photo-${dog.id}`)?.click()
+                        }
+                      >
+                        +
+                      </Button>
+                      <input
+                        type="file"
+                        id={`upload-photo-${dog.id}`}
+                        style={{ display: "none" }}
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            handleDogImageUpload(dog.id.toString(), file);
+                          }
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold">{dog.name}</h3>
+                      <p className="text-sm text-muted-foreground">{dog.race}</p>
+                    </div>
                   </div>
+
                   <Button
-                    variant="outline"
                     size="sm"
-                    onClick={() => handleDeleteDog(dog.id.toString())} 
-                    className="text-red-500" 
+                    onClick={() => handleDeleteDog(dog.id.toString())}
+                    className="text-red-500"
                   >
                     Supprimer
                   </Button>
@@ -125,14 +175,6 @@ export function Dogs() {
           )}
         </article>
       </ProfileCard>
-
-    
-      {showAddDogForm && (
-        <AddDogs
-          onCancel={() => setShowAddDogForm(false)}
-          onRefresh={fetchUserDogs}
-        />
-      )}
     </>
   );
 }
