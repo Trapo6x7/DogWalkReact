@@ -35,7 +35,7 @@ export default function App() {
           onGoToLogin={() => setPage("login")} // Naviguer vers la page de connexion
         />
       )}
-      {page === "welcome" && <Welcome />}
+      {page === "welcome" && <Welcome onLogout={() => setPage("login")} />}
     </>
   );
 }

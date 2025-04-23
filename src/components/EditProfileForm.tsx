@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { UserData } from "../types/Interfaces";
-import EditPasswordForm from "./EditPasswordForm";
 import { ProfileCard } from "./ProfileCard";
 import { useAuth } from "../context/AuthContext"; // 🔥 Import du context
 
@@ -17,7 +16,7 @@ export function EditProfileForm({
   onCancel,
   onRefresh,
 }: EditProfileFormProps & { onRefresh: () => void }) {
-  const { user, token,  refreshUser } = useAuth(); 
+  const {user, token, refreshUser, setUser } = useAuth();
 
   const [userData, setUserData] = useState<UserData | null>(initialUserData);
   const [formData, setFormData] = useState<UserData>(
@@ -82,6 +81,7 @@ export function EditProfileForm({
 
       const updatedUser = await response.json();
       setUserData(updatedUser);
+      setUser(updatedUser); 
       onRefresh();
       onCancel();
     } catch (error) {

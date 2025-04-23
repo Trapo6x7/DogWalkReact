@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import EditProfileForm from "./EditProfileForm";
-import EditPasswordForm from "./EditPasswordForm"; // ⬅️ Étape 1
+import EditPasswordForm from "./EditPasswordForm";
 import AddDogs from "./AddDogs";
 
-export function Navbar() {
-  const { user, logout } = useAuth();
+export function Navbar({ onLogout }: { onLogout: () => void }) {
+  const { user, logout, refreshUser } = useAuth();
   const [showEditProfile, setShowEditProfile] = useState(false);
   const [showAddDogForm, setShowAddDogForm] = useState(false);
-  const [showEditPassword, setShowEditPassword] = useState(false); // ⬅️ Étape 2
+  const [showEditPassword, setShowEditPassword] = useState(false);
 
   const handleNavigation = (path: string) => {
     console.log(`Navigation vers ${path}`);
@@ -18,7 +18,10 @@ export function Navbar() {
     <header className="flex justify-around items-center px-6 bg-[#FBFFEE]">
       <nav className="container mx-auto py-1">
         <div className="flex justify-between">
-          <a onClick={() => handleNavigation("/")} className="flex items-center space-x-2 w-1/12">
+          <a
+            onClick={() => handleNavigation("/")}
+            className="flex items-center space-x-2 w-1/12"
+          >
             <img src="/mimilogo.png" alt="Dogwalk logo" />
           </a>
 
@@ -31,20 +34,18 @@ export function Navbar() {
                 onSave={(updatedData) => {
                   console.log("Profil mis à jour :", updatedData);
                 }}
-                onRefresh={() => {}}
+                onRefresh={refreshUser}
               />
             )}
 
             {showEditPassword && user && (
-              <EditPasswordForm
-                onCancel={() => setShowEditPassword(false)}
-              />
+              <EditPasswordForm onCancel={() => setShowEditPassword(false)} />
             )}
 
             {showAddDogForm && (
               <AddDogs
                 onCancel={() => setShowAddDogForm(false)}
-                onRefresh={() => {}}
+                onRefresh={refreshUser}
               />
             )}
 
@@ -64,7 +65,7 @@ export function Navbar() {
               onClick={() => {
                 setShowAddDogForm(!showAddDogForm);
                 setShowEditProfile(false);
-                setShowEditPassword(false); 
+                setShowEditPassword(false);
               }}
               className="p-2 w-19 z-75"
             >
@@ -76,14 +77,20 @@ export function Navbar() {
               onClick={() => {
                 setShowEditPassword(!showEditPassword);
                 setShowEditProfile(false);
-                setShowAddDogForm(false); 
+                setShowAddDogForm(false);
               }}
               className="p-2 w-15 z-75"
             >
               <img src="/settingsdogwalk.png" alt="Modifier le mot de passe" />
             </a>
 
-            <a onClick={logout} className="p-2 w-15 z-75 cursor-pointer">
+            <a
+              onClick={() => {
+                logout();
+                onLogout();
+              }}
+              className="p-2 w-15 z-75 cursor-pointer"
+            >
               <img src="/logout.png" alt="Déconnexion" />
             </a>
           </nav>

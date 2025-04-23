@@ -8,7 +8,7 @@ interface LoginProps {
   onLoginSuccess: () => void;
 }
 
-export function Login({ onGoToRegister }: LoginProps) {
+export function Login({ onLoginSuccess , onGoToRegister }: LoginProps) {
   const { login } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -29,7 +29,8 @@ export function Login({ onGoToRegister }: LoginProps) {
       }
 
       const { token } = await response.json();
-      login(token); // Appel de la méthode login du contexte
+      login(token); 
+      onLoginSuccess();
     } catch (error: any) {
       setErrorMessage(error.message);
     }

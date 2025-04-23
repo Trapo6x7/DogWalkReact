@@ -4,7 +4,7 @@ import Footer from "./Footer";
 import { Me } from "./Me";
 import { Navbar } from "./Navbar";
 
-export function Welcome() {
+export function Welcome({ onLogout }: { onLogout: () => void }) {
   const { user, isLoggedIn } = useAuth();
 
   if (!isLoggedIn) {
@@ -13,7 +13,7 @@ export function Welcome() {
 
   return (
     <>
-      <Navbar />
+      <Navbar onLogout={onLogout}  />
       <section className="flex gap-8 justify-center py-8 px-47 w-full items-center">
         <article className="w-1/3">
           <Me userData={user} />

@@ -7,7 +7,6 @@ import { ProfileCard } from "./ProfileCard";
 export function Dogs() {
   const [userData, setUserData] = useState<UserData | null>(null);
 
-  console.log(userData);
 
   const fetchUserDogs = async () => {
     const token = localStorage.getItem("authToken");
