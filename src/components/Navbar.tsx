@@ -25,7 +25,7 @@ export function Navbar({ onLogout }: { onLogout: () => void }) {
             <img src="/mimilogo.png" alt="Dogwalk logo" />
           </a>
 
-          <nav className="flex gap-1">
+          <nav className="flex justify-between">
             {/* Affichages conditionnels */}
             {showEditProfile && user && (
               <EditProfileForm
