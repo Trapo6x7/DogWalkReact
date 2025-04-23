@@ -137,7 +137,7 @@ footer {
   display: flex;
   justify-content: center;
   align-items: end;
-  min-height: 85%;
+  height: 5%;
   gap: 1%;
   padding: 1% 0;
 }

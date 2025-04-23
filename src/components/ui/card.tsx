@@ -7,7 +7,7 @@ interface CardProps {
 
 export function Card({ children, className = '' }: CardProps) {
   return (
-    <div className={`flex-col h-[20rem] justify-center rounded-3xl shadow-glass ${className}`}>
+    <div className={`flex-col h-[20rem] justify-center items-center rounded-3xl shadow-glass ${className}`}>
       {children}
     </div>
   );

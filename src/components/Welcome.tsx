@@ -1,6 +1,7 @@
 import { useAuth } from "../context/AuthContext";
 import { Dogs } from "./Dogs";
 import Footer from "./Footer";
+import Groups from "./Groups";
 import { Me } from "./Me";
 import { Navbar } from "./Navbar";
 
@@ -28,7 +29,9 @@ export function Welcome({ onLogout }: { onLogout: () => void }) {
         </article>
       </section>
 
-      <section></section>
+      <section>
+        <Groups />
+      </section>
       <Footer />
     </>
   );

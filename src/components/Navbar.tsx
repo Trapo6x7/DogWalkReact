@@ -20,7 +20,7 @@ export function Navbar({ onLogout }: { onLogout: () => void }) {
         <div className="flex justify-between">
           <a
             onClick={() => handleNavigation("/")}
-            className="flex items-center space-x-2 w-1/12"
+            className="flex items-center space-x-2 w-1/12 z-75"
           >
             <img src="/mimilogo.png" alt="Dogwalk logo" />
           </a>
