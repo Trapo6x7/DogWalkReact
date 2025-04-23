@@ -27,6 +27,8 @@ export function Welcome({ onLogout }: { onLogout: () => void }) {
           <Dogs />
         </article>
       </section>
+
+      <section></section>
       <Footer />
     </>
   );

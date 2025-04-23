@@ -6,14 +6,16 @@ interface AuthContextProps {
   isLoggedIn: boolean;
   login: (token: string) => void;
   logout: () => void;
-  refreshUser: () => void; 
-  token: string | null;  
+  refreshUser: () => void;
+  token: string | null;
   setUser: (user: UserData | null) => void;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [user, setUser] = useState<UserData | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState<string | null>(null);
@@ -31,13 +33,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/me`, {
         headers: {
           Authorization: `Bearer ${tokenToUse}`,
+          "Content-Type": "application/ld+json",
         },
       });
-  
+
       if (!response.ok) {
         throw new Error("Failed to fetch user data");
       }
-  
+
       const data: UserData = await response.json();
       setUser(data);
       setIsLoggedIn(true);
@@ -47,12 +50,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       logout();
     }
   };
-  
+
   const login = (newToken: string) => {
     localStorage.setItem("authToken", newToken);
     fetchUserData(newToken);
   };
-  
+
   const refreshUser = () => {
     const currentToken = localStorage.getItem("authToken");
     if (currentToken) {
@@ -68,7 +71,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider   value={{ user, isLoggedIn, login, logout, refreshUser, token, setUser }}>
+    <AuthContext.Provider
+      value={{ user, isLoggedIn, login, logout, refreshUser, token, setUser }}
+    >
       {children}
     </AuthContext.Provider>
   );
