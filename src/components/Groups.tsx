@@ -1,6 +1,15 @@
 import { useState, useEffect } from "react";
 import { ProfileCard } from "./ProfileCard";
 import { useAuth } from "../context/AuthContext";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMapEvents,
+} from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import type { LeafletMouseEvent } from "leaflet";
 
 type Group = {
   id: number;
@@ -25,6 +34,17 @@ export default function Groups() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
+  const [showWalkForm, setShowWalkForm] = useState(false);
+  const [walkName, setWalkName] = useState("");
+  const [walkLocation, setWalkLocation] = useState("");
+  const [walkDate, setWalkDate] = useState("");
+  const [markerPosition, setMarkerPosition] = useState<[number, number] | null>(
+    null
+  );
+  const [selectedWalkIndex, setSelectedWalkIndex] = useState(0);
+  const [mapCenter, setMapCenter] = useState<[number, number]>([
+    48.8584, 2.2945,
+  ]);
 
   const userId = user?.id;
 
@@ -130,8 +150,6 @@ export default function Groups() {
   };
 
   const handleJoinGroup = async (groupId: number) => {
-    console.log(groupId);
-
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/group_requests`,
@@ -185,40 +203,80 @@ export default function Groups() {
     }
   };
 
-  const handleShowDetails = async (groupId: number) => {
-    console.log(groupId);
+  const fetchWalks = async (groupId: number) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/groups/${groupId}`,
+        `${import.meta.env.VITE_API_URL}/groups/${groupId}/walks`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/ld+json",
+            "Content-Type": "application/json",
           },
         }
       );
 
       if (!response.ok) {
+        throw new Error("Erreur lors de la récupération des balades");
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  };
+
+  const handleShowDetails = async (groupId: number) => {
+    try {
+      const groupResponse = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/groups/${groupId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!groupResponse.ok) {
         throw new Error("Erreur lors de la récupération des détails du groupe");
       }
 
-      const data = await response.json();
+      const groupData = await groupResponse.json();
+      const walks = await fetchWalks(groupId);
 
       setSelectedGroup({
-        id: data.id,
-        name: data.name || `DogWalk # ${data.id}`,
-        description: data.comment,
-        mixed: data.mixed,
-        comment: data.comment,
-        createdAt: data.createdAt,
-        groupRequests: data.groupRequests ?? [],
-        groupRoles: data.groupRoles ?? [],
-        walks: data.walks ?? [],
+        ...groupData,
+        walks, // Ajoute les balades récupérées séparément
       });
     } catch (error) {
       console.error("Erreur lors de la récupération des détails :", error);
     }
   };
+
+  // Composant pour gérer le clic sur la carte
+  function LocationMarker() {
+    useMapEvents({
+      click(e: LeafletMouseEvent) {
+        setMarkerPosition([e.latlng.lat, e.latlng.lng]);
+        setWalkLocation(`${e.latlng.lat},${e.latlng.lng}`);
+      },
+    });
+    return markerPosition ? <Marker position={markerPosition} /> : null;
+  }
+
+  useEffect(() => {
+    if (showWalkForm && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setMapCenter([position.coords.latitude, position.coords.longitude]);
+        },
+        () => {
+          setMapCenter([48.8584, 2.2945]); // fallback Paris
+        }
+      );
+    }
+  }, [showWalkForm]);
 
   return (
     <article className="px-38 flex w-full h-full">
@@ -282,38 +340,36 @@ export default function Groups() {
         </ProfileCard>
 
         {selectedGroup && (
-          <article className="fixed inset-0 backdrop-blur-sm bg-white/20 flex items-center justify-center z-100">
-            <div className="bg-white p-20 rounded shadow-lg w-[60%] h-[50%] relative">
+          <article className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white p-8 rounded-lg shadow-2xl w-[60%] h-[70%] relative">
               <button
-                className="absolute top-2 right-2 text-gray-500 hover:text-black"
+                className="absolute top-4 right-4 text-gray-500 hover:text-black text-xl"
                 onClick={() => setSelectedGroup(null)}
               >
                 ✕
               </button>
-
-              <div className="flex flex-col justify-center items-center gap-5">
-                <h2 className="text-xl font-bold">Détails du groupe</h2>
-                <div className="items-center justify-center flex flex-col p-10">
-                  <p>
+              <div className="flex flex-col justify-center items-center gap-6">
+                <h2 className="text-2xl font-bold text-gray-800">
+                  Détails du groupe
+                </h2>
+                <div className="items-center justify-center flex flex-col p-6 space-y-4">
+                  <p className="text-lg">
                     <strong>Nom :</strong> {selectedGroup.name}
                   </p>
-                  <p>
+                  <p className="text-lg">
                     <strong>Description :</strong> {selectedGroup.comment}
                   </p>
-                  <p>
-                    <strong>Mixte :</strong>{" "}
-                    {selectedGroup.mixed ? "Oui" : "Non"}
+                  <p className="text-lg">
+                    <strong>Mixte :</strong> {selectedGroup.mixed ? "Oui" : "Non"}
                   </p>
-                  <p>
+                  <p className="text-lg">
                     <strong>Créé le :</strong>{" "}
                     {new Date(
                       selectedGroup.createdAt || ""
                     ).toLocaleDateString()}
                   </p>
-
-                  <p>
-                    <strong>Balades :</strong>{" "}
-                    {selectedGroup.walks?.length ?? 0}
+                  <p className="text-lg">
+                    <strong>Balades :</strong> {selectedGroup.walks?.length ?? 0}
                   </p>
 
                   {isCreator && (
@@ -358,16 +414,187 @@ export default function Groups() {
                     </>
                   )}
 
+                  {selectedGroup.walks && selectedGroup.walks.length > 0 ? (
+                    <div className="mt-4 w-full">
+                      <h3 className="font-semibold mb-2">Balades</h3>
+                      <div className="h-64 w-full mb-4 rounded-lg">
+                        <MapContainer
+                          center={
+                            selectedGroup.walks &&
+                            selectedGroup.walks.length > 0
+                              ? selectedGroup.walks[selectedWalkIndex].location
+                                  .split(",")
+                                  .map(Number)
+                              : [48.8584, 2.2945]
+                          }
+                          zoom={13}
+                          style={{ height: "100%", width: "100%" }}
+                        >
+                          <TileLayer
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            attribution="&copy; OpenStreetMap contributors"
+                          />
+                          {selectedGroup.walks.map((walk, index) => {
+                            const [lat, lng] = walk.location
+                              .split(",")
+                              .map(Number);
+                            return (
+                              <Marker
+                                key={walk.id}
+                                position={[lat, lng]}
+                                eventHandlers={{
+                                  click: () => setSelectedWalkIndex(index), // Change l'index lorsque le marqueur est cliqué
+                                }}
+                              >
+                                <Popup>
+                                  <strong>{walk.name}</strong>
+                                  <br />
+                                  {new Date(walk.startAt).toLocaleDateString()}
+                                </Popup>
+                              </Marker>
+                            );
+                          })}
+                        </MapContainer>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="mt-4 text-gray-600">
+                      Aucune balade disponible.
+                    </p>
+                  )}
+
+                  {/* Ajout du bouton et formulaire de création de balade */}
+                  {isCreator && (
+                    <div className="mt-6 w-full">
+                      <button
+                        className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                        onClick={() => {
+                          if (selectedGroup) {
+                            setShowWalkForm(true);
+                          }
+                        }}
+                        disabled={!selectedGroup || showWalkForm}
+                      >
+                        Créer une balade
+                      </button>
+                    </div>
+                  )}
+
                   {canRequestJoin && (
                     <button
                       onClick={() => handleJoinGroup(selectedGroup.id)}
-                      className="mt-6 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                      className="mt-6 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
                     >
                       Rejoindre ce groupe
                     </button>
                   )}
                 </div>
               </div>
+            </div>
+          </article>
+        )}
+
+        {showWalkForm && selectedGroup && (
+          <article className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-2xl w-[40%] relative">
+              <button
+                className="absolute top-4 right-4 text-gray-500 hover:text-black text-xl"
+                onClick={() => setShowWalkForm(false)}
+              >
+                ✕
+              </button>
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">
+                Créer une balade
+              </h2>
+              <form
+                className="flex flex-col gap-4"
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  if (!walkName || !walkLocation || !walkDate || !selectedGroup)
+                    return;
+                  try {
+                    const response = await fetch(
+                      `${import.meta.env.VITE_API_URL}/api/walks`,
+                      {
+                        method: "POST",
+                        headers: {
+                          Authorization: `Bearer ${token}`,
+                          "Content-Type": "application/ld+json",
+                        },
+                        body: JSON.stringify({
+                          name: walkName,
+                          location: walkLocation,
+                          startAt: new Date(walkDate).toISOString(),
+                          walkGroup: `/api/groups/${selectedGroup.id}`,
+                        }),
+                      }
+                    );
+                    if (!response.ok) throw new Error("Erreur création balade");
+                    setShowWalkForm(false);
+                    setWalkName("");
+                    setWalkLocation("");
+                    setWalkDate("");
+                    setMarkerPosition(null);
+                    alert("Balade créée !");
+                    await handleShowDetails(selectedGroup.id);
+                  } catch (err) {
+                    alert("Erreur lors de la création de la balade.");
+                  }
+                }}
+              >
+                <input
+                  className="border p-3 rounded-lg w-full"
+                  type="text"
+                  placeholder="Nom de la balade"
+                  value={walkName}
+                  onChange={(e) => setWalkName(e.target.value)}
+                  required
+                />
+                <div className="h-64 w-full mb-4 rounded-lg">
+                  <MapContainer
+                    center={mapCenter}
+                    zoom={13}
+                    style={{ height: "100%", width: "100%" }}
+                  >
+                    <TileLayer
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      attribution="&copy; OpenStreetMap contributors"
+                    />
+                    <LocationMarker />
+                  </MapContainer>
+                </div>
+                <input
+                  className="border p-3 rounded-lg w-full"
+                  type="text"
+                  placeholder="Lieu (lat,lng)"
+                  value={walkLocation}
+                  onChange={(e) => setWalkLocation(e.target.value)}
+                  required
+                  readOnly
+                />
+                <input
+                  className="border p-3 rounded-lg w-full"
+                  type="datetime-local"
+                  value={walkDate}
+                  onChange={(e) => setWalkDate(e.target.value)}
+                  required
+                />
+                <div className="flex gap-4">
+                  <button
+                    type="submit"
+                    className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+                  >
+                    Valider
+                  </button>
+                  <button
+                    type="button"
+                    className="bg-gray-300 px-6 py-2 rounded-lg hover:bg-gray-400"
+                    onClick={() => setShowWalkForm(false)}
+                  >
+                    Annuler
+                  </button>
+                </div>
+              </form>
             </div>
           </article>
         )}

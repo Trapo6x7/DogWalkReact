@@ -1,11 +1,19 @@
-
 import { Button } from "./ui/button";
 import { deleteRequest } from "../utils/api";
-import { ProfileCard } from "./ProfileCard";
 import { useAuth } from "../context/AuthContext";
+import { useEffect, useState } from "react";
 
 export function Dogs() {
   const { user, refreshUser, token } = useAuth();
+  const [allRaces, setAllRaces] = useState<{ id: number; name: string }[]>([]);
+
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/api/races`)
+      .then((res) => res.json())
+      .then((data) => {
+        setAllRaces(data.member || []);
+      });
+  }, []);
 
   const handleDeleteDog = async (dogId: string) => {
     const dog = user?.dogs.find((d) => d.id.toString() === dogId);
@@ -28,7 +36,10 @@ export function Dogs() {
       if (response.ok) {
         refreshUser();
       } else {
-        console.error("Erreur lors de la suppression du chien :", response.error);
+        console.error(
+          "Erreur lors de la suppression du chien :",
+          response.error
+        );
       }
     } catch (error) {
       console.error("Erreur:", error);
@@ -65,37 +76,35 @@ export function Dogs() {
   };
 
   return (
-    <ProfileCard
-      title="Mes chiens"
-      headerContent={
-        <div className="relative">
-          <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden">
+    <div className="w-full h-75 flex flex-col items-center">
+      <div className="bg-[#FBFFEE] rounded-lg w-full overflow-scroll">
+        {/* Header Section */}
+        <div className="p-6 flex flex-row items-center gap-8 justify-between w-full">
+          <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden border-4 border-white">
             <img
               src="/dwlogopatte.png"
               alt="Profile"
               className="w-full h-full object-cover"
             />
           </div>
+          <h2 className="text-lg font-bold text-gray-900 mt-4">Mes chiens</h2>
         </div>
-      }
-      footerContent={<></>}
-      customClass="h-[10%]"
-    >
-      <article className="flex flex-wrap items-center justify-center h-full w-full py-8 px-6 overflow-hidden">
-        {user?.dogs && user.dogs.length > 0 ? (
-          <div className="space-y-4 w-full">
-            {user.dogs.map((dog) => (
+
+        {/* Body Section */}
+        <div className="p-6 flex flex-col gap-4 w-full text-justify border border-[#EBFFA8]">
+          {user?.dogs && user.dogs.length > 0 ? (
+            user.dogs.map((dog) => (
               <div
                 key={dog.id}
-                className="flex items-center justify-between p-4 rounded-lg"
+                className="flex items-center justify-between p-4"
               >
                 <div className="flex items-center gap-4">
                   <div className="relative">
                     <div className="w-16 h-16 rounded-full bg-gray-200 overflow-hidden">
                       <img
-                        src={`${
-                          import.meta.env.VITE_API_URL
-                        }/uploads/images/${dog.imageFilename}`}
+                        src={`${import.meta.env.VITE_API_URL}/uploads/images/${
+                          dog.imageFilename
+                        }`}
                         alt={`Photo de ${dog.name}`}
                         className="w-full h-full object-cover"
                       />
@@ -103,7 +112,9 @@ export function Dogs() {
                     <Button
                       className="absolute bottom-0 right-0 p-1 text-xs rounded-full bg-green-500 text-white"
                       onClick={() =>
-                        document.getElementById(`upload-photo-${dog.id}`)?.click()
+                        document
+                          .getElementById(`upload-photo-${dog.id}`)
+                          ?.click()
                       }
                     >
                       +
@@ -122,8 +133,25 @@ export function Dogs() {
                     />
                   </div>
                   <div>
-                    <h3 className="font-semibold">{dog.name}</h3>
-                    <p className="text-sm text-muted-foreground">{dog.race}</p>
+                    <h3 className="font-semibold text-gray-900">{dog.name}</h3>
+                    <p className="text-sm text-gray-700">
+                      {!allRaces.length
+                        ? "Chargement…"
+                        : dog.race &&
+                          (Array.isArray(dog.race)
+                            ? dog.race.length > 0
+                            : !!dog.race)
+                        ? (Array.isArray(dog.race) ? dog.race : [dog.race])
+                            .map((raceIri: string) => {
+                              const raceId = raceIri.split("/").pop();
+                              const raceObj = allRaces.find(
+                                (r) => r.id.toString() === raceId
+                              );
+                              return raceObj ? raceObj.name : "Race inconnue";
+                            })
+                            .join(", ")
+                        : "Aucune race"}
+                    </p>
                   </div>
                 </div>
                 <Button
@@ -134,14 +162,21 @@ export function Dogs() {
                   Supprimer
                 </Button>
               </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-center text-muted-foreground">
-            Vous n'avez pas encore ajouté de chien.
-          </p>
-        )}
-      </article>
-    </ProfileCard>
+            ))
+          ) : (
+            <p className="text-center text-gray-700">
+              Vous n'avez pas encore ajouté de chien.
+            </p>
+          )}
+        </div>
+
+        {/* Footer Section */}
+        <div className="bg-[#FBFFEE] p-4 flex justify-center">
+          <button className="bg-[#f6c23e] text-white px-4 py-2 rounded-lg hover:bg-[#e0ac2d] transition">
+            Ajouter un chien
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }

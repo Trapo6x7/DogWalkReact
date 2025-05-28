@@ -31,20 +31,20 @@ export function AddDogs({ onCancel, onRefresh }: AddDogsProps) {
             },
           }
         );
-  
+
         if (!response.ok)
           throw new Error("Erreur lors de la récupération des races");
-  
+
         const data = await response.json();
         setRaces(data["member"]);
       } catch (error) {
         console.error("Erreur lors du chargement des races :", error);
       }
     };
-  
+
     fetchRaces();
   }, [token]);
-  
+
   useEffect(() => {
     const fetchDogs = async () => {
       try {
@@ -79,7 +79,7 @@ export function AddDogs({ onCancel, onRefresh }: AddDogsProps) {
 
     const dogData = {
       name: dogName,
-      race: `/api/races/${dogRaceId}`,
+      race: dogRaceId ? [`/api/races/${dogRaceId}`] : [],
       gender: dogGender,
       birthdate: dogBirthdate,
     };
@@ -156,7 +156,7 @@ export function AddDogs({ onCancel, onRefresh }: AddDogsProps) {
                   </option>
                 ))
               ) : (
-                <option>Chargement...</option> 
+                <option>Chargement...</option>
               )}
             </select>
 

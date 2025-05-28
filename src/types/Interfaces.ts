@@ -7,6 +7,7 @@ export interface UserData {  // Renamed from User to avoid conflicts
   birthdate: string;
   score: number;
   description?: string;
+  city?: string; // Ajout du champ ville
 }
 
 export interface Dog {

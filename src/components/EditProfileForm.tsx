@@ -16,7 +16,7 @@ export function EditProfileForm({
   onCancel,
   onRefresh,
 }: EditProfileFormProps & { onRefresh: () => void }) {
-  const {user, token, refreshUser, setUser } = useAuth();
+  const { user, token, refreshUser, setUser } = useAuth();
 
   const [userData, setUserData] = useState<UserData | null>(initialUserData);
   const [formData, setFormData] = useState<UserData>(
@@ -29,6 +29,7 @@ export function EditProfileForm({
       birthdate: "",
       score: 0,
       description: "",
+      city: "",
     }
   );
 
@@ -81,7 +82,7 @@ export function EditProfileForm({
 
       const updatedUser = await response.json();
       setUserData(updatedUser);
-      setUser(updatedUser); 
+      setUser(updatedUser);
       onRefresh();
       onCancel();
     } catch (error) {
@@ -114,7 +115,10 @@ export function EditProfileForm({
           className="p-2 rounded bg-neutral-white border border-secondary-brown"
         />
 
-        <label htmlFor="description" className="font-medium text-secondary-brown">
+        <label
+          htmlFor="description"
+          className="font-medium text-secondary-brown"
+        >
           Description
         </label>
         <textarea
@@ -131,6 +135,19 @@ export function EditProfileForm({
             Vous avez dépassé la limite de 140 caractères !
           </div>
         )}
+
+        <label htmlFor="city" className="font-medium text-secondary-brown">
+          Ville
+        </label>
+        <input
+          type="text"
+          id="city"
+          name="city"
+          value={formData.city}
+          onChange={handleChange}
+          placeholder="Ville"
+          className="p-2 rounded bg-neutral-white border border-secondary-brown"
+        />
 
         <div className="flex gap-4 mt-4 justify-center">
           <Button
