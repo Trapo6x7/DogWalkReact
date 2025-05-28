@@ -92,7 +92,7 @@ export function Dogs() {
           className="w-full h-full object-cover"
         />
       </div>
-      <h2 className="text-lg font-bold text-gray-900 mt-4">Mes chiens</h2>
+      <h2 className="text-lg font-bold text-gray-900 mt-4 uppercase">Mes chiens</h2>
     </div>
 
     {/* Scrollable Section */}
@@ -138,7 +138,7 @@ export function Dogs() {
                   />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">{dog.name}</h3>
+                  <h3 className="font-semibold text-gray-900 uppercase">{dog.name}</h3>
                   <p className="text-sm text-gray-700">
                     {!allRaces.length
                       ? "Chargement…"

@@ -341,7 +341,8 @@ export default function Groups() {
 
         {selectedGroup && (
           <article className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white p-8 rounded-lg shadow-2xl w-[60%] h-[70%] relative">
+            <div className="bg-white p-8 rounded-lg shadow-2xl w-full max-w-[90%] h-[70%] mx-auto relative">
+              {" "}
               <button
                 className="absolute top-4 right-4 text-gray-500 hover:text-black text-xl"
                 onClick={() => setSelectedGroup(null)}
@@ -349,130 +350,122 @@ export default function Groups() {
                 ✕
               </button>
               <div className="flex flex-col justify-center items-center gap-6">
-                <h2 className="text-2xl font-bold text-gray-800">
+                <h2 className="text-2xl font-bold text-gray-800 uppercase">
                   Détails du groupe
                 </h2>
-                <div className="items-center justify-center flex flex-col p-6 space-y-4">
-                  <p className="text-lg">
-                    <strong>Nom :</strong> {selectedGroup.name}
-                  </p>
-                  <p className="text-lg">
-                    <strong>Description :</strong> {selectedGroup.comment}
-                  </p>
-                  <p className="text-lg">
-                    <strong>Mixte :</strong> {selectedGroup.mixed ? "Oui" : "Non"}
-                  </p>
-                  <p className="text-lg">
-                    <strong>Créé le :</strong>{" "}
-                    {new Date(
-                      selectedGroup.createdAt || ""
-                    ).toLocaleDateString()}
-                  </p>
-                  <p className="text-lg">
-                    <strong>Balades :</strong> {selectedGroup.walks?.length ?? 0}
-                  </p>
-
-                  {isCreator && (
-                    <>
-                      <p>
-                        <strong>Demandes :</strong>{" "}
-                        {selectedGroup.groupRequests?.length ?? 0}
-                      </p>
-                      <p>
-                        <strong>Membres :</strong>{" "}
-                        {selectedGroup.groupRoles?.length ?? 0}
-                      </p>
-                      {selectedGroup.groupRequests &&
-                        selectedGroup.groupRequests.length > 0 && (
-                          <div className="mt-4 w-full">
-                            <h3 className="font-semibold mb-2">
-                              Demandes en attente
-                            </h3>
-                            <ul className="space-y-2">
-                              {selectedGroup.groupRequests.map((request) => (
-                                <li
-                                  key={request.id}
-                                  className="border p-3 rounded flex items-center justify-between"
-                                >
-                                  <span>
-                                    {request.user?.email ??
-                                      "Utilisateur inconnu"}
-                                  </span>
-                                  <button
-                                    onClick={() =>
-                                      handleAcceptRequest(request.id)
-                                    }
-                                    className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
-                                  >
-                                    Accepter
-                                  </button>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
-                    </>
-                  )}
-
-                  {selectedGroup.walks && selectedGroup.walks.length > 0 ? (
-                    <div className="mt-4 w-full">
-                      <h3 className="font-semibold mb-2">Balades</h3>
-                      <div className="h-64 w-full mb-4 rounded-lg">
-                        <MapContainer
-                          center={
-                            selectedGroup.walks &&
-                            selectedGroup.walks.length > 0
-                              ? selectedGroup.walks[selectedWalkIndex].location
-                                  .split(",")
-                                  .map(Number)
-                              : [48.8584, 2.2945]
-                          }
-                          zoom={13}
-                          style={{ height: "100%", width: "100%" }}
-                        >
-                          <TileLayer
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                            attribution="&copy; OpenStreetMap contributors"
-                          />
-                          {selectedGroup.walks.map((walk, index) => {
-                            const [lat, lng] = walk.location
-                              .split(",")
-                              .map(Number);
-                            return (
-                              <Marker
-                                key={walk.id}
-                                position={[lat, lng]}
-                                eventHandlers={{
-                                  click: () => setSelectedWalkIndex(index), // Change l'index lorsque le marqueur est cliqué
-                                }}
-                              >
-                                <Popup>
-                                  <strong>{walk.name}</strong>
-                                  <br />
-                                  {new Date(walk.startAt).toLocaleDateString()}
-                                </Popup>
-                              </Marker>
-                            );
-                          })}
-                        </MapContainer>
-                      </div>
-                    </div>
-                  ) : (
-                    <p className="mt-4 text-gray-600">
-                      Aucune balade disponible.
+                <div className="w-full max-w-3xl flex flex-col gap-6">
+                  {/* Section : Informations générales */}
+                  <div className="space-y-4 flex flex-col gap-2">
+                    <h3 className="text-xl font-bold text-gray-800 uppercase">
+                      Informations générales
+                    </h3>
+                    <p className="text-lg">
+                      <strong>Nom :</strong> {selectedGroup.name}
                     </p>
-                  )}
+                    <p className="text-lg">
+                      <strong>Description :</strong> {selectedGroup.comment}
+                    </p>
+                    <p className="text-lg">
+                      <strong>Mixte :</strong>{" "}
+                      {selectedGroup.mixed ? "Oui" : "Non"}
+                    </p>
+                    <p className="text-lg">
+                      <strong>Créé le :</strong>{" "}
+                      {new Date(
+                        selectedGroup.createdAt || ""
+                      ).toLocaleDateString()}
+                    </p>
+                    <p className="text-lg">
+                      <strong>Balades :</strong>{" "}
+                      {selectedGroup.walks?.length ?? 0}
+                    </p>
+                  </div>
 
-                  {/* Ajout du bouton et formulaire de création de balade */}
+                  {/* Section : Demandes */}
+                  {isCreator &&
+                    selectedGroup &&
+                    Array.isArray(selectedGroup.groupRequests) &&
+                    selectedGroup.groupRequests.length > 0 && (
+                      <div className="space-y-4">
+                        <h3 className="text-xl font-bold text-gray-800">
+                          Demandes en attente
+                        </h3>
+                        <ul className="space-y-2">
+                          {selectedGroup?.groupRequests?.map((request) => (
+                            <li
+                              key={request.id}
+                              className="border p-3 rounded-lg flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition"
+                            >
+                              <span>
+                                {request.user?.email ?? "Utilisateur inconnu"}
+                              </span>
+                              <button
+                                onClick={() => handleAcceptRequest(request.id)}
+                                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+                              >
+                                Accepter
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                  {/* Section : Balades */}
+                  <div className="space-y-4">
+                    <h3 className="text-xl font-bold text-gray-800 uppercase">Balades</h3>
+                    {selectedGroup.walks && selectedGroup.walks.length > 0 ? (
+                      <div className="space-y-4">
+                        <div className="h-64 w-full rounded-lg overflow-hidden">
+                          <MapContainer
+                            center={
+                              selectedGroup.walks[selectedWalkIndex]?.location
+                                .split(",")
+                                .map(Number) || [48.8584, 2.2945]
+                            }
+                            zoom={13}
+                            style={{ height: "100%", width: "100%" }}
+                          >
+                            <TileLayer
+                              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                              attribution="&copy; OpenStreetMap contributors"
+                            />
+                            {selectedGroup.walks.map((walk, index) => {
+                              const [lat, lng] = walk.location
+                                .split(",")
+                                .map(Number);
+                              return (
+                                <Marker
+                                  key={walk.id}
+                                  position={[lat, lng]}
+                                  eventHandlers={{
+                                    click: () => setSelectedWalkIndex(index),
+                                  }}
+                                >
+                                  <Popup>
+                                    <strong>{walk.name}</strong>
+                                    <br />
+                                    {new Date(
+                                      walk.startAt
+                                    ).toLocaleDateString()}
+                                  </Popup>
+                                </Marker>
+                              );
+                            })}
+                          </MapContainer>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-gray-600">Aucune balade disponible.</p>
+                    )}
+                  </div>
+
+                  {/* Boutons */}
                   {isCreator && (
-                    <div className="mt-6 w-full">
+                    <div className="flex justify-center items-center">
                       <button
                         className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                        onClick={() => {
-                          if (selectedGroup) {
-                            setShowWalkForm(true);
-                          }
-                        }}
+                        onClick={() => setShowWalkForm(true)}
                         disabled={!selectedGroup || showWalkForm}
                       >
                         Créer une balade

@@ -114,7 +114,7 @@ export function Me({ userData }: MeProps) {
                 }
               }}
             />
-            <h2 className="text-lg font-bold text-gray-900 mt-4">
+            <h2 className="text-lg font-bold text-gray-900 mt-4 uppercase">
               {localUserData.name}
             </h2>
             <p className="text-sm text-gray-700">
@@ -130,20 +130,20 @@ export function Me({ userData }: MeProps) {
             <div className="p-6 flex flex-col gap-4 w-full text-justify border border-[#EBFFA8]">
               <div className="p-6 flex flex-row gap-8 justify-between w-full">
                 {/* Left Column */}
-                <div className="w-1/2">
-                  <p className="text-sm text-gray-800 text-start">
+                <div className="w-1/2 flex flex-col gap-2">
+                  <p className="text-sm text-gray-800 text-start uppercase font-bold">
                     <strong>Description :</strong>{" "}
                   </p>
-                  <p className="text-sm text-gray-800 text-start">
+                  <p className="text-sm text-gray-800 text-start uppercase font-bold">
                     <strong>Email :</strong>{" "}
                   </p>
-                  <p className="text-sm text-gray-800 text-start">
+                  <p className="text-sm text-gray-800 text-start uppercase font-bold">
                     <strong>Ville :</strong>{" "}
                   </p>
                 </div>
 
                 {/* Right Column */}
-                <div className="w-1/2">
+                <div className="w-1/2 flex flex-col gap-2">
                   <p className="text-sm text-gray-800">
                     {localUserData.description ||
                       "Aucune description disponible."}
