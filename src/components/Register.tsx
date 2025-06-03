@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Button } from "./ui/button";
 import { ProfileCard } from "./ProfileCard";
@@ -14,7 +14,30 @@ export function Register({ onGoToLogin }: RegisterProps) {
   const [password, setPassword] = useState("");
   const [birthdate, setBirthdate] = useState("");
   const [email, setEmail] = useState("");
+  const [city, setCity] = useState(""); // Nouveau champ pour la ville
   const [message, setMessage] = useState("");
+
+  // Utiliser l'API de géolocalisation pour récupérer la ville
+  useEffect(() => {
+    const fetchCity = async () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(async (position) => {
+          const { latitude, longitude } = position.coords;
+
+          // Appeler une API météo gratuite pour obtenir la ville
+          const response = await fetch(
+            `https://api.weatherapi.com/v1/current.json?key=${import.meta.env.VITE_WEATHER_API_KEY}&q=${latitude},${longitude}`
+          );
+          const data = await response.json();
+          setCity(data.location?.name || "Ville inconnue");
+        });
+      } else {
+        setCity("Géolocalisation non disponible");
+      }
+    };
+
+    fetchCity();
+  }, []);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,7 +46,7 @@ export function Register({ onGoToLogin }: RegisterProps) {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/register`, {
         method: "POST",
         headers: { "Content-Type": "application/ld+json" },
-        body: JSON.stringify({ email, password, name, birthdate }),
+        body: JSON.stringify({ email, password, name, birthdate, city }), // Inclure la ville
       });
 
       if (!response.ok) {
@@ -77,6 +100,13 @@ export function Register({ onGoToLogin }: RegisterProps) {
             placeholder="Date de naissance"
             value={birthdate}
             onChange={(e) => setBirthdate(e.target.value)}
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-green"
+          />
+          <input
+            type="text"
+            placeholder="Ville"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-green"
           />
           <Button type="submit" className="w-full text-white">
