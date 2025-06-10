@@ -20,7 +20,7 @@ export function Login({ onLoginSuccess , onGoToRegister }: LoginProps) {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/login_check`, {
         method: "POST",
-        headers: { "Content-Type": "application/ld+json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
 

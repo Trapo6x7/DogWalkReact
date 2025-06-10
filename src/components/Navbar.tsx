@@ -26,6 +26,7 @@ export function Navbar({ onLogout }: { onLogout: () => void }) {
           </a>
 
           <nav className="flex justify-between">
+          
             {/* Affichages conditionnels */}
             {showEditProfile && user && (
               <EditProfileForm

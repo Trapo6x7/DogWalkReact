@@ -10,6 +10,7 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import type { LeafletMouseEvent } from "leaflet";
+import GroupComments from "./GroupComments";
 
 type Group = {
   id: number;
@@ -355,32 +356,38 @@ export default function Groups() {
                 </h2>
                 <div className="w-full max-w-3xl flex flex-col gap-6">
                   {/* Section : Informations générales */}
-                  <div className="space-y-4 flex flex-col gap-2">
-                    <h3 className="text-xl font-bold text-gray-800 uppercase">
-                      Informations générales
-                    </h3>
-                    <p className="text-lg">
-                      <strong>Nom :</strong> {selectedGroup.name}
-                    </p>
-                    <p className="text-lg">
-                      <strong>Description :</strong> {selectedGroup.comment}
-                    </p>
-                    <p className="text-lg">
-                      <strong>Mixte :</strong>{" "}
-                      {selectedGroup.mixed ? "Oui" : "Non"}
-                    </p>
-                    <p className="text-lg">
-                      <strong>Créé le :</strong>{" "}
-                      {new Date(
-                        selectedGroup.createdAt || ""
-                      ).toLocaleDateString()}
-                    </p>
-                    <p className="text-lg">
-                      <strong>Balades :</strong>{" "}
-                      {selectedGroup.walks?.length ?? 0}
-                    </p>
-                  </div>
+                  <div className="flex items-center justify-between w-full">
+                    <div className="space-y-4 flex flex-col gap-2">
+                      <h3 className="text-xl font-bold text-gray-800 uppercase">
+                        Informations générales
+                      </h3>
+                      <p className="text-lg">
+                        <strong>Nom :</strong> {selectedGroup.name}
+                      </p>
+                      <p className="text-lg">
+                        <strong>Description :</strong> {selectedGroup.comment}
+                      </p>
+                      <p className="text-lg">
+                        <strong>Mixte :</strong>{" "}
+                        {selectedGroup.mixed ? "Oui" : "Non"}
+                      </p>
+                      <p className="text-lg">
+                        <strong>Créé le :</strong>{" "}
+                        {new Date(
+                          selectedGroup.createdAt || ""
+                        ).toLocaleDateString()}
+                      </p>
+                      <p className="text-lg">
+                        <strong>Balades :</strong>{" "}
+                        {selectedGroup.walks?.length ?? 0}
+                      </p>
+                    </div>
 
+                    <GroupComments
+                      group="groupe1"
+                      user={{ username: user?.name || "Anonyme" }}
+                    />
+                  </div>
                   {/* Section : Demandes */}
                   {isCreator &&
                     selectedGroup &&
@@ -413,7 +420,9 @@ export default function Groups() {
 
                   {/* Section : Balades */}
                   <div className="space-y-4">
-                    <h3 className="text-xl font-bold text-gray-800 uppercase">Balades</h3>
+                    <h3 className="text-xl font-bold text-gray-800 uppercase">
+                      Balades
+                    </h3>
                     {selectedGroup.walks && selectedGroup.walks.length > 0 ? (
                       <div className="space-y-4">
                         <div className="h-64 w-full rounded-lg overflow-hidden">
