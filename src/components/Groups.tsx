@@ -384,7 +384,7 @@ export default function Groups() {
                     </div>
 
                     <GroupComments
-                      group="groupe1"
+                      group={selectedGroup}
                       user={{ username: user?.name || "Anonyme" }}
                     />
                   </div>
