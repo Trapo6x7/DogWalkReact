@@ -55,6 +55,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.setItem("authToken", newToken);
     fetchUserData(newToken);
   };
+  
+  const logout = () => {
+    localStorage.removeItem("authToken");
+    setUser(null);
+    setIsLoggedIn(false);
+    setToken(null);
+  };
 
   const refreshUser = () => {
     const currentToken = localStorage.getItem("authToken");
@@ -63,12 +70,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem("authToken");
-    setUser(null);
-    setIsLoggedIn(false);
-    setToken(null);
-  };
 
   return (
     <AuthContext.Provider

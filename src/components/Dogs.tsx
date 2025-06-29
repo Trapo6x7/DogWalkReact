@@ -81,9 +81,8 @@ export function Dogs() {
   };
 
   return (
-<div className="w-full h-75 flex flex-col items-center">
-  <div className="bg-[#FBFFEE] rounded-lg w-full h-full flex flex-col">
-    {/* Header Section */}
+<section className="w-full h-75 flex flex-col items-center">
+  <article className="bg-[#FBFFEE] rounded-lg w-full h-full flex flex-col">
     <div className="p-6 flex flex-row items-center gap-8 justify-between w-full">
       <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden border-4 border-white">
         <img
@@ -185,10 +184,10 @@ export function Dogs() {
         </button>
       </div>
     </div>
-  </div>
+  </article>
 
   {/* Modale AddDogs */}
   {isAddModalOpen && <AddDogs onCancel={closeAddModal} onRefresh={refreshUser} />}
-</div>
+</section>
   );
 }

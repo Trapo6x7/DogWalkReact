@@ -10,7 +10,7 @@ interface AddDogsProps {
 
 export function AddDogs({ onCancel, onRefresh }: AddDogsProps) {
   const { token } = useAuth();
-  const [hasDog, setHasDog] = useState(false);
+  // const [hasDog, setHasDog] = useState(false);
 
   const [dogName, setDogName] = useState("");
   const [dogRaceId, setDogRaceId] = useState("");
@@ -61,11 +61,11 @@ export function AddDogs({ onCancel, onRefresh }: AddDogsProps) {
         if (!response.ok)
           throw new Error("Erreur lors de la récupération des chiens");
 
-        const data = await response.json();
+        // const data = await response.json();
 
-        if (data["member"] && data["member"].length >= 1) {
-          setHasDog(true);
-        }
+        // if (data["member"] && data["member"].length >= 1) {
+        //   setHasDog(true);
+        // }
       } catch (error) {
         console.error("Erreur lors du chargement des chiens :", error);
       }
@@ -106,30 +106,15 @@ export function AddDogs({ onCancel, onRefresh }: AddDogsProps) {
   };
 
   return (
-    <div
-      className={`fixed transform -translate-y-1/2 bg-[#FBFFEE] rounded-lg z-50 w-full max-w-md ${
-        hasDog ? "top-43 right-5" : "top-82 right-5"
-      }`}
+    <article
+      className={`fixed transform -translate-y-1/2 bg-[#FBFFEE] rounded-lg z-50 w-full max-w-md  top-80 right-0
+      `}
     >
       <ProfileCard
         title="Ajouter un chien"
         customClass="h-auto"
         headerContent={<></>}
       >
-        {hasDog ? (
-          <div className="p-4 text-center text-secondary-brown">
-            Vous avez déjà ajouté un chien. Vous ne pouvez en ajouter qu’un
-            seul.
-            <div className="mt-4">
-              <Button
-                onClick={onCancel}
-                className="bg-secondary-green text-secondary-brown px-4 py-2 rounded"
-              >
-                Retour
-              </Button>
-            </div>
-          </div>
-        ) : (
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-4">
             <label className="font-medium text-secondary-brown">Nom</label>
             <input
@@ -199,9 +184,8 @@ export function AddDogs({ onCancel, onRefresh }: AddDogsProps) {
               </Button>
             </div>
           </form>
-        )}
       </ProfileCard>
-    </div>
+    </article>
   );
 }
 

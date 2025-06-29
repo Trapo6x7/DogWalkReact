@@ -91,7 +91,7 @@ export function EditProfileForm({
   };
 
   return (
-    <div className="fixed top-60 right-5 transform -translate-y-1/2 bg-[#FBFFEE] p-6 rounded-lg z-50 w-full max-w-md">
+    <div className="fixed transform -translate-y-1/2 bg-[#FBFFEE] p-6 rounded-lg z-50 w-full max-w-md top-70 right-0">
       {userData && (
         <div className="mb-6">
           <ProfileCard userData={userData} customClass="h-auto" />

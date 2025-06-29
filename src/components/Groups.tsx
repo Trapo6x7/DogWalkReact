@@ -43,10 +43,21 @@ export default function Groups() {
     null
   );
   const [selectedWalkIndex, setSelectedWalkIndex] = useState(0);
-  const [mapCenter, setMapCenter] = useState<[number, number]>([
-    48.8584, 2.2945,
-  ]);
-
+  const [mapCenter, setMapCenter] = useState<[number, number]>(
+    [48.8584, 2.2945],
+  );
+  const defaultCenter = [48.8584, 2.2945]; // Paris
+  const center =
+    selectedGroup?.walks?.[selectedWalkIndex]?.location &&
+    typeof selectedGroup.walks[selectedWalkIndex].location === "string" &&
+    selectedGroup.walks[selectedWalkIndex].location
+      .split(",")
+      .map((coord: string) => Number(coord)) // Typage explicite de `coord`
+      .every((coord: number) => !isNaN(coord)) // Typage explicite de `coord`
+      ? selectedGroup.walks[selectedWalkIndex].location
+          .split(",")
+          .map((coord: string) => Number(coord)) // Typage explicite de `coord`
+      : defaultCenter;
   const userId = user?.id;
 
   const isCreator =
@@ -259,13 +270,13 @@ export default function Groups() {
   function LocationMarker() {
     useMapEvents({
       click(e: LeafletMouseEvent) {
-        setMarkerPosition([e.latlng.lat, e.latlng.lng]);
-        setWalkLocation(`${e.latlng.lat},${e.latlng.lng}`);
+        const { lat, lng } = e.latlng;
+        setMarkerPosition([lat, lng]);
+        setWalkLocation(`${lat},${lng}`);
       },
     });
     return markerPosition ? <Marker position={markerPosition} /> : null;
   }
-
   useEffect(() => {
     if (showWalkForm && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -340,161 +351,145 @@ export default function Groups() {
           </div>
         </ProfileCard>
 
-        {selectedGroup && (
-          <article className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white p-8 rounded-lg shadow-2xl w-full max-w-[90%] h-[70%] mx-auto relative">
-              {" "}
-              <button
-                className="absolute top-4 right-4 text-gray-500 hover:text-black text-xl"
-                onClick={() => setSelectedGroup(null)}
-              >
-                ✕
-              </button>
-              <div className="flex flex-col justify-center items-center gap-6">
-                <h2 className="text-2xl font-bold text-gray-800 uppercase">
-                  Détails du groupe
-                </h2>
-                <div className="w-full max-w-3xl flex flex-col gap-6">
-                  {/* Section : Informations générales */}
-                  <div className="flex items-center justify-between w-full">
-                    <div className="space-y-4 flex flex-col gap-2">
-                      <h3 className="text-xl font-bold text-gray-800 uppercase">
-                        Informations générales
-                      </h3>
-                      <p className="text-lg">
-                        <strong>Nom :</strong> {selectedGroup.name}
-                      </p>
-                      <p className="text-lg">
-                        <strong>Description :</strong> {selectedGroup.comment}
-                      </p>
-                      <p className="text-lg">
-                        <strong>Mixte :</strong>{" "}
-                        {selectedGroup.mixed ? "Oui" : "Non"}
-                      </p>
-                      <p className="text-lg">
-                        <strong>Créé le :</strong>{" "}
-                        {new Date(
-                          selectedGroup.createdAt || ""
-                        ).toLocaleDateString()}
-                      </p>
-                      <p className="text-lg">
-                        <strong>Balades :</strong>{" "}
-                        {selectedGroup.walks?.length ?? 0}
-                      </p>
-                    </div>
+{selectedGroup && (
+  <article className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50">
+    <div className="bg-white p-8 rounded-lg shadow-2xl w-full max-w-[90%] h-[80%] mx-auto relative overflow-scroll">
+      <button
+        className="absolute top-4 right-4 text-gray-500 hover:text-black text-xl"
+        onClick={() => setSelectedGroup(null)}
+      >
+        ✕
+      </button>
+      <div className="flex flex-col gap-8">
+        {/* Titre */}
+        <h2 className="text-3xl font-bold text-gray-800 text-center uppercase">
+          Détails du groupe
+        </h2>
 
-                    <GroupComments
-                      group={selectedGroup}
-                      user={{ username: user?.name || "Anonyme" }}
-                    />
-                  </div>
-                  {/* Section : Demandes */}
-                  {isCreator &&
-                    selectedGroup &&
-                    Array.isArray(selectedGroup.groupRequests) &&
-                    selectedGroup.groupRequests.length > 0 && (
-                      <div className="space-y-4">
-                        <h3 className="text-xl font-bold text-gray-800">
-                          Demandes en attente
-                        </h3>
-                        <ul className="space-y-2">
-                          {selectedGroup?.groupRequests?.map((request) => (
-                            <li
-                              key={request.id}
-                              className="border p-3 rounded-lg flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition"
-                            >
-                              <span>
-                                {request.user?.email ?? "Utilisateur inconnu"}
-                              </span>
-                              <button
-                                onClick={() => handleAcceptRequest(request.id)}
-                                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
-                              >
-                                Accepter
-                              </button>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
+        {/* Informations générales */}
+        <section className="border-b pb-6">
+          <h3 className="text-xl font-bold text-gray-800 uppercase mb-4">
+            Informations générales
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <p className="text-lg">
+              <strong>Nom :</strong> {selectedGroup.name}
+            </p>
+            <p className="text-lg">
+              <strong>Description :</strong> {selectedGroup.comment}
+            </p>
+            <p className="text-lg">
+              <strong>Mixte :</strong> {selectedGroup.mixed ? "Oui" : "Non"}
+            </p>
+            <p className="text-lg">
+              <strong>Créé le :</strong>{" "}
+              {new Date(selectedGroup.createdAt || "").toLocaleDateString()}
+            </p>
+            <p className="text-lg">
+              <strong>Balades :</strong> {selectedGroup.walks?.length ?? 0}
+            </p>
+          </div>
+        </section>
 
-                  {/* Section : Balades */}
-                  <div className="space-y-4">
-                    <h3 className="text-xl font-bold text-gray-800 uppercase">
-                      Balades
-                    </h3>
-                    {selectedGroup.walks && selectedGroup.walks.length > 0 ? (
-                      <div className="space-y-4">
-                        <div className="h-64 w-full rounded-lg overflow-hidden">
-                          <MapContainer
-                            center={
-                              selectedGroup.walks[selectedWalkIndex]?.location
-                                .split(",")
-                                .map(Number) || [48.8584, 2.2945]
-                            }
-                            zoom={13}
-                            style={{ height: "100%", width: "100%" }}
-                          >
-                            <TileLayer
-                              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                              attribution="&copy; OpenStreetMap contributors"
-                            />
-                            {selectedGroup.walks.map((walk, index) => {
-                              const [lat, lng] = walk.location
-                                .split(",")
-                                .map(Number);
-                              return (
-                                <Marker
-                                  key={walk.id}
-                                  position={[lat, lng]}
-                                  eventHandlers={{
-                                    click: () => setSelectedWalkIndex(index),
-                                  }}
-                                >
-                                  <Popup>
-                                    <strong>{walk.name}</strong>
-                                    <br />
-                                    {new Date(
-                                      walk.startAt
-                                    ).toLocaleDateString()}
-                                  </Popup>
-                                </Marker>
-                              );
-                            })}
-                          </MapContainer>
-                        </div>
-                      </div>
-                    ) : (
-                      <p className="text-gray-600">Aucune balade disponible.</p>
-                    )}
-                  </div>
+        {/* Commentaires */}
+        <section className="border-b pb-6">
+          <h3 className="text-xl font-bold text-gray-800 uppercase mb-4">
+            Commentaires
+          </h3>
+          <GroupComments
+            group={selectedGroup}
+            user={{ username: user?.name || "Anonyme" }}
+          />
+        </section>
 
-                  {/* Boutons */}
-                  {isCreator && (
-                    <div className="flex justify-center items-center">
-                      <button
-                        className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                        onClick={() => setShowWalkForm(true)}
-                        disabled={!selectedGroup || showWalkForm}
-                      >
-                        Créer une balade
-                      </button>
-                    </div>
-                  )}
-
-                  {canRequestJoin && (
+        {/* Demandes en attente */}
+        {isCreator &&
+          selectedGroup &&
+          Array.isArray(selectedGroup.groupRequests) &&
+          selectedGroup.groupRequests.length > 0 && (
+            <section className="border-b pb-6">
+              <h3 className="text-xl font-bold text-gray-800 uppercase mb-4">
+                Demandes en attente
+              </h3>
+              <ul className="space-y-2">
+                {selectedGroup.groupRequests.map((request) => (
+                  <li
+                    key={request.id}
+                    className="border p-3 rounded-lg flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition"
+                  >
+                    <span>
+                      {request.user?.email ?? "Utilisateur inconnu"}
+                    </span>
                     <button
-                      onClick={() => handleJoinGroup(selectedGroup.id)}
-                      className="mt-6 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+                      onClick={() => handleAcceptRequest(request.id)}
+                      className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
                     >
-                      Rejoindre ce groupe
+                      Accepter
                     </button>
-                  )}
-                </div>
-              </div>
-            </div>
-          </article>
-        )}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+        {/* Balades */}
+        <section className="border-b pb-6">
+          <h3 className="text-xl font-bold text-gray-800 uppercase mb-4">
+            Balades
+          </h3>
+          {selectedGroup.walks && selectedGroup.walks.length > 0 ? (
+            <section className="space-y-4">
+              <article className="h-64 w-full rounded-lg overflow-hidden">
+                <MapContainer
+                  center={
+                    selectedGroup.walks[selectedWalkIndex]?.location
+                      ?.split(",")
+                      .map(Number)
+                      .every((coord: number) => !isNaN(coord))
+                      ? selectedGroup.walks[selectedWalkIndex].location
+                          .split(",")
+                          .map(Number)
+                      : [48.8584, 2.2945]
+                  }
+                  zoom={13}
+                  style={{ height: "100%", width: "100%" }}
+                >
+                  <TileLayer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution="&copy; OpenStreetMap contributors"
+                  />
+                </MapContainer>
+              </article>
+            </section>
+          ) : (
+            <p className="text-gray-600">Aucune balade disponible.</p>
+          )}
+        </section>
+
+        {/* Boutons */}
+        <div className="flex flex-col md:flex-row justify-center items-center gap-4">
+          {isCreator && (
+            <button
+              className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={() => setShowWalkForm(true)}
+              disabled={!selectedGroup || showWalkForm}
+            >
+              Créer une balade
+            </button>
+          )}
+          {canRequestJoin && (
+            <button
+              onClick={() => handleJoinGroup(selectedGroup.id)}
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+            >
+              Rejoindre ce groupe
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  </article>
+)}
 
         {showWalkForm && selectedGroup && (
           <article className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50">
