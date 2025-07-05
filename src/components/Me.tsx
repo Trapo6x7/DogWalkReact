@@ -74,29 +74,29 @@ export function Me({ userData }: MeProps) {
   }
 
   return (
-    <div className="w-full h-75 flex flex-col items-center">
+    <div style={{ width: "100%", maxWidth: "450px", display: "flex", flexDirection: "column", alignItems: "center", margin: "0 auto" }}>
       {localUserData && (
-        <div className="bg-[#FBFFEE] rounded-lg w-full h-full flex flex-col">
+        <div style={{ backgroundColor: "#FBFFEE", borderRadius: "0.5rem", width: "100%", display: "flex", flexDirection: "column", boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)" }}>
           {/* Header Section */}
-          <div className="p-6 flex flex-row justify-between px-15 items-center">
-            <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden border-4 border-white relative">
+          <div style={{ padding: "1rem", display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+            <div style={{ width: "4rem", height: "4rem", borderRadius: "50%", backgroundColor: "rgb(229, 231, 235)", overflow: "hidden", border: "2px solid white", position: "relative" }}>
               {localUserData.imageFilename ? (
                 <img
                   src={`${import.meta.env.VITE_API_URL}/uploads/images/${
                     localUserData.imageFilename
                   }`}
                   alt="Profile"
-                  className="w-full h-full object-cover"
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <span className="text-2xl font-bold text-gray-800">
+                <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "rgb(31, 41, 55)" }}>
                     {localUserData.name?.[0]}
                   </span>
                 </div>
               )}
               <Button
-                className="absolute bottom-0 right-0 p-1 text-xs rounded-full bg-green-500 text-white"
+                style={{ position: "absolute", bottom: "0", right: "0", padding: "0.125rem", fontSize: "0.625rem", borderRadius: "9999px", backgroundColor: "var(--primary-green)", color: "white", minWidth: "unset", lineHeight: "1", width: "1rem", height: "1rem" }}
                 onClick={() => document.getElementById("upload-photo")?.click()}
               >
                 +
@@ -114,61 +114,77 @@ export function Me({ userData }: MeProps) {
                 }
               }}
             />
-            <h2 className="text-lg font-bold text-gray-900 mt-4 uppercase">
+            <h2 style={{ fontSize: "1.125rem", fontWeight: "bold", color: "var(--secondary-brown)", textTransform: "uppercase", margin: 0 }}>
               {localUserData.name}
             </h2>
-            <p className="text-sm text-gray-700">
+            <p style={{ fontSize: "0.875rem", color: "var(--secondary-brown)", margin: 0 }}>
               {localUserData.birthdate
                 ? `${calculateAge(localUserData.birthdate)} ans`
                 : "Âge inconnu"}
             </p>
           </div>
 
-          {/* Scrollable Section */}
-          <div className="flex-1 overflow-y-auto">
-            {/* Body Section */}
-            <div className="p-6 flex flex-col gap-4 w-full text-justify border border-[#EBFFA8]">
-              <div className="p-6 flex flex-row gap-8 justify-between w-full">
-                {/* Left Column */}
-                <div className="w-1/2 flex flex-col gap-2">
-                  <p className="text-sm text-gray-800 text-start uppercase font-bold">
-                    <strong>Description :</strong>{" "}
-                  </p>
-                  <p className="text-sm text-gray-800 text-start uppercase font-bold">
-                    <strong>Email :</strong>{" "}
-                  </p>
-                  <p className="text-sm text-gray-800 text-start uppercase font-bold">
-                    <strong>Ville :</strong>{" "}
-                  </p>
-                </div>
-
-                {/* Right Column */}
-                <div className="w-1/2 flex flex-col gap-2">
-                  <p className="text-sm text-gray-800">
-                    {localUserData.description ||
-                      "Aucune description disponible."}
-                  </p>
-                  <p className="text-sm text-gray-800">
-                    {localUserData.email || "Non renseigné"}
-                  </p>
-                  <p className="text-sm text-gray-800">
-                    {localUserData.city
-                      ? capitalizeFirstLetter(localUserData.city)
-                      : "Non renseignée"}
-                  </p>
-                </div>
+          {/* Content Section */}
+          <div style={{ padding: "0.75rem 1.5rem" }}>
+            {/* Body Section - More compact version */}
+            <div style={{ display: "flex", flexDirection: "column", width: "100%", margin: "0.5rem 0" }}>
+              <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", marginBottom: "0.5rem" }}>
+                <p style={{ fontSize: "0.875rem", color: "var(--secondary-brown)", textTransform: "uppercase", fontWeight: "bold", margin: "0" }}>
+                  DESCRIPTION :
+                </p>
+                <p style={{ fontSize: "0.875rem", color: "var(--secondary-brown)", margin: "0", textAlign: "right" }}>
+                  {localUserData.description || "Aucune description disponible."}
+                </p>
+              </div>
+              
+              <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", marginBottom: "0.5rem" }}>
+                <p style={{ fontSize: "0.875rem", color: "var(--secondary-brown)", textTransform: "uppercase", fontWeight: "bold", margin: "0" }}>
+                  EMAIL :
+                </p>
+                <p style={{ fontSize: "0.875rem", color: "var(--secondary-brown)", margin: "0", textAlign: "right" }}>
+                  {localUserData.email || "Non renseigné"}
+                </p>
+              </div>
+              
+              <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", marginBottom: "0.5rem" }}>
+                <p style={{ fontSize: "0.875rem", color: "var(--secondary-brown)", textTransform: "uppercase", fontWeight: "bold", margin: "0" }}>
+                  VILLE :
+                </p>
+                <p style={{ fontSize: "0.875rem", color: "var(--secondary-brown)", margin: "0", textAlign: "right" }}>
+                  {localUserData.city ? capitalizeFirstLetter(localUserData.city) : "Non renseignée"}
+                </p>
               </div>
             </div>
 
+            {/* Separator */}
+            <div style={{ margin: "0.75rem 0" }}>
+              <div style={{ height: "1px", width: "100%", backgroundColor: "rgba(123, 78, 46, 0.2)" }}></div>
+            </div>
+            
             {/* Footer Section */}
-            <div className="bg-[#FBFFEE] p-4 flex justify-center">
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.75rem" }}>
               <button
-                className="bg-[#f6c23e] text-white px-4 py-2 rounded-lg hover:bg-[#e0ac2d] transition"
+                style={{ 
+                  backgroundColor: "var(--primary-green)", 
+                  color: "var(--primary-brown)", 
+                  padding: "0.5rem 1rem", 
+                  borderRadius: "0.375rem", 
+                  border: "none", 
+                  fontWeight: "500",
+                  transition: "background-color 0.3s ease",
+                  cursor: "pointer",
+                  width: "100%",
+                  fontSize: "0.875rem"
+                }}
+                onMouseOver={(e) => e.currentTarget.style.backgroundColor = "#B7D336"}
+                onMouseOut={(e) => e.currentTarget.style.backgroundColor = "var(--primary-green)"}
                 onClick={openEditModal}
               >
                 Modifier le profil
               </button>
             </div>
+            
+            {/* Espace supplémentaire en bas si nécessaire */}
           </div>
         </div>
       )}
@@ -179,7 +195,7 @@ export function Me({ userData }: MeProps) {
           userData={localUserData}
           onCancel={closeEditModal}
           onRefresh={refreshUser}
-           onSave={handleSave}
+          onSave={handleSave}
         />
       )}
     </div>

@@ -1,12 +1,4 @@
 import { UserData } from "../types/Interfaces";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "./ui/card";
 
 type ProfileCardProps = {
   title?: string;
@@ -28,28 +20,26 @@ export function ProfileCard({
   customClass = "",
 }: ProfileCardProps) {
   return (
-    <Card className={`w-full bg-[#FBFFEE] backdrop-blur-sm pt-3 ${customClass}`}>
-      <div className="p-6 space-y-6 flex flex-col gap-4">
-        <CardHeader className="flex items-center justify-center gap-6 p-0">
+    <div className={`w-full rounded-lg bg-[#FBFFEE] backdrop-blur-sm shadow-lg overflow-hidden ${customClass}`} style={{ paddingTop: "0.5rem" }}>
+      <div style={{ padding: "0.75rem", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem", textAlign: "center" }}>
+        <div style={{ width: "100%", textAlign: "center"}}>
           {headerContent}
-          <div className="space-y-1">
-            <CardTitle className="text-lg">{title}</CardTitle>
-            {description && (
-              <CardDescription className="text-sm text-[#DA915D]/80">
-                {description}
-              </CardDescription>
-            )}
-          </div>
-        </CardHeader>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 500, color: "var(--secondary-brown)", width: "100%", marginBottom: "0.1rem" }}>{title}</h2>
+          {description && (
+            <p style={{ fontSize: "0.75rem", color: "rgba(218, 145, 93, 0.8)", width: "100%" }}>
+              {description}
+            </p>
+          )}
+        </div>
 
-        {children && <CardContent className="p-0">{children}</CardContent>}
+        {children && <div style={{ padding: 0 }}>{children}</div>}
 
         {footerContent && (
-          <CardFooter className="flex justify-end p-0">
+          <div style={{ display: "flex", justifyContent: "flex-end", padding: 0 }}>
             {footerContent}
-          </CardFooter>
+          </div>
         )}
       </div>
-    </Card>
+    </div>
   );
 }
