@@ -47,7 +47,7 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({ group, onClose, o
           <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--secondary-brown)', textAlign: 'center', textTransform: 'uppercase', margin: '0.5rem 0' }}>Détails du groupe</h2>
           <div style={{ borderBottom: '1px solid rgba(123, 78, 46, 0.2)', paddingBottom: '1rem' }}>
             <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: 'var(--secondary-brown)', textTransform: 'uppercase', marginBottom: '0.75rem', textAlign: 'center' }}>Informations générales</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '0.75rem' }}>
+            <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-around', marginTop: '1rem', alignItems: 'center' }}>
               <p style={{ fontSize: '0.95rem', color: 'var(--secondary-brown)' }}><strong>Nom :</strong> {group.name}</p>
               <p style={{ fontSize: '0.95rem', color: 'var(--secondary-brown)' }}><strong>Description :</strong> {group.comment}</p>
               <p style={{ fontSize: '0.95rem', color: 'var(--secondary-brown)' }}><strong>Mixte :</strong> {group.mixed ? 'Oui' : 'Non'}</p>
@@ -71,13 +71,17 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({ group, onClose, o
                   ? location.split(',').map(Number).filter((coord) => !isNaN(coord))
                   : [];
 
-                if (coordinates.length === 2 && coordinates.every((coord) => coord >= -90 && coord <= 90)) {
-                  return <LeafletMap coordinates={coordinates as [number, number]} />;
-                } else if (userCoordinates) {
-                  return <LeafletMap coordinates={userCoordinates} />;
-                } else {
-                  return <LeafletMap coordinates={null} />;
-                }
+                return (
+                  <div style={{ width: '100%', maxWidth: 600, height: 350, margin: '0 auto' }}>
+                    {coordinates.length === 2 && coordinates.every((coord) => coord >= -90 && coord <= 90) ? (
+                      <LeafletMap coordinates={coordinates as [number, number]} />
+                    ) : userCoordinates ? (
+                      <LeafletMap coordinates={userCoordinates} />
+                    ) : (
+                      <LeafletMap coordinates={null} />
+                    )}
+                  </div>
+                );
               })()
             ) : (
               <p style={{ fontSize: '0.875rem', color: 'var(--secondary-brown)' }}>Aucune balade disponible.</p>
