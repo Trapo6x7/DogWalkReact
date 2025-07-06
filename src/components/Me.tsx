@@ -189,14 +189,30 @@ export function Me({ userData }: MeProps) {
         </div>
       )}
 
-      {/* Modale EditProfileForm */}
+      {/* Modale EditProfileForm centrée */}
       {isEditModalOpen && (
-        <EditProfileForm
-          userData={localUserData}
-          onCancel={closeEditModal}
-          onRefresh={refreshUser}
-          onSave={handleSave}
-        />
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+          }}
+        >
+          <div style={{borderRadius: "0.75rem", padding: "2rem", minWidth: 320, maxWidth: "90vw", maxHeight: "90vh", overflowY: "auto" }}>
+            <EditProfileForm
+              userData={localUserData}
+              onCancel={closeEditModal}
+              onRefresh={refreshUser}
+              onSave={handleSave}
+            />
+          </div>
+        </div>
       )}
     </div>
   );

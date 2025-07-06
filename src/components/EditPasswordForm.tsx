@@ -63,7 +63,25 @@ const EditPasswordForm: React.FC<EditPasswordFormProps> = ({ onCancel }) => {
   };
 
   return (
-    <div className="w-full max-w-sm mx-auto px-4">
+    <div className="w-full max-w-sm mx-auto px-4" style={{ position: "relative" }}>
+      {/* Bouton de fermeture en haut à droite */}
+      <button
+        onClick={onCancel}
+        style={{
+          position: "absolute",
+          top: 0.5,
+          right: 17,
+          background: "transparent",
+          border: "none",
+          fontSize: "1.5rem",
+          color: "#7B4E2E",
+          cursor: "pointer",
+          zIndex: 10,
+        }}
+        aria-label="Fermer la modale"
+      >
+        ×
+      </button>
       <div className="bg-[#FBFFEE] p-6 rounded-lg transform hover:scale-[1.01] transition-all text-center">
         {user && (
           <div className="mb-6">

@@ -204,8 +204,26 @@ export function Dogs() {
         </div>
       </div>
 
-      {/* Modale AddDogs */}
-      {isAddModalOpen && <AddDogs onCancel={closeAddModal} onRefresh={refreshUser} />}
+      {/* Modale AddDogs centrée */}
+      {isAddModalOpen && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+          }}
+        >
+          <div style={{borderRadius: "0.75rem", padding: "2rem", minWidth: 320, maxWidth: "90vw", maxHeight: "90vh", overflowY: "auto" }}>
+            <AddDogs onCancel={closeAddModal} onRefresh={refreshUser} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
