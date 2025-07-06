@@ -19,7 +19,7 @@ const GroupCreateForm: React.FC<GroupCreateFormProps> = ({ onCreateGroup }) => {
   };
 
   return (
-    <div style={{ width: '100%', maxWidth: '400px', margin: '0 auto' }}>
+    <div style={{ width: '100%',  margin: '0 auto' }}>
       <div style={{ backgroundColor: '#FBFFEE', borderRadius: '0.5rem', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)', padding: '1rem' }}>
         <h2 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: 'var(--secondary-brown)', textTransform: 'uppercase', textAlign: 'center' }}>Créer un groupe</h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1rem' }}>

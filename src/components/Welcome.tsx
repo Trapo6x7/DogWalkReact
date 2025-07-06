@@ -29,7 +29,7 @@ export function Welcome({ onLogout }: { onLogout: () => void }) {
         </article>
       </section>
 
-      <section>
+      <section className="flex justify-center items-center py-8 px-42 w-full">
         <Groups />
       </section>
       <Footer />

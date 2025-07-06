@@ -43,10 +43,10 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({ group, onClose, o
         >
           ✕
         </button>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '1.5rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--secondary-brown)', textAlign: 'center', textTransform: 'uppercase', margin: '0.5rem 0' }}>Détails du groupe</h2>
           <div style={{ borderBottom: '1px solid rgba(123, 78, 46, 0.2)', paddingBottom: '1rem' }}>
-            <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: 'var(--secondary-brown)', textTransform: 'uppercase', marginBottom: '0.75rem' }}>Informations générales</h3>
+            <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: 'var(--secondary-brown)', textTransform: 'uppercase', marginBottom: '0.75rem', textAlign: 'center' }}>Informations générales</h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '0.75rem' }}>
               <p style={{ fontSize: '0.95rem', color: 'var(--secondary-brown)' }}><strong>Nom :</strong> {group.name}</p>
               <p style={{ fontSize: '0.95rem', color: 'var(--secondary-brown)' }}><strong>Description :</strong> {group.comment}</p>
@@ -58,13 +58,12 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({ group, onClose, o
 
           {/* Comments Section */}
           <div style={{ borderBottom: '1px solid rgba(123, 78, 46, 0.2)', paddingBottom: '1rem' }}>
-            <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: 'var(--secondary-brown)', textTransform: 'uppercase', marginBottom: '0.75rem' }}>Commentaires</h3>
             <GroupComments group={group} user={{ username: "Anonyme" }} />
           </div>
 
           {/* Map Section */}
           <div style={{ borderBottom: '1px solid rgba(123, 78, 46, 0.2)', paddingBottom: '1rem' }}>
-            <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: 'var(--secondary-brown)', textTransform: 'uppercase', marginBottom: '0.75rem' }}>Carte interactive</h3>
+            <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: 'var(--secondary-brown)', textTransform: 'uppercase', marginBottom: '0.75rem', textAlign: 'center' }}>Carte interactive</h3>
             {group.walks && group.walks.length > 0 ? (
               (() => {
                 const location = group.walks[0].location;
@@ -84,7 +83,7 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({ group, onClose, o
               <p style={{ fontSize: '0.875rem', color: 'var(--secondary-brown)' }}>Aucune balade disponible.</p>
             )}
           </div>
-
+<div className='flex flex-col items-center gap-4'>
           {isCreator && (
             <button
               style={{ backgroundColor: 'var(--primary-green)', color: 'var(--primary-brown)', padding: '0.5rem 1.5rem', borderRadius: '0.375rem', border: 'none', fontWeight: '500', cursor: 'pointer', fontSize: '0.875rem', width: '100%', maxWidth: '250px' }}
@@ -101,6 +100,7 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({ group, onClose, o
               Rejoindre ce groupe
             </button>
           )}
+          </div>
         </div>
       </div>
     </div>

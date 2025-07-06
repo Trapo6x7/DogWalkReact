@@ -62,42 +62,74 @@ export default function GroupComments({ group, user }: GroupCommentsProps) {
   };
 
   return (
-    <div className="border rounded p-4 bg-white w-full h-50 overflow-hidden max-w-md">
-      <h3 className="font-bold mb-2 text-center">Commentaires</h3>
-      <div className="mb-2 max-h-30 overflow-y-auto">
+    <div
+      style={{
+        backgroundColor: '#FBFFEE',
+        borderRadius: '0.5rem',
+        padding: '1rem',
+        width: '100%',
+        maxWidth: 400,
+        margin: '0 auto',
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+      }}
+    >
+      <h3 style={{ fontWeight: 'bold', fontSize: '1.125rem', color: 'var(--secondary-brown)', textAlign: 'center', textTransform: 'uppercase', marginBottom: '1rem' }}>
+        Commentaires
+      </h3>
+      <div style={{ flex: 1, overflowY: 'auto', marginBottom: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         {loading ? (
-          <p className="text-gray-500 text-sm">Chargement…</p>
+          <p style={{ color: '#888', fontSize: '0.875rem', textAlign: 'center' }}>Chargement…</p>
         ) : comments.length === 0 ? (
-          <p className="text-gray-500 text-sm">Aucun commentaire.</p>
+          <p style={{ color: '#888', fontSize: '0.875rem', textAlign: 'center' }}>Aucun commentaire.</p>
         ) : (
           comments.map((c) => (
-            <div key={c.id} className="mb-1">
-              <span className="font-semibold">{c.user.name ?? "?"} :</span>{" "}
-              <span>{c.content}</span>
+            <div key={c.id} style={{ marginBottom: '0.25rem', background: 'rgba(123,78,46,0.05)', borderRadius: '0.375rem', padding: '0.5rem' }}>
+              <span style={{ fontWeight: 600, color: 'var(--secondary-brown)' }}>{c.user.name ?? "?"} :</span>{' '}
+              <span style={{ color: 'var(--secondary-brown)' }}>{c.content}</span>
             </div>
           ))
         )}
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+        {error && <p style={{ color: '#e53e3e', fontSize: '0.875rem', textAlign: 'center' }}>{error}</p>}
       </div>
-    <form
-      onSubmit={handleAddComment}
-      className="flex gap-2 border-t bg-white sticky bottom-0 left-0"
-      style={{ zIndex: 10 }}
-    >
-      <input
-        type="text"
-        value={newComment}
-        onChange={(e) => setNewComment(e.target.value)}
-        placeholder="Votre commentaire..."
-        className="flex-1 border rounded px-2 py-1"
-      />
-      <button
-        type="submit"
-        className="bg-green-500 text-white px-3 py-1 rounded"
+      <form
+        onSubmit={handleAddComment}
+        style={{ display: 'flex', gap: '0.5rem', borderTop: '1px solid rgba(123, 78, 46, 0.1)', paddingTop: '0.75rem' }}
       >
-        Envoyer
-      </button>
-    </form>
+        <input
+          type="text"
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+          placeholder="Votre commentaire..."
+          style={{
+            flex: 1,
+            border: '1px solid rgba(123, 78, 46, 0.2)',
+            borderRadius: '0.375rem',
+            padding: '0.5rem',
+            fontSize: '0.875rem',
+            background: 'rgba(255,255,255,0.8)',
+            outline: 'none',
+            color: 'var(--secondary-brown)',
+          }}
+        />
+        <button
+          type="submit"
+          style={{
+            backgroundColor: 'var(--primary-green)',
+            color: 'var(--primary-brown)',
+            padding: '0.5rem 1rem',
+            borderRadius: '0.375rem',
+            border: 'none',
+            fontWeight: 500,
+            cursor: 'pointer',
+            fontSize: '0.875rem',
+            minWidth: 90,
+          }}
+        >
+          Envoyer
+        </button>
+      </form>
     </div>
   );
 }
