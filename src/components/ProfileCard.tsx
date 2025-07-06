@@ -20,9 +20,9 @@ export function ProfileCard({
   customClass = "",
 }: ProfileCardProps) {
   return (
-    <div className={`w-full rounded-lg bg-[#FBFFEE] backdrop-blur-sm shadow-lg overflow-hidden ${customClass}`} style={{ paddingTop: "0.5rem" }}>
+    <div className={`w-full rounded-lg bg-[#FBFFEE] backdrop-blur-sm overflow-hidden ${customClass}`} style={{ paddingTop: "0.5rem" }}>
       <div style={{ padding: "0.75rem", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem", textAlign: "center" }}>
-        <div style={{ width: "100%", textAlign: "center"}}>
+        <div style={{ width: "100%", textAlign: "center", }}>
           {headerContent}
           <h2 style={{ fontSize: "1.25rem", fontWeight: 500, color: "var(--secondary-brown)", width: "100%", marginBottom: "0.1rem" }}>{title}</h2>
           {description && (

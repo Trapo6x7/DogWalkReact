@@ -76,25 +76,25 @@ export function Me({ userData }: MeProps) {
   return (
     <div style={{ width: "100%", maxWidth: "450px", display: "flex", flexDirection: "column", alignItems: "center", margin: "0 auto" }}>
       {localUserData && (
-        <div style={{ backgroundColor: "#FBFFEE", borderRadius: "0.5rem", width: "100%", display: "flex", flexDirection: "column", boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)" }}>
+        <div style={{ backgroundColor: "#FBFFEE", borderRadius: "0.5rem", width: "100%", height: "270px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "0.5rem", paddingTop: "2.5rem", paddingBottom: "1rem", boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)" }}>
           {/* Header Section */}
-          <div style={{ padding: "1rem", display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-            <div style={{ width: "4rem", height: "4rem", borderRadius: "50%", backgroundColor: "rgb(229, 231, 235)", overflow: "hidden", border: "2px solid white", position: "relative" }}>
-              {localUserData.imageFilename ? (
-                <img
-                  src={`${import.meta.env.VITE_API_URL}/uploads/images/${
-                    localUserData.imageFilename
-                  }`}
-                  alt="Profile"
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
-              ) : (
-                <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "rgb(31, 41, 55)" }}>
-                    {localUserData.name?.[0]}
-                  </span>
-                </div>
-              )}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center" ,gap: "0.75rem" }}>
+            <div style={{ position: "relative" }}>
+              <div style={{ width: "3rem", height: "3rem", borderRadius: "50%", backgroundColor: "rgb(229, 231, 235)", overflow: "hidden" }}>
+                {localUserData.imageFilename ? (
+                  <img
+                    src={`${import.meta.env.VITE_API_URL}/uploads/images/${localUserData.imageFilename}`}
+                    alt="Profile"
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  />
+                ) : (
+                  <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "rgb(31, 41, 55)" }}>
+                      {localUserData.name?.[0]}
+                    </span>
+                  </div>
+                )}
+              </div>
               <Button
                 style={{ position: "absolute", bottom: "0", right: "0", padding: "0.125rem", fontSize: "0.625rem", borderRadius: "9999px", backgroundColor: "var(--primary-green)", color: "white", minWidth: "unset", lineHeight: "1", width: "1rem", height: "1rem" }}
                 onClick={() => document.getElementById("upload-photo")?.click()}

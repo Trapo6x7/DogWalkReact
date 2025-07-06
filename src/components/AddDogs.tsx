@@ -106,23 +106,39 @@ export function AddDogs({ onCancel, onRefresh }: AddDogsProps) {
   };
 
   return (
-    <article
-      className={`fixed transform -translate-y-1/2 bg-[#FBFFEE] rounded-lg z-50 w-full max-w-md  top-80 right-0
-      `}
-    >
-      <ProfileCard
-        title="Ajouter un chien"
-        customClass="h-auto"
-        headerContent={<></>}
-      >
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-4">
+    <div className="w-full max-w-sm mx-auto px-4">
+      <div className="bg-[#FBFFEE] p-6 rounded-lg transform hover:scale-[1.01] transition-all text-center">
+        <ProfileCard
+          customClass="h-auto"
+          headerContent={<></>}
+        >
+          <form
+            onSubmit={handleSubmit}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.5rem",
+              marginTop: "0.25rem",
+            }}
+          >
+                <h2 className="text-xl font-bold text-primary-brown text-center mb-2">
+            Ajouter un chien
+          </h2>
             <label className="font-medium text-secondary-brown">Nom</label>
             <input
               type="text"
               value={dogName}
               onChange={(e) => setDogName(e.target.value)}
               placeholder="Nom du chien"
-              className="p-2 rounded bg-neutral-white border border-secondary-brown"
+              style={{
+                width: "100%",
+                padding: "0.5rem",
+                border: "1px solid rgba(123, 78, 46, 0.3)",
+                borderRadius: "0.5rem",
+                outline: "none",
+                backgroundColor: "rgba(255,255,255,0.8)",
+                textAlign: "center",
+              }}
               required
             />
 
@@ -130,7 +146,15 @@ export function AddDogs({ onCancel, onRefresh }: AddDogsProps) {
             <select
               value={dogRaceId}
               onChange={(e) => setDogRaceId(e.target.value)}
-              className="p-2 rounded bg-neutral-white border border-secondary-brown"
+              style={{
+                width: "100%",
+                padding: "0.5rem",
+                border: "1px solid rgba(123, 78, 46, 0.3)",
+                borderRadius: "0.5rem",
+                outline: "none",
+                backgroundColor: "rgba(255,255,255,0.8)",
+                textAlign: "center",
+              }}
               required
             >
               <option value="">Sélectionner une race</option>
@@ -149,7 +173,15 @@ export function AddDogs({ onCancel, onRefresh }: AddDogsProps) {
             <select
               value={dogGender}
               onChange={(e) => setDogGender(e.target.value)}
-              className="p-2 rounded bg-neutral-white border border-secondary-brown"
+              style={{
+                width: "100%",
+                padding: "0.5rem",
+                border: "1px solid rgba(123, 78, 46, 0.3)",
+                borderRadius: "0.5rem",
+                outline: "none",
+                backgroundColor: "rgba(255,255,255,0.8)",
+                textAlign: "center",
+              }}
               required
             >
               <option value="">Sélectionner</option>
@@ -164,28 +196,56 @@ export function AddDogs({ onCancel, onRefresh }: AddDogsProps) {
               type="date"
               value={dogBirthdate}
               onChange={(e) => setDogBirthdate(e.target.value)}
-              className="p-2 rounded bg-neutral-white border border-secondary-brown"
+              style={{
+                width: "100%",
+                padding: "0.5rem",
+                border: "1px solid rgba(123, 78, 46, 0.3)",
+                borderRadius: "0.5rem",
+                outline: "none",
+                backgroundColor: "rgba(255,255,255,0.8)",
+                textAlign: "center",
+              }}
               required
             />
 
-            <div className="flex gap-4 mt-4 justify-center">
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.5rem",
+                marginTop: "0.5rem",
+              }}
+            >
               <Button
                 type="button"
                 onClick={onCancel}
-                className="bg-secondary-green text-secondary-brown px-4 py-2 rounded"
+                style={{
+                  width: "100%",
+                  backgroundColor: "var(--secondary-green)",
+                  color: "var(--secondary-brown)",
+                  fontWeight: 500,
+                  padding: "0.5rem 0",
+                }}
               >
                 Annuler
               </Button>
               <Button
                 type="submit"
-                className="bg-primary-green text-primary-brown px-4 py-2 rounded"
+                style={{
+                  width: "100%",
+                  backgroundColor: "var(--primary-green)",
+                  color: "var(--primary-brown)",
+                  fontWeight: 500,
+                  padding: "0.5rem 0",
+                }}
               >
                 Ajouter
               </Button>
             </div>
           </form>
-      </ProfileCard>
-    </article>
+        </ProfileCard>
+      </div>
+    </div>
   );
 }
 

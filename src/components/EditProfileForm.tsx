@@ -35,6 +35,7 @@ export function EditProfileForm({
 
   const [charCount, setCharCount] = useState(0);
   const [isLimitExceeded, setIsLimitExceeded] = useState(false);
+  const [isLocating, setIsLocating] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -90,81 +91,198 @@ export function EditProfileForm({
     }
   };
 
+  const handleGeolocate = () => {
+    if (!navigator.geolocation) {
+      alert("La géolocalisation n'est pas supportée par votre navigateur.");
+      return;
+    }
+    setIsLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          // Utilisation de l'API Nominatim pour reverse geocoding
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+          );
+          const data = await response.json();
+          const city =
+            data.address.city ||
+            data.address.town ||
+            data.address.village ||
+            data.address.county ||
+            "";
+          setFormData((prev) => ({ ...prev, city }));
+        } catch (e) {
+          alert("Impossible de récupérer la ville automatiquement.");
+        } finally {
+          setIsLocating(false);
+        }
+      },
+      () => {
+        alert("Impossible d'accéder à votre position.");
+        setIsLocating(false);
+      }
+    );
+  };
+
   return (
-    <div className="fixed transform -translate-y-1/2 bg-[#FBFFEE] p-6 rounded-lg z-50 w-full max-w-md top-70 right-0">
-      {userData && (
-        <div className="mb-6">
-          <ProfileCard userData={userData} customClass="h-auto" />
-        </div>
-      )}
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
-        <h2 className="text-xl font-bold text-primary-brown text-center">
-          Modifier le profil
-        </h2>
-
-        <label htmlFor="name" className="font-medium text-secondary-brown">
-          Nom
-        </label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          placeholder="Nom"
-          className="p-2 rounded bg-neutral-white border border-secondary-brown"
-        />
-
-        <label
-          htmlFor="description"
-          className="font-medium text-secondary-brown"
-        >
-          Description
-        </label>
-        <textarea
-          id="description"
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          placeholder="Description"
-          className="p-2 rounded bg-neutral-white border border-secondary-brown"
-        />
-        <div className="text-sm text-gray-500">{charCount}/140 caractères</div>
-        {isLimitExceeded && (
-          <div className="text-sm text-red-500">
-            Vous avez dépassé la limite de 140 caractères !
+    <div className="w-full max-w-sm mx-auto px-4">
+      <div className="bg-[#FBFFEE] p-6 rounded-lg transform hover:scale-[1.01] transition-all text-center">
+        {userData && (
+          <div className="mb-6">
+            <ProfileCard userData={userData} customClass="h-auto" />
           </div>
         )}
-
-        <label htmlFor="city" className="font-medium text-secondary-brown">
-          Ville
-        </label>
-        <input
-          type="text"
-          id="city"
-          name="city"
-          value={formData.city}
-          onChange={handleChange}
-          placeholder="Ville"
-          className="p-2 rounded bg-neutral-white border border-secondary-brown"
-        />
-
-        <div className="flex gap-4 mt-4 justify-center">
-          <Button
-            type="button"
-            onClick={onCancel}
-            className="bg-secondary-green text-secondary-brown px-4 py-2 rounded"
+        <form
+          onSubmit={handleSubmit}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "0.5rem",
+            marginTop: "0.25rem",
+          }}
+        >
+          <h2 className="text-xl font-bold text-primary-brown text-center mb-2">
+            Modifier le profil
+          </h2>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.5rem",
+            }}
           >
-            Annuler
-          </Button>
-          <Button
-            type="submit"
-            className="bg-primary-green text-primary-brown px-4 py-2 rounded"
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Nom"
+              style={{
+                width: "100%",
+                padding: "0.5rem",
+                border: "1px solid rgba(123, 78, 46, 0.3)",
+                borderRadius: "0.5rem",
+                outline: "none",
+                backgroundColor: "rgba(255,255,255,0.8)",
+                textAlign: "center",
+              }}
+            />
+            <textarea
+              id="description"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              placeholder="Description"
+              style={{
+                width: "100%",
+                padding: "0.5rem",
+                border: "1px solid rgba(123, 78, 46, 0.3)",
+                borderRadius: "0.5rem",
+                outline: "none",
+                backgroundColor: "rgba(255,255,255,0.8)",
+                textAlign: "center",
+              }}
+            />
+            <div className="text-sm text-gray-500">
+              {charCount}/140 caractères
+            </div>
+            {isLimitExceeded && (
+              <div className="text-sm text-red-500">
+                Vous avez dépassé la limite de 140 caractères !
+              </div>
+            )}
+            <div
+              style={{
+                display: "flex",
+                gap: "0.5rem",
+                alignItems: "center",
+              }}
+            >
+              <input
+                type="text"
+                id="city"
+                name="city"
+                value={formData.city}
+                onChange={handleChange}
+                placeholder="Ville"
+                style={{
+                  width: "100%",
+                  padding: "0.5rem",
+                  border: "1px solid rgba(123, 78, 46, 0.3)",
+                  borderRadius: "0.5rem",
+                  outline: "none",
+                  backgroundColor: "rgba(255,255,255,0.8)",
+                  textAlign: "center",
+                }}
+              />
+              <button
+                type="button"
+                onClick={handleGeolocate}
+                disabled={isLocating}
+                style={{
+                  background: "var(--primary-green)",
+                  color: "var(--primary-brown)",
+                  border: "none",
+                  borderRadius: "0.5rem",
+                  padding: "0.5rem 0.75rem",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  minWidth: "40px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                title="Détecter ma ville automatiquement"
+              >
+                {isLocating ? (
+                  "..."
+                ) : (
+                  <span role="img" aria-label="géolocalisation">
+                    <img src="localisation.png" alt="geolocalisation" className="w-6" />
+                  </span>
+                )}
+              </button>
+            </div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.5rem",
+              marginTop: "0.5rem",
+            }}
           >
-            Sauvegarder
-          </Button>
-        </div>
-      </form>
+            <Button
+              type="button"
+              onClick={onCancel}
+              style={{
+                width: "100%",
+                backgroundColor: "var(--secondary-green)",
+                color: "var(--secondary-brown)",
+                fontWeight: 500,
+                padding: "0.5rem 0",
+              }}
+            >
+              Annuler
+            </Button>
+            <Button
+              type="submit"
+              style={{
+                width: "100%",
+                backgroundColor: "var(--primary-green)",
+                color: "var(--primary-brown)",
+                fontWeight: 500,
+                padding: "0.5rem 0",
+              }}
+            >
+              Sauvegarder
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
