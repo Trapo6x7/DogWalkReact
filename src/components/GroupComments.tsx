@@ -61,21 +61,31 @@ export default function GroupComments({ group, user }: GroupCommentsProps) {
     }
   };
 
+  // Responsive styles
+  const isMobile = window.innerWidth <= 600;
+  const cardStyle: React.CSSProperties = {
+    backgroundColor: '#FBFFEE',
+    borderRadius: '0.5rem',
+    padding: isMobile ? '0.5rem' : '1rem',
+    width: '100%',
+    maxWidth: isMobile ? '100%' : 400,
+    margin: '0 auto',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    boxSizing: 'border-box',
+  };
+  const titleStyle: React.CSSProperties = {
+    fontWeight: 'bold',
+    fontSize: isMobile ? '1rem' : '1.125rem',
+    color: 'var(--secondary-brown)',
+    textAlign: 'center',
+    textTransform: 'uppercase',
+    marginBottom: isMobile ? '0.5rem' : '1rem',
+  };
   return (
-    <div
-      style={{
-        backgroundColor: '#FBFFEE',
-        borderRadius: '0.5rem',
-        padding: '1rem',
-        width: '100%',
-        maxWidth: 400,
-        margin: '0 auto',
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-      }}
-    >
-      <h3 style={{ fontWeight: 'bold', fontSize: '1.125rem', color: 'var(--secondary-brown)', textAlign: 'center', textTransform: 'uppercase', marginBottom: '1rem' }}>
+    <div style={cardStyle}>
+      <h3 style={titleStyle}>
         Commentaires
       </h3>
       <div style={{ flex: 1, overflowY: 'auto', marginBottom: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>

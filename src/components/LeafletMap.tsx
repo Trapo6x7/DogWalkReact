@@ -1,30 +1,34 @@
-import React from 'react';
-import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 
-interface LeafletMapProps {
-  coordinates: [number, number] | null;
+import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
+import { useEffect } from 'react';
+
+function InvalidateMapSize() {
+  const map = useMap();
+  useEffect(() => {
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 500); // délai augmenté pour laisser la modale s'afficher
+  }, [map]);
+  return null;
 }
-
-const LeafletMap: React.FC<LeafletMapProps> = ({ coordinates }) => {
-  if (!coordinates || coordinates.length !== 2 || coordinates.some((coord) => isNaN(coord))) {
-    return <p style={{ fontSize: '0.875rem', color: 'var(--secondary-brown)' }}>Coordonnées invalides ou géolocalisation indisponible.</p>;
+export default function LeafletMap({ coordinates }: { coordinates: [number, number] | null }) {
+  const isMobile = window.innerWidth <= 600;
+  if (!coordinates || coordinates.length !== 2 || coordinates.some(isNaN)) {
+    return <span style={{ color: '#7B4E2E', fontSize: isMobile ? '0.85rem' : '0.9rem' }}>Coordonnées invalides</span>;
   }
-
   return (
-    <div style={{ width: '100%', height: '300px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '0.5rem', overflow: 'hidden' }}>
-      <MapContainer
-        center={coordinates}
-        zoom={13}
-        style={{ height: '100%', width: '100%' }}
-      >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution="&copy; OpenStreetMap contributors"
-        />
-        <Marker position={coordinates} />
-      </MapContainer>
-    </div>
+    <MapContainer
+      key={coordinates ? coordinates.join(',') : 'empty'}
+      center={coordinates}
+      zoom={13}
+      style={{ width: '100%', height: isMobile ? 200 : 300, borderRadius: 8, overflow: 'hidden' }}
+    >
+      <InvalidateMapSize />
+      <TileLayer
+        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+        attribution="&copy; OpenStreetMap &copy; CartoDB"
+      />
+      <Marker position={coordinates} />
+    </MapContainer>
   );
-};
-
-export default LeafletMap;
+}

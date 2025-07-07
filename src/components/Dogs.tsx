@@ -81,145 +81,111 @@ export function Dogs() {
   };
 
   return (
-    <div style={{ width: "100%", maxWidth: "450px", display: "flex", flexDirection: "column", alignItems: "center", margin: "0 auto" }}>
-      <div style={{ backgroundColor: "#FBFFEE", borderRadius: "0.5rem", width: "100%", display: "flex", flexDirection: "column", boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)" }}>
-        <div style={{ padding: "1rem", display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ width: "4rem", height: "4rem", borderRadius: "50%", backgroundColor: "rgb(229, 231, 235)", overflow: "hidden", border: "2px solid white" }}>
+    <div className="w-full max-w-[500px] flex flex-col items-center mx-auto mx-6 mb-8">
+      <div className="bg-[#FBFFEE] rounded-xl w-full flex flex-col shadow-lg p-10 gap-6">
+        {/* Header */}
+        <div className="flex items-center gap-4 mb-2">
+          <div className="w-16 h-16 rounded-full bg-gray-200 overflow-hidden border-2 border-white flex-shrink-0">
             <img
-              src="/dwlogopatte.png"
+              src="/logoronddogwalk2.png"
               alt="Profile"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              className="w-full h-full object-cover"
             />
           </div>
-          <h2 style={{ fontSize: "1.125rem", fontWeight: "bold", color: "var(--secondary-brown)", textTransform: "uppercase", margin: 0 }}>Mes chiens</h2>
-          <div style={{ width: "4rem" }}></div> {/* Élément vide pour équilibrer la mise en page */}
+          <h2 className="text-2xl font-bold text-secondary-brown uppercase">Mes chiens</h2>
         </div>
 
-        {/* Content Section */}
-        <div style={{ padding: "0.75rem 1.5rem" }}>
-          {/* Dogs List Section */}
-          <div style={{ display: "flex", flexDirection: "column", width: "100%", margin: "0.5rem 0", maxHeight: "65px", overflowY: "scroll", overflowX: "hidden" }}>
-            {user?.dogs && user.dogs.length > 0 ? (
-              user.dogs.map((dog) => (
-                <div
-                  key={dog.id}
-                  style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.5rem 0", borderBottom: "1px solid rgba(123, 78, 46, 0.1)" }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                    <div style={{ position: "relative" }}>
-                      <div style={{ width: "3rem", height: "3rem", borderRadius: "50%", backgroundColor: "rgb(229, 231, 235)", overflow: "hidden" }}>
-                        <img
-                          src={`${import.meta.env.VITE_API_URL}/uploads/images/${dog.imageFilename}`}
-                          alt={`Photo de ${dog.name}`}
-                          style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                        />
-                      </div>
-                      <Button
-                        style={{ position: "absolute", bottom: "0", right: "0", padding: "0.125rem", fontSize: "0.625rem", borderRadius: "9999px", backgroundColor: "var(--primary-green)", color: "white", minWidth: "unset", lineHeight: "1", width: "1rem", height: "1rem" }}
-                        onClick={() =>
-                          document
-                            .getElementById(`upload-photo-${dog.id}`)
-                            ?.click()
-                        }
-                      >
-                        +
-                      </Button>
-                      <input
-                        type="file"
-                        id={`upload-photo-${dog.id}`}
-                        style={{ display: "none" }}
-                        accept="image/*"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) {
-                            handleDogImageUpload(dog.id.toString(), file);
-                          }
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <h3 style={{ fontWeight: "600", color: "var(--secondary-brown)", textTransform: "uppercase", fontSize: "0.875rem", margin: "0" }}>{dog.name}</h3>
-                      <p style={{ fontSize: "0.75rem", color: "var(--secondary-brown)", margin: "0" }}>
-                        {!allRaces.length
-                          ? "Chargement…"
-                          : dog.race &&
-                            (Array.isArray(dog.race)
-                              ? dog.race.length > 0
-                              : !!dog.race)
-                          ? (Array.isArray(dog.race) ? dog.race : [dog.race])
-                              .map((raceIri: string) => {
-                                const raceId = raceIri.split("/").pop();
-                                const raceObj = allRaces.find(
-                                  (r) => r.id.toString() === raceId
-                                );
-                                return raceObj ? raceObj.name : "Race inconnue";
-                              })
-                              .join(", ")
-                          : "Aucune race"}
-                      </p>
-                    </div>
+        {/* Liste des chiens */}
+        <div className="w-full bg-white rounded-lg shadow-inner p-4 flex flex-col gap-4 max-h-[120px] overflow-y-auto">
+          {user?.dogs && user.dogs.length > 0 ? (
+            user.dogs.map((dog) => (
+              <div
+                key={dog.id}
+                className="flex items-center gap-4 border-b border-[rgba(123,78,46,0.1)] pb-2 last:border-b-0 last:pb-0"
+              >
+                <div className="relative w-12 h-12">
+                  <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden">
+                    <img
+                      src={`${import.meta.env.VITE_API_URL}/uploads/images/${dog.imageFilename}`}
+                      alt={`Photo de ${dog.name}`}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <Button
-                    style={{ fontSize: "0.75rem", color: "#e53e3e", backgroundColor: "transparent", padding: "0.25rem 0.5rem" }}
-                    onClick={() => handleDeleteDog(dog.id.toString())}
+                    className="absolute bottom-0 right-0 p-0.5 text-xs rounded-full bg-[var(--primary-green)] text-white min-w-0 leading-none w-4 h-4"
+                    onClick={() =>
+                      document
+                        .getElementById(`upload-photo-${dog.id}`)
+                        ?.click()
+                    }
                   >
-                    Supprimer
+                    +
                   </Button>
+                  <input
+                    type="file"
+                    id={`upload-photo-${dog.id}`}
+                    className="hidden"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        handleDogImageUpload(dog.id.toString(), file);
+                      }
+                    }}
+                  />
                 </div>
-              ))
-            ) : (
-              <p style={{ textAlign: "center", color: "var(--secondary-brown)", fontSize: "0.875rem", margin: "1rem 0" }}>
-                Vous n'avez pas encore ajouté de chien.
-              </p>
-            )}
-          </div>
-
-          {/* Separator */}
-          <div style={{ margin: "0.75rem 0" }}>
-            <div style={{ height: "1px", width: "100%", backgroundColor: "rgba(123, 78, 46, 0.2)" }}></div>
-          </div>
-
-          {/* Footer Section */}
-          <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.75rem" }}>
-            <button
-              style={{ 
-                backgroundColor: "var(--primary-green)", 
-                color: "var(--primary-brown)", 
-                padding: "0.5rem 1rem", 
-                borderRadius: "0.375rem", 
-                border: "none", 
-                fontWeight: "500",
-                transition: "background-color 0.3s ease",
-                cursor: "pointer",
-                width: "100%",
-                fontSize: "0.875rem"
-              }}
-              onMouseOver={(e) => e.currentTarget.style.backgroundColor = "#B7D336"}
-              onMouseOut={(e) => e.currentTarget.style.backgroundColor = "var(--primary-green)"}
-              onClick={openAddModal}
-            >
-              Ajouter un chien
-            </button>
-          </div>
+                <div className="flex flex-col flex-1 min-w-0">
+                  <span className="font-bold text-secondary-brown text-lg truncate">{dog.name}</span>
+                  <span className="text-xs text-secondary-brown truncate">
+                    {!allRaces.length
+                      ? "Chargement…"
+                      : dog.race &&
+                        (Array.isArray(dog.race)
+                          ? dog.race.length > 0
+                          : !!dog.race)
+                      ? (Array.isArray(dog.race) ? dog.race : [dog.race])
+                          .map((raceIri: string) => {
+                            const raceId = raceIri.split("/").pop();
+                            const raceObj = allRaces.find(
+                              (r) => r.id.toString() === raceId
+                            );
+                            return raceObj ? raceObj.name : "Race inconnue";
+                          })
+                          .join(", ")
+                      : "Aucune race"}
+                  </span>
+                </div>
+                <Button
+                  className="text-xs text-[#e53e3e] bg-transparent px-2 py-1"
+                  onClick={() => handleDeleteDog(dog.id.toString())}
+                >
+                  Supprimer
+                </Button>
+              </div>
+            ))
+          ) : (
+            <p className="text-center text-secondary-brown text-sm my-2">
+              Vous n'avez pas encore ajouté de chien.
+            </p>
+          )}
         </div>
+
+        {/* Footer Section */}
+        <button
+          className="bg-[var(--primary-green)] text-[var(--primary-brown)] font-medium rounded-md w-full py-2 mt-2 hover:bg-[#B7D336] transition"
+          onClick={openAddModal}
+          type="button"
+        >
+          Ajouter un chien
+        </button>
       </div>
 
       {/* Modale AddDogs centrée */}
       {isAddModalOpen && (
         <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 1000,
-          }}
+          className="fixed inset-0 flex items-center justify-center z-[1000] bg-black/30"
         >
-          <div style={{borderRadius: "0.75rem", padding: "2rem", minWidth: 320, maxWidth: "90vw", maxHeight: "90vh", overflowY: "auto" }}>
+          <div className="rounded-xl p-8 min-w-[320px] max-w-[90vw] max-h-[90vh] overflow-y-auto bg-white">
             <AddDogs onCancel={closeAddModal} onRefresh={refreshUser} />
           </div>
         </div>

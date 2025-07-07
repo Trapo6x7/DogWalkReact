@@ -126,22 +126,26 @@ export function EditProfileForm({
     );
   };
 
+  // Responsive styles
+  const isMobile = window.innerWidth <= 600;
+  const containerClass = isMobile ? "w-full max-w-full mx-0 px-1" : "w-full max-w-sm mx-auto px-4";
+  const closeBtnStyle: React.CSSProperties = {
+    position: 'absolute',
+    top: 0.5,
+    right: 17,
+    background: 'transparent',
+    border: 'none',
+    fontSize: isMobile ? '1.2rem' : '1.5rem',
+    color: '#7B4E2E',
+    cursor: 'pointer',
+    zIndex: 10,
+  };
   return (
-    <div className="w-full max-w-sm mx-auto px-4" style={{ position: "relative" }}>
+    <div className={containerClass} style={{ position: "relative" }}>
       {/* Bouton de fermeture en haut à droite */}
       <button
         onClick={onCancel}
-        style={{
-          position: "absolute",
-          top: 0.5,
-          right: 17,
-          background: "transparent",
-          border: "none",
-          fontSize: "1.5rem",
-          color: "#7B4E2E",
-          cursor: "pointer",
-          zIndex: 10,
-        }}
+        style={closeBtnStyle}
         aria-label="Fermer la modale"
       >
         ×

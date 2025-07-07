@@ -154,7 +154,10 @@ export default function Groups() {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
             "Content-Type": "application/ld+json",
           },
-          body: JSON.stringify({ walk_group: `/api/groups/${groupId}` }),
+          body: JSON.stringify({
+            walkGroup: `/api/groups/${groupId}`,
+            user: user && user.id ? `/api/users/${user.id}` : undefined
+          }),
         }
       );
 
@@ -220,29 +223,22 @@ export default function Groups() {
       console.error("Erreur récupération détails groupe :", error);
     }
   };
-
   return (
-    <div
-      style={{
-        width: "100%",
-        display: "flex",
-        flexDirection: "row",
-        gap: "1rem",
-        padding: "1rem",
-      }}
-    >
-      <div style={{ width: "50%" }}>
-        <GroupCreateForm onCreateGroup={handleCreateGroup} />
-      </div>
-      <div style={{ width: "50%" }}>
-        <GroupList
-          groups={groups.map((group) => ({
-            id: group.id,
-            name: group.name,
-            description: group.comment || "Pas de description",
-          }))}
-          onShowDetails={handleShowDetails}
-        />
+    <div className="w-full flex flex-col md:flex-row gap-4 p-4 box-border mx-auto">
+      <div className="flex flex-col md:flex-row w-full gap-4">
+        <div className="w-full mb-4 md:mb-0">
+          <GroupCreateForm onCreateGroup={handleCreateGroup} />
+        </div>
+        <div className="w-full ">
+          <GroupList
+            groups={groups.map((group) => ({
+              id: group.id,
+              name: group.name,
+              description: group.comment || "Pas de description",
+            }))}
+            onShowDetails={handleShowDetails}
+          />
+        </div>
       </div>
       {selectedGroup && (
         <GroupDetailsModal

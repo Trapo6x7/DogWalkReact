@@ -17,38 +17,37 @@ const GroupCreateForm: React.FC<GroupCreateFormProps> = ({ onCreateGroup }) => {
       setMixed(true);
     }
   };
-
   return (
-    <div style={{ width: '100%',  margin: '0 auto' }}>
-      <div style={{ backgroundColor: '#FBFFEE', borderRadius: '0.5rem', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)', padding: '1rem' }}>
-        <h2 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: 'var(--secondary-brown)', textTransform: 'uppercase', textAlign: 'center' }}>Créer un groupe</h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1rem' }}>
+    <div className="w-full h-full max-w-2xl mx-auto px-2">
+      <div className="bg-[#FBFFEE] rounded-lg shadow-lg p-4 md:p-6 w-full h-full flex flex-col justify-between">
+        <h2 className="text-lg md:text-xl font-bold text-secondary-brown uppercase text-center mb-0">Créer un groupe</h2>
+        <div className="flex flex-col gap-2 md:gap-3 mt-4">
           <input
             type="text"
             placeholder="Nom du groupe"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            style={{ padding: '0.5rem', borderRadius: '0.375rem', border: '1px solid rgba(123, 78, 46, 0.2)', fontSize: '0.875rem' }}
+            className="p-2 rounded-md border border-[rgba(123,78,46,0.2)] text-sm md:text-base w-full focus:outline-none focus:ring-2 focus:ring-[var(--primary-green)]"
           />
           <textarea
             placeholder="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            style={{ padding: '0.5rem', borderRadius: '0.375rem', border: '1px solid rgba(123, 78, 46, 0.2)', fontSize: '0.875rem', minHeight: '80px' }}
+            className="p-2 rounded-md border border-[rgba(123,78,46,0.2)] text-sm md:text-base min-h-[80px] w-full focus:outline-none focus:ring-2 focus:ring-[var(--primary-green)]"
           />
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <div className="flex items-center gap-2">
             <input
               type="checkbox"
               id="mixed"
               checked={mixed}
               onChange={(e) => setMixed(e.target.checked)}
-              style={{ accentColor: 'var(--primary-green)' }}
+              className="accent-[var(--primary-green)]"
             />
-            <label htmlFor="mixed" style={{ fontSize: '0.875rem', color: 'var(--secondary-brown)' }}>Mixte</label>
+            <label htmlFor="mixed" className="text-sm md:text-base text-secondary-brown">Mixte</label>
           </div>
           <button
             onClick={handleSubmit}
-            style={{ backgroundColor: 'var(--primary-green)', color: 'var(--primary-brown)', padding: '0.5rem 1rem', borderRadius: '0.375rem', border: 'none', fontWeight: '500', cursor: 'pointer', fontSize: '0.875rem' }}
+            className="bg-[var(--primary-green)] text-[var(--primary-brown)] w-full rounded-md px-4 py-2 font-medium text-sm md:text-base hover:bg-[#B7D336] transition border-none cursor-pointer mt-2"
           >
             Créer un groupe
           </button>

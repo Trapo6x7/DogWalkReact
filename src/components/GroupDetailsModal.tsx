@@ -34,25 +34,97 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({ group, onClose, o
     }
   }, []);
 
+  // Responsive styles
+  const isMobile = window.innerWidth <= 600;
+  const modalBgStyle: React.CSSProperties = {
+    position: 'fixed',
+    inset: 0,
+    backdropFilter: 'blur(4px)',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 50,
+    padding: isMobile ? '0.5rem' : 0,
+  };
+  const modalStyle: React.CSSProperties = {
+    backgroundColor: '#FBFFEE',
+    padding: isMobile ? '0.5rem' : '1rem',
+    borderRadius: '0.5rem',
+    boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
+    width: '100%',
+    maxWidth: isMobile ? '100%' : '900px',
+    height: isMobile ? '95%' : '80%',
+    margin: '0 auto',
+    position: 'relative',
+    overflowY: 'auto',
+    boxSizing: 'border-box',
+  };
+  const closeBtnStyle: React.CSSProperties = {
+    position: 'absolute',
+    top: isMobile ? '0.5rem' : '1rem',
+    right: isMobile ? '0.5rem' : '1rem',
+    color: 'var(--secondary-brown)',
+    fontSize: isMobile ? '1.1rem' : '1.25rem',
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    zIndex: 2,
+  };
+  const contentStyle: React.CSSProperties = {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    gap: isMobile ? '1rem' : '1.5rem',
+  };
+  const sectionTitleStyle: React.CSSProperties = {
+    fontSize: isMobile ? '1rem' : '1.125rem',
+    fontWeight: 'bold',
+    color: 'var(--secondary-brown)',
+    textTransform: 'uppercase',
+    marginBottom: isMobile ? '0.5rem' : '0.75rem',
+    textAlign: 'center',
+  };
+  const infoRowStyle: React.CSSProperties = {
+    display: 'flex',
+    flexDirection: isMobile ? 'column' : 'row',
+    flexWrap: 'wrap',
+    justifyContent: isMobile ? 'flex-start' : 'space-around',
+    marginTop: '1rem',
+    alignItems: isMobile ? 'flex-start' : 'center',
+    gap: isMobile ? '0.5rem' : 0,
+  };
+  const infoTextStyle: React.CSSProperties = {
+    fontSize: isMobile ? '0.9rem' : '0.95rem',
+    color: 'var(--secondary-brown)',
+  };
+  const mainTitleStyle: React.CSSProperties = {
+    fontSize: isMobile ? '1.2rem' : '1.5rem',
+    fontWeight: 'bold',
+    color: 'var(--secondary-brown)',
+    textAlign: 'center',
+    textTransform: 'uppercase',
+    margin: isMobile ? '0.3rem 0' : '0.5rem 0',
+  };
   return (
-    <div style={{ position: 'fixed', inset: '0', backdropFilter: 'blur(4px)', backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: '50' }}>
-      <div style={{ backgroundColor: '#FBFFEE', padding: '1rem', borderRadius: '0.5rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', width: '90%', maxWidth: '900px', height: '80%', margin: '0 auto', position: 'relative', overflowY: 'auto' }}>
+    <div style={modalBgStyle}>
+      <div style={modalStyle}>
         <button
-          style={{ position: 'absolute', top: '1rem', right: '1rem', color: 'var(--secondary-brown)', fontSize: '1.25rem', background: 'none', border: 'none', cursor: 'pointer' }}
+          style={closeBtnStyle}
           onClick={onClose}
         >
-          ✕
+          ×
         </button>
-        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '1.5rem' }}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--secondary-brown)', textAlign: 'center', textTransform: 'uppercase', margin: '0.5rem 0' }}>Détails du groupe</h2>
-          <div style={{ borderBottom: '1px solid rgba(123, 78, 46, 0.2)', paddingBottom: '1rem' }}>
-            <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: 'var(--secondary-brown)', textTransform: 'uppercase', marginBottom: '0.75rem', textAlign: 'center' }}>Informations générales</h3>
-            <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-around', marginTop: '1rem', alignItems: 'center' }}>
-              <p style={{ fontSize: '0.95rem', color: 'var(--secondary-brown)' }}><strong>Nom :</strong> {group.name}</p>
-              <p style={{ fontSize: '0.95rem', color: 'var(--secondary-brown)' }}><strong>Description :</strong> {group.comment}</p>
-              <p style={{ fontSize: '0.95rem', color: 'var(--secondary-brown)' }}><strong>Mixte :</strong> {group.mixed ? 'Oui' : 'Non'}</p>
-              <p style={{ fontSize: '0.95rem', color: 'var(--secondary-brown)' }}><strong>Créé le :</strong> {new Date(group.createdAt || '').toLocaleDateString()}</p>
-              <p style={{ fontSize: '0.95rem', color: 'var(--secondary-brown)' }}><strong>Balades :</strong> {group.walks?.length ?? 0}</p>
+        <div style={contentStyle}>
+          <h2 style={mainTitleStyle}>Détails du groupe</h2>
+          <div style={{ borderBottom: '1px solid rgba(123, 78, 46, 0.2)', paddingBottom: isMobile ? '0.5rem' : '1rem' }}>
+            <h3 style={sectionTitleStyle}>Informations générales</h3>
+            <div style={infoRowStyle}>
+              <p style={infoTextStyle}><strong>Nom :</strong> {group.name}</p>
+              <p style={infoTextStyle}><strong>Description :</strong> {group.comment}</p>
+              <p style={infoTextStyle}><strong>Mixte :</strong> {group.mixed ? 'Oui' : 'Non'}</p>
+              <p style={infoTextStyle}><strong>Créé le :</strong> {new Date(group.createdAt || '').toLocaleDateString()}</p>
+              <p style={infoTextStyle}><strong>Balades :</strong> {group.walks?.length ?? 0}</p>
             </div>
           </div>
 

@@ -7,25 +7,28 @@ interface GroupListProps {
 
 const GroupList: React.FC<GroupListProps> = ({ groups, onShowDetails }) => {
   return (
-    <div style={{ width: '100%', margin: '0 auto' }}>
-      <div style={{ backgroundColor: '#FBFFEE', borderRadius: '0.5rem', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)', padding: '1rem' }}>
-        <h2 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: 'var(--secondary-brown)', textTransform: 'uppercase', textAlign: 'center' }}>Groupes existants</h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1rem', maxHeight: '210px', overflowY: 'auto' }}>
+    <div className="w-full h-full mx-auto px-2">
+      <div className="bg-[#FBFFEE] rounded-lg shadow-lg p-4 md:p-6 w-full h-full flex flex-col justify-between">
+        <h2 className="text-lg md:text-xl font-bold text-secondary-brown uppercase text-center mb-0">Groupes existants</h2>
+        <div className="flex flex-col gap-2 md:gap-3 mt-4 max-h-52 md:max-h-60 overflow-y-auto">
           {groups.length > 0 ? (
             groups.map((group) => (
-              <div key={group.id} style={{ padding: '0.75rem', borderBottom: '1px solid rgba(123, 78, 46, 0.1)' }}>
-                <h3 style={{ fontSize: '1rem', fontWeight: 'bold', color: 'var(--secondary-brown)' }}>{group.name}</h3>
-                <p style={{ fontSize: '0.875rem', color: 'var(--secondary-brown)' }}>{group.description}</p>
+              <div
+                key={group.id}
+                className="py-2 md:py-3 border-b border-[rgba(123,78,46,0.1)] last:border-b-0"
+              >
+                <h3 className="text-base md:text-lg font-bold text-secondary-brown">{group.name}</h3>
+                <p className="text-sm md:text-base text-secondary-brown">{group.description}</p>
                 <button
                   onClick={() => onShowDetails(group.id)}
-                  style={{ backgroundColor: 'var(--primary-green)', color: 'var(--primary-brown)', padding: '0.25rem 0.75rem', borderRadius: '0.25rem', fontSize: '0.75rem', border: 'none', cursor: 'pointer' }}
+                  className="bg-[var(--secondary-green)] text-[var(--primary-brown)] w-full rounded px-2 py-1 mt-2 text-xs md:text-sm font-medium hover:bg-[#B7D336] transition border-none cursor-pointer"
                 >
                   Voir détails
                 </button>
               </div>
             ))
           ) : (
-            <p style={{ textAlign: 'center', color: 'var(--secondary-brown)', fontSize: '0.875rem' }}>Aucun groupe disponible.</p>
+            <p className="text-center text-secondary-brown text-sm md:text-base">Aucun groupe disponible.</p>
           )}
         </div>
       </div>

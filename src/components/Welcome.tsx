@@ -14,22 +14,30 @@ export function Welcome({ onLogout }: { onLogout: () => void }) {
 
   return (
     <>
-      <Navbar onLogout={onLogout}  />
-      <section className="flex gap-8 justify-center py-8 px-47 w-full items-center">
-        <article className="w-1/3">
+      <Navbar onLogout={onLogout} />
+      <section
+        className="flex flex-col md:flex-row gap-8 justify-center py-6 px-2 w-full md:px-12 lg:px-24 xl:px-32 items-center"
+      >
+        <article className="w-full">
           <Me userData={user} />
         </article>
 
-        <article className="w-1/3 flex justify-center">
-          <img src="/dogwalklogobrown.png" alt="logo" className="h-1/2 w-1/2" />
+        <article className="w-full md:w-1/3 flex justify-center">
+          <img
+            src="/dogwalklogobrown.png"
+            alt="logo"
+            className="w-[90px] lg:w-40 mx-auto"
+          />
         </article>
 
-        <article className="w-1/3">
+        <article className="w-full">
           <Dogs />
         </article>
       </section>
 
-      <section className="flex justify-center items-center py-8 px-42 w-full">
+      <section
+        className="flex justify-center items-center py-6 px-2 w-full md:px-12 lg:px-24"
+      >
         <Groups />
       </section>
       <Footer />
