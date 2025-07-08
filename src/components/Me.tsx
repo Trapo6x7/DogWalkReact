@@ -82,7 +82,7 @@ export function Me({ userData }: MeProps) {
               <div className="bg-[#FBFFEE] rounded-xl max-w-md mx-auto flex flex-col shadow-lg p-4 gap-6">
                 <details className="max-w-md mx-auto w-full">
                   <summary className="flex flex-col items-center gap-2 cursor-pointer select-none px-4 max-w-md mx-auto w-full">
-                    <div className="flex items-center justify-center gap-8 w-full min-w-sm max-w-md mx-auto">
+                    <div className="flex items-center justify-center gap-8 w-full max-w-md mx-auto">
                       <div className="relative w-20 h-20 flex items-center justify-center">
                         <div className="w-20 h-20 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center">
                           {localUserData.imageFilename ? (

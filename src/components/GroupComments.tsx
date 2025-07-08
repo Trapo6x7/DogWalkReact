@@ -12,7 +12,7 @@ interface GroupCommentsProps {
   user: { username: string };
 }
 
-export default function GroupComments({ group, user }: GroupCommentsProps) {
+export default function GroupComments({ group }: GroupCommentsProps) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(false);

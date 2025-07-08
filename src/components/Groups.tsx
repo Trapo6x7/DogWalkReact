@@ -18,30 +18,13 @@ interface Group {
 
 export default function Groups() {
   const { user } = useAuth();
-  const [mixed, setMixed] = useState(true);
+  const [mixed] = useState(true);
   const [groups, setGroups] = useState<Group[]>([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
   const [showWalkForm, setShowWalkForm] = useState(false);
-  const [walkName, setWalkName] = useState("");
-  const [walkLocation, setWalkLocation] = useState("");
-  const [walkDate, setWalkDate] = useState("");
-  const [markerPosition, setMarkerPosition] = useState(null);
-  const selectedWalkIndex = 0;
-  const [mapCenter, setMapCenter] = useState([48.8584, 2.2945]);
-  const defaultCenter = [48.8584, 2.2945]; // Paris
-  const center =
-    selectedGroup?.walks?.[selectedWalkIndex]?.location &&
-    typeof selectedGroup.walks[selectedWalkIndex].location === "string" &&
-    selectedGroup.walks[selectedWalkIndex].location
-      .split(",")
-      .map((coord) => Number(coord)) // Typage explicite de `coord`
-      .every((coord) => !isNaN(coord)) // Typage explicite de `coord`
-      ? selectedGroup.walks[selectedWalkIndex].location
-          .split(",")
-          .map((coord) => Number(coord)) // Typage explicite de `coord`
-      : defaultCenter;
+ 
   const userId = user?.id;
 
   const isCreator =

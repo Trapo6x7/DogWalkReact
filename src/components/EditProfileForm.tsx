@@ -16,7 +16,7 @@ export function EditProfileForm({
   onCancel,
   onRefresh,
 }: EditProfileFormProps & { onRefresh: () => void }) {
-  const { user, token, refreshUser, setUser } = useAuth();
+  const { token, setUser } = useAuth();
 
   const [userData, setUserData] = useState<UserData | null>(initialUserData);
   const [formData, setFormData] = useState<UserData>(

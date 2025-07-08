@@ -5,7 +5,7 @@ import EditPasswordForm from "./EditPasswordForm";
 import AddDogs from "./AddDogs";
 
 export function Navbar({ onLogout }: { onLogout: () => void }) {
-  const { user, logout, refreshUser } = useAuth();
+  const { user, logout } = useAuth();
   const [showEditProfile, setShowEditProfile] = useState(false);
   const [showAddDogForm, setShowAddDogForm] = useState(false);
   const [showEditPassword, setShowEditPassword] = useState(false);
@@ -24,7 +24,7 @@ export function Navbar({ onLogout }: { onLogout: () => void }) {
 
   return (
     <header
-      className={`fixed left-0 z-40 bg-[#FBFFEE] shadow-lg transition-transform duration-300 flex flex-col items-center
+      className={`fixed left-0 z-40 md:bg-[#FBFFEE] transition-transform duration-300 flex flex-col items-center
         ${isMobile ? "top-0 w-screen h-auto rounded-b-2xl" : "top-0 h-100 w-[110px] rounded-b-2xl pt-6"}
       `}
     >
@@ -87,7 +87,7 @@ export function Navbar({ onLogout }: { onLogout: () => void }) {
       {isMobile && (
         <nav className="flex items-center justify-between px-4 py-2 w-full">
           <button
-            className="flex flex-col justify-center items-center w-10 h-10 focus:outline-none ml-auto"
+            className="flex flex-col gap-1 justify-center items-center w-10 h-10 focus:outline-none ml-auto"
             onClick={() => setMenuOpen((open) => !open)}
             aria-label="Ouvrir le menu"
           >
@@ -100,8 +100,8 @@ export function Navbar({ onLogout }: { onLogout: () => void }) {
 
       {/* Mobile menu drawer */}
       {isMobile && menuOpen && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-40 z-50 flex flex-col items-end">
-          <div className="bg-[#FBFFEE] w-64 h-full shadow-lg p-6 flex flex-col gap-6 animate-slide-in-right rounded-br-2xl">
+        <div className="fixed top-0 left-0 w-full h-full bg-opacity-40 z-50 flex flex-col items-start">
+          <div className="bg-[#FBFFEE] h-full p-6 flex flex-col gap-6 animate-slide-in-left rounded-bl-2xl">
             <button
               className="self-end mb-4"
               onClick={() => setMenuOpen(false)}
@@ -123,7 +123,7 @@ export function Navbar({ onLogout }: { onLogout: () => void }) {
                 alt="Modifier le profil"
                 className="h-7 w-7"
               />
-              <span>Profil</span>
+     
             </a>
             <a
               onClick={() => {
@@ -139,7 +139,7 @@ export function Navbar({ onLogout }: { onLogout: () => void }) {
                 alt="Ajouter un chien"
                 className="h-7 w-7"
               />
-              <span>Ajouter un chien</span>
+         
             </a>
             <a
               onClick={() => {
@@ -155,7 +155,7 @@ export function Navbar({ onLogout }: { onLogout: () => void }) {
                 alt="Modifier le mot de passe"
                 className="h-7 w-7"
               />
-              <span>Mot de passe</span>
+       
             </a>
             <a
               onClick={() => {
@@ -166,7 +166,7 @@ export function Navbar({ onLogout }: { onLogout: () => void }) {
               className="flex items-center gap-2 cursor-pointer"
             >
               <img src="/logout2.png" alt="Déconnexion" className="h-7 w-7" />
-              <span>Déconnexion</span>
+      
             </a>
           </div>
         </div>
