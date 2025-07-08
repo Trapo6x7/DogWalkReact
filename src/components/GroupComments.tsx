@@ -61,7 +61,7 @@ export default function GroupComments({ group, user }: GroupCommentsProps) {
     }
   }
   return (
-    <div className="bg-[#FBFFEE] rounded-lg p-2 md:p-4 w-full max-w-md mx-auto flex flex-col h-full box-border shadow-lg">
+    <div className="bg-[#FBFFEE] rounded-lg p-2 md:p-4 w-full max-w-md mx-auto flex flex-col h-full box-border">
       <h3 className="font-bold text-base md:text-lg text-secondary-brown text-center uppercase mb-2 md:mb-4">Commentaires</h3>
       <div className="flex-1 overflow-y-auto mb-4 flex flex-col gap-2">
         {loading ? (

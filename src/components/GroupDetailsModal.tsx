@@ -37,7 +37,7 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({ group, onClose, o
   // All JS/CSS style constants removed, now using Tailwind for modal and content
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-2 md:p-0">
-      <div className="relative bg-[#FBFFEE] p-2 md:p-6 rounded-lg shadow-2xl w-full max-w-3xl h-[95%] md:h-[80%] mx-auto overflow-y-auto">
+      <div className="relative bg-[#FBFFEE] p-2 md:p-6 rounded-lg w-full max-w-3xl h-[95%] md:h-[80%] mx-auto overflow-y-auto">
         <button
           className="absolute top-2 right-2 md:top-4 md:right-4 text-secondary-brown text-xl md:text-2xl bg-none border-none cursor-pointer z-10"
           onClick={onClose}
@@ -48,7 +48,6 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({ group, onClose, o
         <div className="flex flex-col justify-center gap-4 md:gap-6">
           <h2 className="text-xl md:text-2xl font-bold text-secondary-brown text-center uppercase my-2">Détails du groupe</h2>
           <div className="border-b border-[rgba(123,78,46,0.2)] pb-2 md:pb-4">
-            <h3 className="text-base md:text-lg font-bold text-secondary-brown uppercase text-center mb-2 md:mb-3">Informations générales</h3>
             <div className="flex flex-col md:flex-row md:flex-wrap md:justify-around mt-4 md:items-center gap-2 md:gap-0">
               <p className="text-[0.95rem] text-secondary-brown"><strong>Nom :</strong> {group.name}</p>
               <p className="text-[0.95rem] text-secondary-brown"><strong>Description :</strong> {group.comment}</p>
@@ -59,7 +58,7 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({ group, onClose, o
           </div>
 
           {/* Comments Section */}
-          <div className="border-b border-[rgba(123,78,46,0.2)] pb-4">
+          <div className="border-b border-[rgba(123,78,46,0.2)] pb-4 flex flex-col items-center">
             <GroupComments group={group} user={{ username: "Anonyme" }} />
           </div>
 

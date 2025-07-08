@@ -74,192 +74,195 @@ export function Me({ userData }: MeProps) {
 }
   return (
     <div className="w-full flex flex-col items-center mx-6 mb-8">
-      {/* Pour garder une largeur max sur mobile et desktop */}
-      <div className="w-full max-w-md mx-auto">
-      {localUserData && (
-        <div className="bg-[#FBFFEE] rounded-xl w-full flex flex-col shadow-lg p-10 gap-6">
-          {/* Mobile Accordion Layout */}
-          <div className="block md:hidden w-full">
-            {/* On limite la largeur du layout mobile aussi, et on retire tous les w-full internes */}
-            <div className="bg-[#FBFFEE] rounded-xl max-w-md mx-auto flex flex-col shadow-none p-0 gap-0">
-              <details className="max-w-md mx-auto w-full">
-                <summary className="flex flex-col items-center gap-2 cursor-pointer select-none px-4 py-4 max-w-md mx-auto w-full">
-                  <div className="flex items-center justify-center gap-8 w-full min-w-sm max-w-md mx-auto">
-                    <div className="relative w-20 h-20 flex items-center justify-center">
-                      <div className="w-20 h-20 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center">
-                        {localUserData.imageFilename ? (
-                          <img
-                            src={`${import.meta.env.VITE_API_URL}/uploads/images/${localUserData.imageFilename}`}
-                            alt="Profile"
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center">
-                            <span className="text-2xl font-bold text-gray-800">
-                              {localUserData.name?.[0]}
-                            </span>
-                          </div>
-                        )}
+      <div className="w-full max-w-md h-full mx-auto">
+        {/* Mobile Accordion Layout (inchangé) */}
+        {localUserData && (
+          <div>
+            <div className="block md:hidden w-full">
+              <div className="bg-[#FBFFEE] rounded-xl max-w-md mx-auto flex flex-col shadow-lg p-4 gap-6">
+                <details className="max-w-md mx-auto w-full">
+                  <summary className="flex flex-col items-center gap-2 cursor-pointer select-none px-4 max-w-md mx-auto w-full">
+                    <div className="flex items-center justify-center gap-8 w-full min-w-sm max-w-md mx-auto">
+                      <div className="relative w-20 h-20 flex items-center justify-center">
+                        <div className="w-20 h-20 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center">
+                          {localUserData.imageFilename ? (
+                            <img
+                              src={`${import.meta.env.VITE_API_URL}/uploads/images/${localUserData.imageFilename}`}
+                              alt="Profile"
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <span className="text-2xl font-bold text-gray-800">
+                                {localUserData.name?.[0]}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                        <Button
+                          className="absolute bottom-0 right-0 p-0.5 text-xs rounded-full bg-[var(--primary-green)] text-white min-w-0 leading-none w-5 h-5 shadow"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            document.getElementById('upload-photo')?.click();
+                          }}
+                        >
+                          +
+                        </Button>
                       </div>
-                      <Button
-                        className="absolute bottom-0 right-0 p-0.5 text-xs rounded-full bg-[var(--primary-green)] text-white min-w-0 leading-none w-5 h-5 shadow"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          document.getElementById('upload-photo')?.click();
+                      <input
+                        type="file"
+                        id="upload-photo"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            handlePhotoUpload(file);
+                          }
                         }}
+                      />
+                      <h2 className="text-xl font-bold text-secondary-brown uppercase leading-none mt-2">{localUserData.name}</h2>
+                      <span className="text-sm text-secondary-brown mb-2">
+                        {localUserData.birthdate
+                          ? `${calculateAge(localUserData.birthdate)} ans`
+                          : "Âge inconnu"}
+                      </span>
+                    </div>
+                  </summary>
+                  <div className="mt-4 flex flex-col gap-2 px-4 pb-4 max-w-md mx-auto w-full">
+                    <div className="flex flex-row justify-between items-start">
+                      <span className="text-sm text-secondary-brown uppercase font-bold">DESCRIPTION :</span>
+                      <span className="text-sm text-secondary-brown text-right max-w-[60%]">
+                        {localUserData.description || "Aucune description disponible."}
+                      </span>
+                    </div>
+                    <div className="flex flex-row justify-between items-start">
+                      <span className="text-sm text-secondary-brown uppercase font-bold">EMAIL :</span>
+                      <span className="text-sm text-secondary-brown text-right max-w-[60%]">
+                        {localUserData.email || "Non renseigné"}
+                      </span>
+                    </div>
+                    <div className="flex flex-row justify-between items-start">
+                      <span className="text-sm text-secondary-brown uppercase font-bold">VILLE :</span>
+                      <span className="text-sm text-secondary-brown text-right max-w-[60%]">
+                        {localUserData.city ? capitalizeFirstLetter(localUserData.city) : "Non renseignée"}
+                      </span>
+                    </div>
+                    <div className="my-3 w-full">
+                      <div className="h-px w-full bg-[rgba(123,78,46,0.2)]"></div>
+                    </div>
+                    <button
+                      className="bg-[var(--primary-green)] text-[var(--primary-brown)] font-medium rounded-md w-full py-2 mt-2 hover:bg-[#B7D336] transition"
+                      onClick={openEditModal}
+                      type="button"
+                    >
+                      Modifier le profil
+                    </button>
+                  </div>
+                </details>
+              </div>
+            </div>
+            {/* Desktop Layout (structure Dogs, une seule card) */}
+            <div className="hidden md:block w-full">
+              <div className="bg-[#FBFFEE] rounded-xl w-full flex flex-col shadow-lg p-10 gap-0 h-[370px] max-h-[370px] min-h-[370px] justify-between">
+                {/* Header Section - aligné Dogs */}
+                <div className="flex flex-col items-center justify-center gap-2 mb-2">
+                  <div className="flex items-center justify-center gap-4">
+                    <div className="relative w-16 h-16 rounded-full bg-gray-200 overflow-hidden border-2 border-white flex-shrink-0">
+                      {localUserData.imageFilename ? (
+                        <img
+                          src={`${import.meta.env.VITE_API_URL}/uploads/images/${localUserData.imageFilename}`}
+                          alt="Profile"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <span className="text-xl font-bold text-gray-800">
+                            {localUserData.name?.[0]}
+                          </span>
+                        </div>
+                      )}
+                      <Button
+                        className="absolute bottom-0 right-0 p-0.5 text-xs rounded-full bg-[var(--primary-green)] text-white min-w-0 leading-none w-4 h-4"
+                        onClick={() => document.getElementById('upload-photo-desktop')?.click()}
                       >
                         +
                       </Button>
+                      <input
+                        type="file"
+                        id="upload-photo-desktop"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            handlePhotoUpload(file);
+                          }
+                        }}
+                      />
                     </div>
-                    <input
-                      type="file"
-                      id="upload-photo"
-                      className="hidden"
-                      accept="image/*"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          handlePhotoUpload(file);
-                        }
-                      }}
-                    />
-                    <h2 className="text-xl font-bold text-secondary-brown uppercase leading-none mt-2">{localUserData.name}</h2>
-                    <span className="text-sm text-secondary-brown mb-2">
-                      {localUserData.birthdate
-                        ? `${calculateAge(localUserData.birthdate)} ans`
-                        : "Âge inconnu"}
-                    </span>
+                    <div className="flex flex-col gap-0.5">
+                      <h2 className="text-2xl font-bold text-secondary-brown uppercase leading-none">{localUserData.name}</h2>
+                      <span className="text-sm text-secondary-brown">
+                        {localUserData.birthdate
+                          ? `${calculateAge(localUserData.birthdate)} ans`
+                          : "Âge inconnu"}
+                      </span>
+                    </div>
                   </div>
-                </summary>
-                <div className="mt-4 flex flex-col gap-2 px-4 pb-4 max-w-md mx-auto w-full">
-                  <div className="flex flex-row justify-between items-start">
-                    <span className="text-sm text-secondary-brown uppercase font-bold">DESCRIPTION :</span>
-                    <span className="text-sm text-secondary-brown text-right max-w-[60%]">
-                      {localUserData.description || "Aucune description disponible."}
-                    </span>
-                  </div>
-                  <div className="flex flex-row justify-between items-start">
-                    <span className="text-sm text-secondary-brown uppercase font-bold">EMAIL :</span>
-                    <span className="text-sm text-secondary-brown text-right max-w-[60%]">
-                      {localUserData.email || "Non renseigné"}
-                    </span>
-                  </div>
-                  <div className="flex flex-row justify-between items-start">
-                    <span className="text-sm text-secondary-brown uppercase font-bold">VILLE :</span>
-                    <span className="text-sm text-secondary-brown text-right max-w-[60%]">
-                      {localUserData.city ? capitalizeFirstLetter(localUserData.city) : "Non renseignée"}
-                    </span>
-                  </div>
-                  <div className="my-3 w-full">
-                    <div className="h-px w-full bg-[rgba(123,78,46,0.2)]"></div>
-                  </div>
-                  <button
-                    className="bg-[var(--primary-green)] text-[var(--primary-brown)] font-medium rounded-md w-full py-2 mt-2 hover:bg-[#B7D336] transition"
-                    onClick={openEditModal}
-                    type="button"
-                  >
-                    Modifier le profil
-                  </button>
                 </div>
-              </details>
-            </div>
-          </div>
-          {/* Desktop Layout (unchanged) */}
-          <div className="hidden md:flex flex-col gap-6 w-full">
-            {/* Header Section - aligné comme Dogs */}
-            <div className="flex items-center justify-center gap-4 mb-2">
-              <div className="relative w-16 h-16 rounded-full bg-gray-200 overflow-hidden border-2 border-white flex-shrink-0">
-                {localUserData.imageFilename ? (
-                  <img
-                    src={`${import.meta.env.VITE_API_URL}/uploads/images/${localUserData.imageFilename}`}
-                    alt="Profile"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <span className="text-xl font-bold text-gray-800">
-                      {localUserData.name?.[0]}
-                    </span>
+                {/* Infos Section - aligné Dogs */}
+                <div className="w-full flex flex-col items-center">
+                  <div className="w-full bg-white rounded-lg p-4 flex flex-col gap-2">
+                    <div className="flex flex-row justify-between items-start">
+                      <span className="text-sm text-secondary-brown uppercase font-bold">DESCRIPTION :</span>
+                      <span className="text-sm text-secondary-brown text-right max-w-[60%]">
+                        {localUserData.description || "Aucune description disponible."}
+                      </span>
+                    </div>
+                    <div className="flex flex-row justify-between items-start">
+                      <span className="text-sm text-secondary-brown uppercase font-bold">EMAIL :</span>
+                      <span className="text-sm text-secondary-brown text-right max-w-[60%]">
+                        {localUserData.email || "Non renseigné"}
+                      </span>
+                    </div>
+                    <div className="flex flex-row justify-between items-start">
+                      <span className="text-sm text-secondary-brown uppercase font-bold">VILLE :</span>
+                      <span className="text-sm text-secondary-brown text-right max-w-[60%]">
+                        {localUserData.city ? capitalizeFirstLetter(localUserData.city) : "Non renseignée"}
+                      </span>
+                    </div>
                   </div>
-                )}
-                <Button
-                  className="absolute bottom-0 right-0 p-0.5 text-xs rounded-full bg-[var(--primary-green)] text-white min-w-0 leading-none w-4 h-4"
-                  onClick={() => document.getElementById('upload-photo-desktop')?.click()}
+                </div>
+                {/* Separator */}
+                <div className="my-3 w-full">
+                  <div className="h-px w-full bg-[rgba(123,78,46,0.2)]"></div>
+                </div>
+                {/* Footer Section */}
+                <button
+                  className="bg-[var(--primary-green)] text-[var(--primary-brown)] font-medium rounded-md w-full py-2 mt-2 hover:bg-[#B7D336] transition"
+                  onClick={openEditModal}
+                  type="button"
                 >
-                  +
-                </Button>
-                <input
-                  type="file"
-                  id="upload-photo-desktop"
-                  className="hidden"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      handlePhotoUpload(file);
-                    }
-                  }}
-                />
-              </div>
-              <div className="flex flex-col gap-0.5">
-                <h2 className="text-2xl font-bold text-secondary-brown uppercase leading-none">{localUserData.name}</h2>
-                <span className="text-sm text-secondary-brown">
-                  {localUserData.birthdate
-                    ? `${calculateAge(localUserData.birthdate)} ans`
-                    : "Âge inconnu"}
-                </span>
+                  Modifier le profil
+                </button>
               </div>
             </div>
-            {/* Content Section - aligné comme Dogs */}
-            <div className="w-full bg-white rounded-lg p-4 flex flex-col gap-4">
-              <div className="flex flex-row justify-between items-start">
-                <span className="text-sm text-secondary-brown uppercase font-bold">DESCRIPTION :</span>
-                <span className="text-sm text-secondary-brown text-right max-w-[60%]">
-                  {localUserData.description || "Aucune description disponible."}
-                </span>
-              </div>
-              <div className="flex flex-row justify-between items-start">
-                <span className="text-sm text-secondary-brown uppercase font-bold">EMAIL :</span>
-                <span className="text-sm text-secondary-brown text-right max-w-[60%]">
-                  {localUserData.email || "Non renseigné"}
-                </span>
-              </div>
-              <div className="flex flex-row justify-between items-start">
-                <span className="text-sm text-secondary-brown uppercase font-bold">VILLE :</span>
-                <span className="text-sm text-secondary-brown text-right max-w-[60%]">
-                  {localUserData.city ? capitalizeFirstLetter(localUserData.city) : "Non renseignée"}
-                </span>
-              </div>
-            </div>
-            {/* Separator */}
-            <div className="my-3 w-full">
-              <div className="h-px w-full bg-[rgba(123,78,46,0.2)]"></div>
-            </div>
-            {/* Footer Section */}
-            <button
-              className="bg-[var(--primary-green)] text-[var(--primary-brown)] font-medium rounded-md w-full py-2 mt-2 hover:bg-[#B7D336] transition"
-              onClick={openEditModal}
-              type="button"
-            >
-              Modifier le profil
-            </button>
           </div>
-        </div>
-      )}
-
-      {/* Modale EditProfileForm centrée */}
-      {isEditModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="rounded-xl bg-white p-8 min-w-[320px] max-w-[90vw] max-h-[90vh] overflow-y-auto">
-            <EditProfileForm
-              userData={localUserData}
-              onCancel={closeEditModal}
-              onRefresh={refreshUser}
-              onSave={handleSave}
-            />
+        )}
+        {/* Modale EditProfileForm centrée */}
+        {isEditModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <div className="rounded-xl bg-white p-8 min-w-[320px] max-w-[90vw] max-h-[90vh] overflow-y-auto">
+              <EditProfileForm
+                userData={localUserData}
+                onCancel={closeEditModal}
+                onRefresh={refreshUser}
+                onSave={handleSave}
+              />
+            </div>
           </div>
-        </div>
-      )}
+        )}
       </div>
     </div>
   );

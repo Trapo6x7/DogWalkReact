@@ -225,7 +225,7 @@ export default function Groups() {
   };
   return (
     <div className="w-full flex flex-col md:flex-row gap-4 box-border mx-auto">
-      <div className="flex flex-col md:flex-row w-full gap-10">
+      <div className="flex flex-col md:flex-row w-full gap-2">
         <div className="w-full mb-4 md:mb-0">
           <GroupCreateForm onCreateGroup={handleCreateGroup} />
         </div>
