@@ -34,108 +34,38 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({ group, onClose, o
     }
   }, []);
 
-  // Responsive styles
-  const isMobile = window.innerWidth <= 600;
-  const modalBgStyle: React.CSSProperties = {
-    position: 'fixed',
-    inset: 0,
-    backdropFilter: 'blur(4px)',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 50,
-    padding: isMobile ? '0.5rem' : 0,
-  };
-  const modalStyle: React.CSSProperties = {
-    backgroundColor: '#FBFFEE',
-    padding: isMobile ? '0.5rem' : '1rem',
-    borderRadius: '0.5rem',
-    boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
-    width: '100%',
-    maxWidth: isMobile ? '100%' : '900px',
-    height: isMobile ? '95%' : '80%',
-    margin: '0 auto',
-    position: 'relative',
-    overflowY: 'auto',
-    boxSizing: 'border-box',
-  };
-  const closeBtnStyle: React.CSSProperties = {
-    position: 'absolute',
-    top: isMobile ? '0.5rem' : '1rem',
-    right: isMobile ? '0.5rem' : '1rem',
-    color: 'var(--secondary-brown)',
-    fontSize: isMobile ? '1.1rem' : '1.25rem',
-    background: 'none',
-    border: 'none',
-    cursor: 'pointer',
-    zIndex: 2,
-  };
-  const contentStyle: React.CSSProperties = {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    gap: isMobile ? '1rem' : '1.5rem',
-  };
-  const sectionTitleStyle: React.CSSProperties = {
-    fontSize: isMobile ? '1rem' : '1.125rem',
-    fontWeight: 'bold',
-    color: 'var(--secondary-brown)',
-    textTransform: 'uppercase',
-    marginBottom: isMobile ? '0.5rem' : '0.75rem',
-    textAlign: 'center',
-  };
-  const infoRowStyle: React.CSSProperties = {
-    display: 'flex',
-    flexDirection: isMobile ? 'column' : 'row',
-    flexWrap: 'wrap',
-    justifyContent: isMobile ? 'flex-start' : 'space-around',
-    marginTop: '1rem',
-    alignItems: isMobile ? 'flex-start' : 'center',
-    gap: isMobile ? '0.5rem' : 0,
-  };
-  const infoTextStyle: React.CSSProperties = {
-    fontSize: isMobile ? '0.9rem' : '0.95rem',
-    color: 'var(--secondary-brown)',
-  };
-  const mainTitleStyle: React.CSSProperties = {
-    fontSize: isMobile ? '1.2rem' : '1.5rem',
-    fontWeight: 'bold',
-    color: 'var(--secondary-brown)',
-    textAlign: 'center',
-    textTransform: 'uppercase',
-    margin: isMobile ? '0.3rem 0' : '0.5rem 0',
-  };
+  // All JS/CSS style constants removed, now using Tailwind for modal and content
   return (
-    <div style={modalBgStyle}>
-      <div style={modalStyle}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-2 md:p-0">
+      <div className="relative bg-[#FBFFEE] p-2 md:p-6 rounded-lg shadow-2xl w-full max-w-3xl h-[95%] md:h-[80%] mx-auto overflow-y-auto">
         <button
-          style={closeBtnStyle}
+          className="absolute top-2 right-2 md:top-4 md:right-4 text-secondary-brown text-xl md:text-2xl bg-none border-none cursor-pointer z-10"
           onClick={onClose}
+          aria-label="Fermer la modale"
         >
           ×
         </button>
-        <div style={contentStyle}>
-          <h2 style={mainTitleStyle}>Détails du groupe</h2>
-          <div style={{ borderBottom: '1px solid rgba(123, 78, 46, 0.2)', paddingBottom: isMobile ? '0.5rem' : '1rem' }}>
-            <h3 style={sectionTitleStyle}>Informations générales</h3>
-            <div style={infoRowStyle}>
-              <p style={infoTextStyle}><strong>Nom :</strong> {group.name}</p>
-              <p style={infoTextStyle}><strong>Description :</strong> {group.comment}</p>
-              <p style={infoTextStyle}><strong>Mixte :</strong> {group.mixed ? 'Oui' : 'Non'}</p>
-              <p style={infoTextStyle}><strong>Créé le :</strong> {new Date(group.createdAt || '').toLocaleDateString()}</p>
-              <p style={infoTextStyle}><strong>Balades :</strong> {group.walks?.length ?? 0}</p>
+        <div className="flex flex-col justify-center gap-4 md:gap-6">
+          <h2 className="text-xl md:text-2xl font-bold text-secondary-brown text-center uppercase my-2">Détails du groupe</h2>
+          <div className="border-b border-[rgba(123,78,46,0.2)] pb-2 md:pb-4">
+            <h3 className="text-base md:text-lg font-bold text-secondary-brown uppercase text-center mb-2 md:mb-3">Informations générales</h3>
+            <div className="flex flex-col md:flex-row md:flex-wrap md:justify-around mt-4 md:items-center gap-2 md:gap-0">
+              <p className="text-[0.95rem] text-secondary-brown"><strong>Nom :</strong> {group.name}</p>
+              <p className="text-[0.95rem] text-secondary-brown"><strong>Description :</strong> {group.comment}</p>
+              <p className="text-[0.95rem] text-secondary-brown"><strong>Mixte :</strong> {group.mixed ? 'Oui' : 'Non'}</p>
+              <p className="text-[0.95rem] text-secondary-brown"><strong>Créé le :</strong> {new Date(group.createdAt || '').toLocaleDateString()}</p>
+              <p className="text-[0.95rem] text-secondary-brown"><strong>Balades :</strong> {group.walks?.length ?? 0}</p>
             </div>
           </div>
 
           {/* Comments Section */}
-          <div style={{ borderBottom: '1px solid rgba(123, 78, 46, 0.2)', paddingBottom: '1rem' }}>
+          <div className="border-b border-[rgba(123,78,46,0.2)] pb-4">
             <GroupComments group={group} user={{ username: "Anonyme" }} />
           </div>
 
           {/* Map Section */}
-          <div style={{ borderBottom: '1px solid rgba(123, 78, 46, 0.2)', paddingBottom: '1rem' }}>
-            <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: 'var(--secondary-brown)', textTransform: 'uppercase', marginBottom: '0.75rem', textAlign: 'center' }}>Carte interactive</h3>
+          <div className="border-b border-[rgba(123,78,46,0.2)] pb-4">
+            <h3 className="text-base md:text-lg font-bold text-secondary-brown uppercase text-center mb-3">Carte interactive</h3>
             {group.walks && group.walks.length > 0 ? (
               (() => {
                 const location = group.walks[0].location;
@@ -144,7 +74,7 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({ group, onClose, o
                   : [];
 
                 return (
-                  <div style={{ width: '100%', maxWidth: 600, height: 350, margin: '0 auto' }}>
+                  <div className="w-full max-w-2xl h-[350px] mx-auto">
                     {coordinates.length === 2 && coordinates.every((coord) => coord >= -90 && coord <= 90) ? (
                       <LeafletMap coordinates={coordinates as [number, number]} />
                     ) : userCoordinates ? (
@@ -156,26 +86,26 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({ group, onClose, o
                 );
               })()
             ) : (
-              <p style={{ fontSize: '0.875rem', color: 'var(--secondary-brown)' }}>Aucune balade disponible.</p>
+              <p className="text-sm text-secondary-brown">Aucune balade disponible.</p>
             )}
           </div>
-<div className='flex flex-col items-center gap-4'>
-          {isCreator && (
-            <button
-              style={{ backgroundColor: 'var(--primary-green)', color: 'var(--primary-brown)', padding: '0.5rem 1.5rem', borderRadius: '0.375rem', border: 'none', fontWeight: '500', cursor: 'pointer', fontSize: '0.875rem', width: '100%', maxWidth: '250px' }}
-              onClick={onCreateWalk}
-            >
-              Créer une balade
-            </button>
-          )}
-          {canRequestJoin && (
-            <button
-              style={{ backgroundColor: 'var(--primary-green)', color: 'var(--primary-brown)', padding: '0.5rem 1.5rem', borderRadius: '0.375rem', border: 'none', fontWeight: '500', cursor: 'pointer', fontSize: '0.875rem', width: '100%', maxWidth: '250px' }}
-              onClick={() => onJoinGroup(group.id)}
-            >
-              Rejoindre ce groupe
-            </button>
-          )}
+          <div className="flex flex-col items-center gap-4 mt-4">
+            {isCreator && (
+              <button
+                className="bg-[var(--primary-green)] text-[var(--primary-brown)] py-2 px-6 rounded-md font-medium text-sm w-full max-w-xs hover:bg-[#B7D336] transition border-none cursor-pointer"
+                onClick={onCreateWalk}
+              >
+                Créer une balade
+              </button>
+            )}
+            {canRequestJoin && (
+              <button
+                className="bg-[var(--primary-green)] text-[var(--primary-brown)] py-2 px-6 rounded-md font-medium text-sm w-full max-w-xs hover:bg-[#B7D336] transition border-none cursor-pointer"
+                onClick={() => onJoinGroup(group.id)}
+              >
+                Rejoindre ce groupe
+              </button>
+            )}
           </div>
         </div>
       </div>

@@ -14,14 +14,15 @@ function InvalidateMapSize() {
 export default function LeafletMap({ coordinates }: { coordinates: [number, number] | null }) {
   const isMobile = window.innerWidth <= 600;
   if (!coordinates || coordinates.length !== 2 || coordinates.some(isNaN)) {
-    return <span style={{ color: '#7B4E2E', fontSize: isMobile ? '0.85rem' : '0.9rem' }}>Coordonnées invalides</span>;
+    return <span className="text-[0.9rem] text-secondary-brown">Coordonnées invalides</span>;
   }
   return (
     <MapContainer
       key={coordinates ? coordinates.join(',') : 'empty'}
       center={coordinates}
       zoom={13}
-      style={{ width: '100%', height: isMobile ? 200 : 300, borderRadius: 8, overflow: 'hidden' }}
+      className={`w-full ${isMobile ? 'h-[200px]' : 'h-[300px]'} rounded-lg overflow-hidden`}
+      style={{ width: '100%' }}
     >
       <InvalidateMapSize />
       <TileLayer

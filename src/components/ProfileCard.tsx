@@ -20,24 +20,18 @@ export function ProfileCard({
   customClass = "",
 }: ProfileCardProps) {
   return (
-    <div className={`w-full rounded-lg bg-[#FBFFEE] backdrop-blur-sm overflow-hidden ${customClass}`} style={{ paddingTop: "0.5rem" }}>
-      <div style={{ padding: "0.75rem", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem", textAlign: "center" }}>
-        <div style={{ width: "100%", textAlign: "center", }}>
+    <div className={`w-full rounded-lg bg-[#FBFFEE] backdrop-blur-sm overflow-hidden pt-2 ${customClass}`}>
+      <div className="p-3 flex flex-col items-center gap-2 text-center">
+        <div className="w-full text-center">
           {headerContent}
-          <h2 style={{ fontSize: "1.25rem", fontWeight: 500, color: "var(--secondary-brown)", width: "100%", marginBottom: "0.1rem" }}>{title}</h2>
+          <h2 className="text-lg font-medium text-secondary-brown w-full mb-0.5">{title}</h2>
           {description && (
-            <p style={{ fontSize: "0.75rem", color: "rgba(218, 145, 93, 0.8)", width: "100%" }}>
-              {description}
-            </p>
+            <p className="text-xs text-[rgba(218,145,93,0.8)] w-full">{description}</p>
           )}
         </div>
-
-        {children && <div style={{ padding: 0 }}>{children}</div>}
-
+        {children && <div className="p-0">{children}</div>}
         {footerContent && (
-          <div style={{ display: "flex", justifyContent: "flex-end", padding: 0 }}>
-            {footerContent}
-          </div>
+          <div className="flex justify-end p-0 w-full">{footerContent}</div>
         )}
       </div>
     </div>

@@ -62,27 +62,13 @@ const EditPasswordForm: React.FC<EditPasswordFormProps> = ({ onCancel }) => {
     }
   };
 
-  // Responsive styles
-  const isMobile = window.innerWidth <= 600;
-  const containerClass = isMobile ? "w-full max-w-full mx-0 px-1" : "w-full max-w-sm mx-auto px-4";
-  const closeBtnStyle: React.CSSProperties = {
-    position: 'absolute',
-    top: 0.5,
-    right: 17,
-    background: 'transparent',
-    border: 'none',
-    fontSize: isMobile ? '1.2rem' : '1.5rem',
-    color: '#7B4E2E',
-    cursor: 'pointer',
-    zIndex: 10,
-  };
   return (
-    <div className={containerClass} style={{ position: "relative" }}>
+    <div className="w-full max-w-sm mx-auto px-1 md:px-4 relative">
       {/* Bouton de fermeture en haut à droite */}
       <button
         onClick={onCancel}
-        style={closeBtnStyle}
         aria-label="Fermer la modale"
+        className="absolute top-2 right-4 bg-transparent border-none text-[1.5rem] text-[#7B4E2E] cursor-pointer z-10"
       >
         ×
       </button>
@@ -94,12 +80,7 @@ const EditPasswordForm: React.FC<EditPasswordFormProps> = ({ onCancel }) => {
         )}
         <form
           onSubmit={handleSubmit}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "0.5rem",
-            marginTop: "0.25rem",
-          }}
+          className="flex flex-col gap-2 mt-1"
         >
           <h2 className="text-xl font-bold text-primary-brown text-center mb-2">
             Modifier le mot de passe
@@ -107,7 +88,7 @@ const EditPasswordForm: React.FC<EditPasswordFormProps> = ({ onCancel }) => {
           {error && <p className="text-red-500 text-center text-sm font-semibold">{error}</p>}
           {success && <p className="text-green-600 text-center text-sm font-semibold">{success}</p>}
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+          <div className="flex flex-col gap-2">
             <input
               type="password"
               id="oldPassword"
@@ -116,15 +97,7 @@ const EditPasswordForm: React.FC<EditPasswordFormProps> = ({ onCancel }) => {
               onChange={(e) => setOldPassword(e.target.value)}
               required
               placeholder="Mot de passe actuel"
-              style={{
-                width: "100%",
-                padding: "0.5rem",
-                border: "1px solid rgba(123, 78, 46, 0.3)",
-                borderRadius: "0.5rem",
-                outline: "none",
-                backgroundColor: "rgba(255,255,255,0.8)",
-                textAlign: "center",
-              }}
+              className="w-full p-2 border border-[rgba(123,78,46,0.3)] rounded-lg outline-none bg-[rgba(255,255,255,0.8)] text-center"
             />
             <input
               type="password"
@@ -134,15 +107,7 @@ const EditPasswordForm: React.FC<EditPasswordFormProps> = ({ onCancel }) => {
               onChange={(e) => setNewPassword(e.target.value)}
               required
               placeholder="Nouveau mot de passe"
-              style={{
-                width: "100%",
-                padding: "0.5rem",
-                border: "1px solid rgba(123, 78, 46, 0.3)",
-                borderRadius: "0.5rem",
-                outline: "none",
-                backgroundColor: "rgba(255,255,255,0.8)",
-                textAlign: "center",
-              }}
+              className="w-full p-2 border border-[rgba(123,78,46,0.3)] rounded-lg outline-none bg-[rgba(255,255,255,0.8)] text-center"
             />
             <input
               type="password"
@@ -152,47 +117,20 @@ const EditPasswordForm: React.FC<EditPasswordFormProps> = ({ onCancel }) => {
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
               placeholder="Confirmer le nouveau mot de passe"
-              style={{
-                width: "100%",
-                padding: "0.5rem",
-                border: "1px solid rgba(123, 78, 46, 0.3)",
-                borderRadius: "0.5rem",
-                outline: "none",
-                backgroundColor: "rgba(255,255,255,0.8)",
-                textAlign: "center",
-              }}
+              className="w-full p-2 border border-[rgba(123,78,46,0.3)] rounded-lg outline-none bg-[rgba(255,255,255,0.8)] text-center"
             />
           </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "0.5rem",
-              marginTop: "0.5rem",
-            }}
-          >
+          <div className="flex flex-col gap-2 mt-2">
             <Button
               type="button"
               onClick={onCancel}
-              style={{
-                width: "100%",
-                backgroundColor: "var(--secondary-green)",
-                color: "var(--secondary-brown)",
-                fontWeight: 500,
-                padding: "0.5rem 0",
-              }}
+              className="w-full bg-[var(--secondary-green)] text-[var(--secondary-brown)] font-medium py-2"
             >
               Annuler
             </Button>
             <Button
               type="submit"
-              style={{
-                width: "100%",
-                backgroundColor: "var(--primary-green)",
-                color: "var(--primary-brown)",
-                fontWeight: 500,
-                padding: "0.5rem 0",
-              }}
+              className="w-full bg-[var(--primary-green)] text-[var(--primary-brown)] font-medium py-2"
             >
               Sauvegarder
             </Button>

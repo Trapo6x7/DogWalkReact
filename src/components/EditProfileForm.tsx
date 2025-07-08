@@ -126,27 +126,13 @@ export function EditProfileForm({
     );
   };
 
-  // Responsive styles
-  const isMobile = window.innerWidth <= 600;
-  const containerClass = isMobile ? "w-full max-w-full mx-0 px-1" : "w-full max-w-sm mx-auto px-4";
-  const closeBtnStyle: React.CSSProperties = {
-    position: 'absolute',
-    top: 0.5,
-    right: 17,
-    background: 'transparent',
-    border: 'none',
-    fontSize: isMobile ? '1.2rem' : '1.5rem',
-    color: '#7B4E2E',
-    cursor: 'pointer',
-    zIndex: 10,
-  };
   return (
-    <div className={containerClass} style={{ position: "relative" }}>
+    <div className="w-full max-w-sm mx-auto px-1 md:px-4 relative">
       {/* Bouton de fermeture en haut à droite */}
       <button
         onClick={onCancel}
-        style={closeBtnStyle}
         aria-label="Fermer la modale"
+        className="absolute top-2 right-4 bg-transparent border-none text-[1.5rem] text-[#7B4E2E] cursor-pointer z-10"
       >
         ×
       </button>
@@ -158,23 +144,12 @@ export function EditProfileForm({
         )}
         <form
           onSubmit={handleSubmit}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "0.5rem",
-            marginTop: "0.25rem",
-          }}
+          className="flex flex-col gap-2 mt-1"
         >
           <h2 className="text-xl font-bold text-primary-brown text-center mb-2">
             Modifier le profil
           </h2>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "0.5rem",
-            }}
-          >
+          <div className="flex flex-col gap-2">
             <input
               type="text"
               id="name"
@@ -182,15 +157,7 @@ export function EditProfileForm({
               value={formData.name}
               onChange={handleChange}
               placeholder="Nom"
-              style={{
-                width: "100%",
-                padding: "0.5rem",
-                border: "1px solid rgba(123, 78, 46, 0.3)",
-                borderRadius: "0.5rem",
-                outline: "none",
-                backgroundColor: "rgba(255,255,255,0.8)",
-                textAlign: "center",
-              }}
+              className="w-full p-2 border border-[rgba(123,78,46,0.3)] rounded-lg outline-none bg-[rgba(255,255,255,0.8)] text-center"
             />
             <textarea
               id="description"
@@ -198,15 +165,7 @@ export function EditProfileForm({
               value={formData.description}
               onChange={handleChange}
               placeholder="Description"
-              style={{
-                width: "100%",
-                padding: "0.5rem",
-                border: "1px solid rgba(123, 78, 46, 0.3)",
-                borderRadius: "0.5rem",
-                outline: "none",
-                backgroundColor: "rgba(255,255,255,0.8)",
-                textAlign: "center",
-              }}
+              className="w-full p-2 border border-[rgba(123,78,46,0.3)] rounded-lg outline-none bg-[rgba(255,255,255,0.8)] text-center"
             />
             <div className="text-sm text-gray-500">
               {charCount}/140 caractères
@@ -216,13 +175,7 @@ export function EditProfileForm({
                 Vous avez dépassé la limite de 140 caractères !
               </div>
             )}
-            <div
-              style={{
-                display: "flex",
-                gap: "0.5rem",
-                alignItems: "center",
-              }}
-            >
+            <div className="flex gap-2 items-center">
               <input
                 type="text"
                 id="city"
@@ -230,34 +183,14 @@ export function EditProfileForm({
                 value={formData.city}
                 onChange={handleChange}
                 placeholder="Ville"
-                style={{
-                  width: "100%",
-                  padding: "0.5rem",
-                  border: "1px solid rgba(123, 78, 46, 0.3)",
-                  borderRadius: "0.5rem",
-                  outline: "none",
-                  backgroundColor: "rgba(255,255,255,0.8)",
-                  textAlign: "center",
-                }}
+                className="w-full p-2 border border-[rgba(123,78,46,0.3)] rounded-lg outline-none bg-[rgba(255,255,255,0.8)] text-center"
               />
               <button
                 type="button"
                 onClick={handleGeolocate}
                 disabled={isLocating}
-                style={{
-                  background: "var(--primary-green)",
-                  color: "var(--primary-brown)",
-                  border: "none",
-                  borderRadius: "0.5rem",
-                  padding: "0.5rem 0.75rem",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  minWidth: "40px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
                 title="Détecter ma ville automatiquement"
+                className="bg-[var(--primary-green)] text-[var(--primary-brown)] border-none rounded-lg px-3 py-2 font-semibold cursor-pointer min-w-[40px] flex items-center justify-center"
               >
                 {isLocating ? (
                   "..."
@@ -269,36 +202,17 @@ export function EditProfileForm({
               </button>
             </div>
           </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "0.5rem",
-              marginTop: "0.5rem",
-            }}
-          >
+          <div className="flex flex-col gap-2 mt-2">
             <Button
               type="button"
               onClick={onCancel}
-              style={{
-                width: "100%",
-                backgroundColor: "var(--secondary-green)",
-                color: "var(--secondary-brown)",
-                fontWeight: 500,
-                padding: "0.5rem 0",
-              }}
+              className="w-full bg-[var(--secondary-green)] text-[var(--secondary-brown)] font-medium py-2"
             >
               Annuler
             </Button>
             <Button
               type="submit"
-              style={{
-                width: "100%",
-                backgroundColor: "var(--primary-green)",
-                color: "var(--primary-brown)",
-                fontWeight: 500,
-                padding: "0.5rem 0",
-              }}
+              className="w-full bg-[var(--primary-green)] text-[var(--primary-brown)] font-medium py-2"
             >
               Sauvegarder
             </Button>

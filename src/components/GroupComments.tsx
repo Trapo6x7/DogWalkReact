@@ -59,83 +59,39 @@ export default function GroupComments({ group, user }: GroupCommentsProps) {
     } catch (err: any) {
       setError(err.message || "Erreur inconnue");
     }
-  };
-
-  // Responsive styles
-  const isMobile = window.innerWidth <= 600;
-  const cardStyle: React.CSSProperties = {
-    backgroundColor: '#FBFFEE',
-    borderRadius: '0.5rem',
-    padding: isMobile ? '0.5rem' : '1rem',
-    width: '100%',
-    maxWidth: isMobile ? '100%' : 400,
-    margin: '0 auto',
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-    boxSizing: 'border-box',
-  };
-  const titleStyle: React.CSSProperties = {
-    fontWeight: 'bold',
-    fontSize: isMobile ? '1rem' : '1.125rem',
-    color: 'var(--secondary-brown)',
-    textAlign: 'center',
-    textTransform: 'uppercase',
-    marginBottom: isMobile ? '0.5rem' : '1rem',
-  };
+  }
   return (
-    <div style={cardStyle}>
-      <h3 style={titleStyle}>
-        Commentaires
-      </h3>
-      <div style={{ flex: 1, overflowY: 'auto', marginBottom: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+    <div className="bg-[#FBFFEE] rounded-lg p-2 md:p-4 w-full max-w-md mx-auto flex flex-col h-full box-border shadow-lg">
+      <h3 className="font-bold text-base md:text-lg text-secondary-brown text-center uppercase mb-2 md:mb-4">Commentaires</h3>
+      <div className="flex-1 overflow-y-auto mb-4 flex flex-col gap-2">
         {loading ? (
-          <p style={{ color: '#888', fontSize: '0.875rem', textAlign: 'center' }}>Chargement…</p>
+          <p className="text-gray-400 text-sm text-center">Chargement…</p>
         ) : comments.length === 0 ? (
-          <p style={{ color: '#888', fontSize: '0.875rem', textAlign: 'center' }}>Aucun commentaire.</p>
+          <p className="text-gray-400 text-sm text-center">Aucun commentaire.</p>
         ) : (
           comments.map((c) => (
-            <div key={c.id} style={{ marginBottom: '0.25rem', background: 'rgba(123,78,46,0.05)', borderRadius: '0.375rem', padding: '0.5rem' }}>
-              <span style={{ fontWeight: 600, color: 'var(--secondary-brown)' }}>{c.user.name ?? "?"} :</span>{' '}
-              <span style={{ color: 'var(--secondary-brown)' }}>{c.content}</span>
+            <div key={c.id} className="mb-1 bg-[rgba(123,78,46,0.05)] rounded-md p-2">
+              <span className="font-semibold text-secondary-brown">{c.user.name ?? "?"} :</span>{' '}
+              <span className="text-secondary-brown">{c.content}</span>
             </div>
           ))
         )}
-        {error && <p style={{ color: '#e53e3e', fontSize: '0.875rem', textAlign: 'center' }}>{error}</p>}
+        {error && <p className="text-red-600 text-sm text-center">{error}</p>}
       </div>
       <form
         onSubmit={handleAddComment}
-        style={{ display: 'flex', gap: '0.5rem', borderTop: '1px solid rgba(123, 78, 46, 0.1)', paddingTop: '0.75rem' }}
+        className="flex gap-2 border-t border-[rgba(123,78,46,0.1)] pt-3"
       >
         <input
           type="text"
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
           placeholder="Votre commentaire..."
-          style={{
-            flex: 1,
-            border: '1px solid rgba(123, 78, 46, 0.2)',
-            borderRadius: '0.375rem',
-            padding: '0.5rem',
-            fontSize: '0.875rem',
-            background: 'rgba(255,255,255,0.8)',
-            outline: 'none',
-            color: 'var(--secondary-brown)',
-          }}
+          className="flex-1 border border-[rgba(123,78,46,0.2)] rounded-md p-2 text-sm bg-[rgba(255,255,255,0.8)] outline-none text-secondary-brown focus:ring-2 focus:ring-[var(--primary-green)]"
         />
         <button
           type="submit"
-          style={{
-            backgroundColor: 'var(--primary-green)',
-            color: 'var(--primary-brown)',
-            padding: '0.5rem 1rem',
-            borderRadius: '0.375rem',
-            border: 'none',
-            fontWeight: 500,
-            cursor: 'pointer',
-            fontSize: '0.875rem',
-            minWidth: 90,
-          }}
+          className="bg-[var(--primary-green)] text-[var(--primary-brown)] px-4 py-2 rounded-md font-medium text-sm min-w-[90px] hover:bg-[#B7D336] transition border-none cursor-pointer"
         >
           Envoyer
         </button>

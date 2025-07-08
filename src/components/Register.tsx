@@ -84,127 +84,73 @@ export function Register({ onGoToLogin, onRegisterSuccess }: RegisterProps) {
         headerContent={<></>}
         customClass="h-auto transform hover:scale-[1.01] transition-all text-center"
       >
-        <div style={{ marginBottom: "0.75rem", display: "flex", justifyContent: "center" }}>
-          <p style={{ color: "var(--secondary-brown)", textAlign: "center", fontSize: "0.75rem" }}>Remplissez le formulaire ci-dessous</p>
+        <div className="mb-3 flex justify-center">
+          <p className="text-[0.75rem] text-secondary-brown text-center">Remplissez le formulaire ci-dessous</p>
         </div>
-        <form onSubmit={handleRegister} style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginTop: "0.25rem" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-            <div style={{ position: "relative" }}>
+        <form onSubmit={handleRegister} className="flex flex-col gap-2 mt-1">
+          <div className="flex flex-col gap-2">
+            <div className="relative">
               <input
                 type="text"
                 placeholder="Nom d'utilisateur"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                style={{ 
-                  width: "100%", 
-                  padding: "0.5rem", 
-                  border: "1px solid rgba(123, 78, 46, 0.3)", 
-                  borderRadius: "0.5rem", 
-                  outline: "none",
-                  backgroundColor: "rgba(255, 255, 255, 0.8)",
-                  textAlign: "center"
-                }}
+                className="w-full p-2 border border-brown/30 rounded-lg outline-none bg-white/80 text-center focus:ring-2 focus:ring-primary-green"
               />
             </div>
-            <div style={{ position: "relative" }}>
+            <div className="relative">
               <input
                 type="email"
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                style={{ 
-                  width: "100%", 
-                  padding: "0.5rem", 
-                  border: "1px solid rgba(123, 78, 46, 0.3)", 
-                  borderRadius: "0.5rem", 
-                  outline: "none",
-                  backgroundColor: "rgba(255, 255, 255, 0.8)",
-                  textAlign: "center"
-                }}
+                className="w-full p-2 border border-brown/30 rounded-lg outline-none bg-white/80 text-center focus:ring-2 focus:ring-primary-green"
               />
             </div>
-            <div style={{ position: "relative" }}>
+            <div className="relative">
               <input
                 type="password"
                 placeholder="Mot de passe"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                style={{ 
-                  width: "100%", 
-                  padding: "0.5rem", 
-                  border: "1px solid rgba(123, 78, 46, 0.3)", 
-                  borderRadius: "0.5rem", 
-                  outline: "none",
-                  backgroundColor: "rgba(255, 255, 255, 0.8)",
-                  textAlign: "center"
-                }}
+                className="w-full p-2 border border-brown/30 rounded-lg outline-none bg-white/80 text-center focus:ring-2 focus:ring-primary-green"
               />
             </div>
-            <div style={{ position: "relative" }}>
+            <div className="relative">
               <input
                 type="date"
                 placeholder="Date de naissance"
                 value={birthdate}
                 onChange={(e) => setBirthdate(e.target.value)}
-                style={{ 
-                  width: "100%", 
-                  padding: "0.5rem", 
-                  border: "1px solid rgba(123, 78, 46, 0.3)", 
-                  borderRadius: "0.5rem", 
-                  outline: "none",
-                  backgroundColor: "rgba(255, 255, 255, 0.8)",
-                  textAlign: "center"
-                }}
+                className="w-full p-2 border border-brown/30 rounded-lg outline-none bg-white/80 text-center focus:ring-2 focus:ring-primary-green"
               />
             </div>
-            <div style={{ position: "relative" }}>
+            <div className="relative">
               <input
                 type="text"
                 placeholder="Ville"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                style={{ 
-                  width: "100%", 
-                  padding: "0.5rem", 
-                  border: "1px solid rgba(123, 78, 46, 0.3)", 
-                  borderRadius: "0.5rem", 
-                  outline: "none",
-                  backgroundColor: "rgba(255, 255, 255, 0.8)",
-                  textAlign: "center"
-                }}
+                className="w-full p-2 border border-brown/30 rounded-lg outline-none bg-white/80 text-center focus:ring-2 focus:ring-primary-green"
               />
             </div>
           </div>
-          
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginTop: "0.25rem" }}>
+          <div className="flex flex-col gap-2 mt-1">
             <Button 
               type="submit" 
-              style={{
-                width: "100%",
-                backgroundColor: "var(--primary-green)",
-                color: "var(--primary-brown)",
-                fontWeight: "500",
-                padding: "0.5rem 0"
-              }}
+              className="w-full bg-primary-green text-primary-brown font-medium py-2 rounded-lg hover:bg-primary-green/90 transition-colors"
               disabled={isLoading}
             >
               {isLoading ? "Inscription en cours..." : "S'inscrire"}
             </Button>
-            
-            <div style={{ position: "relative", display: "flex", alignItems: "center", gap: "0.5rem", margin: "0.25rem 0" }}>
-              <div style={{ flexGrow: 1, height: "1px", backgroundColor: "rgba(123, 78, 46, 0.2)" }}></div>
-              <span style={{ fontSize: "0.75rem", color: "rgba(123, 78, 46, 0.6)" }}>ou</span>
-              <div style={{ flexGrow: 1, height: "1px", backgroundColor: "rgba(123, 78, 46, 0.2)" }}></div>
+            <div className="relative flex items-center gap-2 my-1">
+              <div className="flex-grow h-px bg-brown/20"></div>
+              <span className="text-xs text-brown/60">ou</span>
+              <div className="flex-grow h-px bg-brown/20"></div>
             </div>
-            
             <Button
               variant="outline"
-              style={{
-                width: "100%",
-                border: "1px solid rgba(123, 78, 46, 0.3)",
-                color: "var(--secondary-brown)",
-                padding: "0.5rem 0"
-              }}
+              className="w-full border border-brown/30 text-secondary-brown py-2 rounded-lg hover:bg-brown/10 transition-colors"
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                 e.preventDefault();
                 onGoToLogin();
@@ -214,18 +160,16 @@ export function Register({ onGoToLogin, onRegisterSuccess }: RegisterProps) {
             </Button>
           </div>
         </form>
-        
         {message && (
-          <div style={{ marginTop: "0.5rem", padding: "0.5rem", backgroundColor: "rgba(254, 226, 226, 1)", borderRadius: "0.375rem", border: "1px solid rgba(254, 202, 202, 1)" }}>
-            <p style={{ color: "rgba(239, 68, 68, 1)", textAlign: "center", fontSize: "0.75rem" }}>{message}</p>
+          <div className="mt-2 p-2 bg-red-100 rounded-md border border-red-200">
+            <p className="text-red-500 text-center text-xs">{message}</p>
           </div>
         )}
-        
-        <div style={{ marginTop: "0.5rem", textAlign: "center" }}>
-          <p style={{ fontSize: "0.625rem", color: "rgba(123, 78, 46, 0.7)", marginBottom: "0.5rem" }}>
+        <div className="mt-2 text-center flex flex-col items-center justify-center">
+          <p className="text-[0.625rem] text-brown/70 mb-2">
             En vous inscrivant, vous acceptez nos conditions d'utilisation
           </p>
-          <img src="/dogwalklogobrown.png" alt="DogWalk Logo" style={{ width: "3rem", height: "3rem", objectFit: "contain", margin: "0 auto" }} />
+          <img src="/dogwalklogobrown.png" alt="DogWalk Logo" className="w-12 h-12 object-contain mx-auto" />
         </div>
       </ProfileCard>
     </section>

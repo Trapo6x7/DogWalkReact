@@ -49,76 +49,46 @@ export function Login({ onLoginSuccess, onGoToRegister }: LoginProps) {
         headerContent={<></>}
         customClass="h-auto transform hover:scale-[1.01] transition-all text-center"
       >
-        <div style={{ marginBottom: "0.75rem", display: "flex", justifyContent: "center" }}>
-          <p style={{ color: "var(--secondary-brown)", textAlign: "center", fontSize: "0.75rem" }}>Entrez vos identifiants</p>
+        <div className="mb-3 flex justify-center">
+          <p className="text-[0.75rem] text-secondary-brown text-center">Entrez vos identifiants</p>
         </div>
-        <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginTop: "0.25rem" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-            <div style={{ position: "relative" }}>
+        <form onSubmit={handleLogin} className="flex flex-col gap-2 mt-1">
+          <div className="flex flex-col gap-2">
+            <div className="relative">
               <input
                 type="text"
                 placeholder="Nom d'utilisateur"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                style={{ 
-                  width: "100%", 
-                  padding: "0.5rem", 
-                  border: "1px solid rgba(123, 78, 46, 0.3)", 
-                  borderRadius: "0.5rem", 
-                  outline: "none",
-                  backgroundColor: "rgba(255, 255, 255, 0.8)",
-                  textAlign: "center"
-                }}
+                className="w-full p-2 border border-[rgba(123,78,46,0.3)] rounded-lg outline-none bg-[rgba(255,255,255,0.8)] text-center"
               />
             </div>
-            <div style={{ position: "relative" }}>
+            <div className="relative">
               <input
                 type="password"
                 placeholder="Mot de passe"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                style={{ 
-                  width: "100%", 
-                  padding: "0.5rem", 
-                  border: "1px solid rgba(123, 78, 46, 0.3)", 
-                  borderRadius: "0.5rem", 
-                  outline: "none",
-                  backgroundColor: "rgba(255, 255, 255, 0.8)",
-                  textAlign: "center"
-                }}
+                className="w-full p-2 border border-[rgba(123,78,46,0.3)] rounded-lg outline-none bg-[rgba(255,255,255,0.8)] text-center"
               />
             </div>
           </div>
-          
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginTop: "0.5rem" }}>
+          <div className="flex flex-col gap-2 mt-2">
             <Button 
               type="submit" 
-              style={{
-                width: "100%",
-                backgroundColor: "var(--primary-green)",
-                color: "var(--primary-brown)",
-                fontWeight: "500",
-                padding: "0.5rem 0"
-              }}
+              className="w-full bg-[var(--primary-green)] text-[var(--primary-brown)] font-medium py-2"
               disabled={isLoading}
             >
               {isLoading ? "Connexion en cours..." : "Connexion"}
             </Button>
-            
-            <div style={{ position: "relative", display: "flex", alignItems: "center", gap: "0.5rem", margin: "0.25rem 0" }}>
-              <div style={{ flexGrow: 1, height: "1px", backgroundColor: "rgba(123, 78, 46, 0.2)" }}></div>
-              <span style={{ fontSize: "0.75rem", color: "rgba(123, 78, 46, 0.6)" }}>ou</span>
-              <div style={{ flexGrow: 1, height: "1px", backgroundColor: "rgba(123, 78, 46, 0.2)" }}></div>
+            <div className="relative flex items-center gap-2 my-1">
+              <div className="flex-grow h-px bg-[rgba(123,78,46,0.2)]"></div>
+              <span className="text-[0.75rem] text-[rgba(123,78,46,0.6)]">ou</span>
+              <div className="flex-grow h-px bg-[rgba(123,78,46,0.2)]"></div>
             </div>
-            
             <Button
               variant="outline"
-              style={{
-                width: "100%",
-                border: "1px solid rgba(123, 78, 46, 0.3)",
-                color: "var(--secondary-brown)",
-                padding: "0.5rem 0"
-              }}
+              className="w-full border border-[rgba(123,78,46,0.3)] text-secondary-brown py-2"
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                 e.preventDefault();
                 onGoToRegister();
@@ -128,18 +98,16 @@ export function Login({ onLoginSuccess, onGoToRegister }: LoginProps) {
             </Button>
           </div>
         </form>
-        
         {errorMessage && (
-          <div style={{ marginTop: "0.5rem", padding: "0.5rem", backgroundColor: "rgba(254, 226, 226, 1)", borderRadius: "0.375rem", border: "1px solid rgba(254, 202, 202, 1)" }}>
-            <p style={{ color: "rgba(239, 68, 68, 1)", textAlign: "center", fontSize: "0.75rem" }}>{errorMessage}</p>
+          <div className="mt-2 p-2 bg-red-100 rounded-md border border-red-200">
+            <p className="text-red-600 text-center text-xs">{errorMessage}</p>
           </div>
         )}
-        
-        <div style={{ marginTop: "0.5rem", textAlign: "center" }}>
-          <p style={{ fontSize: "0.625rem", color: "rgba(123, 78, 46, 0.7)", marginBottom: "0.5rem" }}>
+        <div className="mt-2 text-center flex flex-col items-center justify-center">
+          <p className="text-[0.625rem] text-[rgba(123,78,46,0.7)] mb-2">
             En vous connectant, vous acceptez nos conditions d'utilisation
           </p>
-          <img src="/dogwalklogobrown.png" alt="DogWalk Logo" style={{ width: "2.25rem", height: "2.25rem", objectFit: "contain", margin: "0 auto" }} />
+          <img src="/dogwalklogobrown.png" alt="DogWalk Logo" className="w-9 h-9 object-contain mx-auto" />
         </div>
       </ProfileCard>
     </section>
