@@ -18,13 +18,10 @@ interface Group {
 
 export default function Groups() {
   const { user } = useAuth();
-  const [mixed] = useState(true);
   const [groups, setGroups] = useState<Group[]>([]);
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
   const [showWalkForm, setShowWalkForm] = useState(false);
- 
+  const mixed = true;
   const userId = user?.id;
 
   const isCreator =
@@ -75,7 +72,7 @@ export default function Groups() {
     fetchGroups();
   }, []);
 
-  const handleCreateGroup = async () => {
+  const handleCreateGroup = async (name: string, description: string) => {
     if (!name || !description) return;
 
     try {
@@ -119,8 +116,6 @@ export default function Groups() {
       };
 
       setGroups([...groups, newGroup]);
-      setName("");
-      setDescription("");
     } catch (error) {
       console.error(error);
       alert("Impossible de créer le groupe. Réessaie plus tard.");
@@ -209,9 +204,9 @@ export default function Groups() {
   return (
     <div className="w-full flex flex-col md:flex-row gap-4 box-border mx-auto">
       <div className="flex flex-col md:flex-row w-full gap-2">
-        <div className="w-full mb-4 md:mb-0">
-          <GroupCreateForm onCreateGroup={handleCreateGroup} />
-        </div>
+      <div className="w-full mb-4 md:mb-0">
+        <GroupCreateForm onCreateGroup={handleCreateGroup} />
+      </div>
         <div className="w-full ">
           <GroupList
             groups={groups.map((group) => ({
