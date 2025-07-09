@@ -235,9 +235,9 @@ export default function Groups() {
         <WalkForm
           groupId={selectedGroup.id}
           onClose={() => setShowWalkForm(false)}
-          onCreated={() => {
+          onCreated={async () => {
             setShowWalkForm(false);
-            // Optionnel : rafraîchir les balades du groupe après création
+            await handleShowDetails(selectedGroup.id);
           }}
         />
       )}

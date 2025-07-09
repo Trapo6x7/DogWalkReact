@@ -74,13 +74,12 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({ group, onClose, o
 
               return (
                 <div className="w-full max-w-2xl h-[350px] mx-auto">
-                  {coordinates.length === 2 && coordinates.every((coord) => coord >= -90 && coord <= 90) ? (
-                    <LeafletMap coordinates={coordinates as [number, number]} />
-                  ) : userCoordinates ? (
-                    <LeafletMap coordinates={userCoordinates} />
-                  ) : (
-                    <LeafletMap coordinates={null} />
-                  )}
+                  <LeafletMap
+                    coordinates={coordinates.length === 2 && coordinates.every((coord) => coord >= -90 && coord <= 90)
+                      ? (coordinates as [number, number])
+                      : userCoordinates || null}
+                    walks={group.walks}
+                  />
                 </div>
               );
             })()

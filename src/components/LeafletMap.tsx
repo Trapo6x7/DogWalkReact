@@ -1,5 +1,5 @@
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 function InvalidateMapSize() {
   const map = useMap();
@@ -18,21 +18,31 @@ interface WalkMarker {
 }
 
 interface LeafletMapProps {
-  coordinates?: [number, number] | null;
-  value?: string;
+  coordinates?: [number, number] | string | WalkMarker | null;
+  value?: string | [number, number] | WalkMarker | null;
   onChange?: (latlng: string) => void;
   height?: number | string;
   walks?: WalkMarker[];
 }
 
 export default function LeafletMap({ coordinates, value, onChange, height, walks }: LeafletMapProps) {
+  function isWalkMarker(obj: any): obj is WalkMarker {
+    return obj && typeof obj === 'object' && typeof obj.location === 'string';
+  }
+
   // Mode interactif si onChange fourni
   const isPicker = typeof onChange === 'function';
   // Parse value ou coordinates
-  const parseValue = (val?: string | [number, number] | null): [number, number] => {
+  const parseValue = (val?: string | [number, number] | WalkMarker | null): [number, number] => {
     if (Array.isArray(val) && val.length === 2) return val;
     if (typeof val === 'string' && val.split(',').length === 2) {
       return [parseFloat(val.split(',')[0]), parseFloat(val.split(',')[1])];
+    }
+    if (val && typeof val === 'object' && 'location' in val && typeof val.location === 'string') {
+      const loc = val.location.split(',');
+      if (loc.length === 2) {
+        return [parseFloat(loc[0]), parseFloat(loc[1])];
+      }
     }
     return [48.8584, 2.2945];
   };
@@ -64,15 +74,23 @@ export default function LeafletMap({ coordinates, value, onChange, height, walks
   }, []);
 
   function LocationMarker() {
+    const markerRef = useRef(null);
     useMapEvents({
       click(e) {
         setMarker([e.latlng.lat, e.latlng.lng]);
         onChange && onChange(`${e.latlng.lat.toFixed(5)},${e.latlng.lng.toFixed(5)}`);
+        // Ouvre le popup après sélection
+        setTimeout(() => {
+          if (markerRef.current) {
+            // @ts-ignore
+            markerRef.current.openPopup();
+          }
+        }, 100);
       },
     });
     return marker ? (
-      <Marker position={marker}>
-        <Popup>
+      <Marker position={marker} ref={markerRef}>
+        <Popup autoPan={true}>
           <div>
             <div className="font-bold text-primary-brown text-sm mb-1">Lieu sélectionné</div>
             <div className="text-xs text-secondary-brown">{marker[0].toFixed(5)}, {marker[1].toFixed(5)}</div>
@@ -125,7 +143,37 @@ export default function LeafletMap({ coordinates, value, onChange, height, walks
             );
           })}
           {/* Marqueur interactif (picker) ou simple */}
-          {isPicker ? <LocationMarker /> : (!walks || walks.length === 0) ? <Marker position={marker} /> : null}
+          {isPicker ? <LocationMarker /> : (!walks || walks.length === 0) ? (
+            <Marker position={marker}>
+              <Popup autoPan={true}>
+                <div>
+                  {/* Si coordinates ou value sont un objet balade, affiche les infos */}
+                  {isWalkMarker(coordinates) && (coordinates as WalkMarker).name ? (
+                    <>
+                      <div className="font-bold text-primary-brown text-sm mb-1">{(coordinates as WalkMarker).name}</div>
+                      {(coordinates as WalkMarker).startAt && (
+                        <div className="text-xs text-secondary-brown">{new Date((coordinates as WalkMarker).startAt!).toLocaleString()}</div>
+                      )}
+                      <div className="text-xs text-secondary-brown mt-1">{marker[0].toFixed(5)}, {marker[1].toFixed(5)}</div>
+                    </>
+                  ) : isWalkMarker(value) && (value as WalkMarker).name ? (
+                    <>
+                      <div className="font-bold text-primary-brown text-sm mb-1">{(value as WalkMarker).name}</div>
+                      {(value as WalkMarker).startAt && (
+                        <div className="text-xs text-secondary-brown">{new Date((value as WalkMarker).startAt!).toLocaleString()}</div>
+                      )}
+                      <div className="text-xs text-secondary-brown mt-1">{marker[0].toFixed(5)}, {marker[1].toFixed(5)}</div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="font-bold text-primary-brown text-sm mb-1">Lieu sélectionné</div>
+                      <div className="text-xs text-secondary-brown mt-1">{marker[0].toFixed(5)}, {marker[1].toFixed(5)}</div>
+                    </>
+                  )}
+                </div>
+              </Popup>
+            </Marker>
+          ) : null}
         </MapContainer>
       </article>
     </section>
