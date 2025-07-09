@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import GroupCreateForm from "./GroupCreateForm";
 import GroupList from "./GroupList";
 import GroupDetailsModal from "./GroupDetailsModal";
+import WalkForm from "./WalkForm";
 
 interface Group {
   id: number;
@@ -202,32 +203,44 @@ export default function Groups() {
     }
   };
   return (
-    <main className="w-full flex flex-col md:flex-row gap-4 box-border mx-auto" role="main" aria-label="Gestion des groupes">
-      <section className="flex flex-col md:flex-row w-full gap-2" aria-label="Section gestion des groupes">
-        <article className="w-full mb-4 md:mb-0" aria-label="Création de groupe">
-          <GroupCreateForm onCreateGroup={handleCreateGroup} />
-        </article>
-        <article className="w-full" aria-label="Liste des groupes">
-          <GroupList
-            groups={groups.map((group) => ({
-              id: group.id,
-              name: group.name,
-              description: group.comment || "Pas de description",
-            }))}
-            onShowDetails={handleShowDetails}
+    <>
+      <main className="w-full flex flex-col md:flex-row gap-4 box-border mx-auto" role="main" aria-label="Gestion des groupes">
+        <section className="flex flex-col md:flex-row w-full gap-2" aria-label="Section gestion des groupes">
+          <article className="w-full mb-4 md:mb-0" aria-label="Création de groupe">
+            <GroupCreateForm onCreateGroup={handleCreateGroup} />
+          </article>
+          <article className="w-full" aria-label="Liste des groupes">
+            <GroupList
+              groups={groups.map((group) => ({
+                id: group.id,
+                name: group.name,
+                description: group.comment || "Pas de description",
+              }))}
+              onShowDetails={handleShowDetails}
+            />
+          </article>
+        </section>
+        {selectedGroup && (
+          <GroupDetailsModal
+            group={selectedGroup}
+            onClose={() => setSelectedGroup(null)}
+            onJoinGroup={handleJoinGroup}
+            onCreateWalk={() => setShowWalkForm(true)}
+            isCreator={isCreator}
+            canRequestJoin={canRequestJoin}
           />
-        </article>
-      </section>
-      {selectedGroup && (
-        <GroupDetailsModal
-          group={selectedGroup}
-          onClose={() => setSelectedGroup(null)}
-          onJoinGroup={handleJoinGroup}
-          onCreateWalk={() => setShowWalkForm(true)}
-          isCreator={isCreator}
-          canRequestJoin={canRequestJoin}
+        )}
+      </main>
+      {showWalkForm && selectedGroup && (
+        <WalkForm
+          groupId={selectedGroup.id}
+          onClose={() => setShowWalkForm(false)}
+          onCreated={() => {
+            setShowWalkForm(false);
+            // Optionnel : rafraîchir les balades du groupe après création
+          }}
         />
       )}
-    </main>
+    </>
   );
 }
