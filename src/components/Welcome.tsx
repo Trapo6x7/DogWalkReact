@@ -14,38 +14,38 @@ export function Welcome({ onLogout }: { onLogout: () => void }) {
   return (
     <>
       <Navbar onLogout={onLogout} />
-      <section className="flex flex-col items-center justify-center min-h-screen w-full">
-        <section className="flex flex-col md:flex-row gap-2 justify-center px-2 md:px-20 lg:px-32 xl:px-48 items-center w-full max-w-md mx-auto md:max-w-none">
-          <article className="w-full max-w-full">
+      <main className="flex flex-col items-center justify-center min-h-screen w-full" role="main" aria-label="Accueil utilisateur">
+        <section className="flex flex-col md:flex-row gap-2 justify-center px-2 md:px-20 lg:px-32 xl:px-48 items-center w-full max-w-md mx-auto md:max-w-none" aria-label="Section profil et chiens">
+          <article className="w-full max-w-full" aria-label="Profil utilisateur">
             <Me userData={user} />
           </article>
 
-          <article className="w-full md:w-1/3 hidden md:flex justify-center items-center">
+          <article className="w-full md:w-1/6 px-4 hidden md:flex justify-center items-center" aria-hidden="true">
             <img
               src="/dogwalklogobrown.png"
-              alt="logo"
+              alt="Logo DogWalk"
               className="w-auto lg:w-48 mx-auto"
             />
           </article>
 
-          <article className="w-full max-w-full">
+          <article className="w-full max-w-full" aria-label="Chiens utilisateur">
             <Dogs />
           </article>
         </section>
 
-        <section className="flex flex-col md:flex-row gap-10 justify-center items-start py-10 px-2 w-full md:px-20 lg:px-32 xl:px-48">
+        <section className="flex flex-col md:flex-row gap-10 justify-center items-start py-10 px-2 w-full md:px-20 lg:px-32 xl:px-48" aria-label="Section groupes">
           <div className="w-full max-w-7xl mx-auto flex flex-col md:flex-row gap-10">
             <Groups />
           </div>
         </section>
-             <article className="w-full md:w-1/4 flex md:hidden justify-center items-center">
-            <img
-              src="/dogwalklogobrown.png"
-              alt="logo"
-              className="w-[120px] lg:w-48 mx-auto"
-            />
-          </article>
-      </section>
+        <article className="w-full md:w-1/4 flex md:hidden justify-center items-center" aria-hidden="true">
+          <img
+            src="/dogwalklogobrown.png"
+            alt="Logo DogWalk"
+            className="w-[120px] lg:w-48 mx-auto"
+          />
+        </article>
+      </main>
     </>
   );
 }

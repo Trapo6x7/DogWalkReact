@@ -135,10 +135,8 @@ button {
 footer {
   display: flex;
   justify-content: center;
-  align-items: end;
-  height: 5%;
-  gap: 1%;
-  padding: 1% 0;
+  align-items: center;
+  padding: 1rem;
 }
 
 footer img{

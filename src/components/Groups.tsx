@@ -202,12 +202,12 @@ export default function Groups() {
     }
   };
   return (
-    <div className="w-full flex flex-col md:flex-row gap-4 box-border mx-auto">
-      <div className="flex flex-col md:flex-row w-full gap-2">
-      <div className="w-full mb-4 md:mb-0">
-        <GroupCreateForm onCreateGroup={handleCreateGroup} />
-      </div>
-        <div className="w-full ">
+    <main className="w-full flex flex-col md:flex-row gap-4 box-border mx-auto" role="main" aria-label="Gestion des groupes">
+      <section className="flex flex-col md:flex-row w-full gap-2" aria-label="Section gestion des groupes">
+        <article className="w-full mb-4 md:mb-0" aria-label="Création de groupe">
+          <GroupCreateForm onCreateGroup={handleCreateGroup} />
+        </article>
+        <article className="w-full" aria-label="Liste des groupes">
           <GroupList
             groups={groups.map((group) => ({
               id: group.id,
@@ -216,8 +216,8 @@ export default function Groups() {
             }))}
             onShowDetails={handleShowDetails}
           />
-        </div>
-      </div>
+        </article>
+      </section>
       {selectedGroup && (
         <GroupDetailsModal
           group={selectedGroup}
@@ -228,6 +228,6 @@ export default function Groups() {
           canRequestJoin={canRequestJoin}
         />
       )}
-    </div>
+    </main>
   );
 }

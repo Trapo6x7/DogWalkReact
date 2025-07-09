@@ -127,12 +127,18 @@ export function EditProfileForm({
   };
 
   return (
-    <div className="w-full max-w-sm mx-auto px-1 md:px-4 relative">
+    <section
+      className="w-full max-w-sm mx-auto px-1 md:px-4 relative"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="edit-profile-title"
+    >
       {/* Bouton de fermeture en haut à droite */}
       <button
         onClick={onCancel}
-        aria-label="Fermer la modale"
+        aria-label="Fermer la fenêtre de modification du profil"
         className="absolute top-2 right-4 bg-transparent border-none text-[1.5rem] text-[#7B4E2E] cursor-pointer z-10"
+        type="button"
       >
         ×
       </button>
@@ -145,11 +151,15 @@ export function EditProfileForm({
         <form
           onSubmit={handleSubmit}
           className="flex flex-col gap-2 mt-1"
+          aria-labelledby="edit-profile-title"
+          role="form"
         >
-          <h2 className="text-xl font-bold text-primary-brown text-center mb-2">
+          <h2 id="edit-profile-title" className="text-xl font-bold text-primary-brown text-center mb-2">
             Modifier le profil
           </h2>
-          <div className="flex flex-col gap-2">
+          {/* Nom */}
+          <div className="flex flex-col gap-1">
+            <label htmlFor="name" className="sr-only">Nom</label>
             <input
               type="text"
               id="name"
@@ -157,24 +167,35 @@ export function EditProfileForm({
               value={formData.name}
               onChange={handleChange}
               placeholder="Nom"
-              className="w-full p-2 border border-[rgba(123,78,46,0.3)] rounded-lg outline-none bg-[rgba(255,255,255,0.8)] text-center"
+              className="w-full p-2 border border-[rgba(123,78,46,0.3)] rounded-lg outline-none bg-white/80 text-center"
+              aria-required="true"
+              autoComplete="name"
             />
+          </div>
+          {/* Description */}
+          <div className="flex flex-col gap-1">
+            <label htmlFor="description" className="sr-only">Description</label>
             <textarea
               id="description"
               name="description"
               value={formData.description}
               onChange={handleChange}
-              placeholder="Description"
-              className="w-full p-2 border border-[rgba(123,78,46,0.3)] rounded-lg outline-none bg-[rgba(255,255,255,0.8)] text-center"
+              placeholder="Description (max 140 caractères)"
+              className="w-full p-2 border border-[rgba(123,78,46,0.3)] rounded-lg outline-none bg-white/80 text-center"
+              aria-required="false"
+              maxLength={140}
+              aria-describedby="desc-char-count"
             />
-            <div className="text-sm text-gray-500">
-              {charCount}/140 caractères
-            </div>
+            <span id="desc-char-count" className={`text-xs text-right ${isLimitExceeded ? 'text-red-500' : 'text-secondary-brown'}`}>{charCount}/140</span>
             {isLimitExceeded && (
-              <div className="text-sm text-red-500">
+              <div className="text-sm text-red-500" role="alert" aria-live="polite">
                 Vous avez dépassé la limite de 140 caractères !
               </div>
             )}
+          </div>
+          {/* Ville */}
+          <div className="flex flex-col gap-1">
+            <label htmlFor="city" className="sr-only">Ville</label>
             <div className="flex gap-2 items-center">
               <input
                 type="text"
@@ -183,43 +204,79 @@ export function EditProfileForm({
                 value={formData.city}
                 onChange={handleChange}
                 placeholder="Ville"
-                className="w-full p-2 border border-[rgba(123,78,46,0.3)] rounded-lg outline-none bg-[rgba(255,255,255,0.8)] text-center"
+                className="w-full p-2 border border-[rgba(123,78,46,0.3)] rounded-lg outline-none bg-white/80 text-center"
+                aria-required="true"
+                autoComplete="address-level2"
               />
               <button
                 type="button"
                 onClick={handleGeolocate}
                 disabled={isLocating}
                 title="Détecter ma ville automatiquement"
+                aria-label="Détecter ma ville automatiquement"
                 className="bg-[var(--primary-green)] text-[var(--primary-brown)] border-none rounded-lg px-3 py-2 font-semibold cursor-pointer min-w-[40px] flex items-center justify-center"
               >
                 {isLocating ? (
                   "..."
                 ) : (
                   <span role="img" aria-label="géolocalisation">
-                    <img src="localisation.png" alt="geolocalisation" className="w-6" />
+                    <img src="localisation.png" alt="géolocalisation" className="w-6" />
                   </span>
                 )}
               </button>
             </div>
           </div>
+          {/* Email */}
+          <div className="flex flex-col gap-1">
+            <label htmlFor="email" className="sr-only">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Email"
+              className="w-full p-2 border border-[rgba(123,78,46,0.3)] rounded-lg outline-none bg-white/80 text-center"
+              aria-required="true"
+              autoComplete="email"
+            />
+          </div>
+          {/* Date de naissance */}
+          <div className="flex flex-col gap-1">
+            <label htmlFor="birthdate" className="sr-only">Date de naissance</label>
+            <input
+              type="date"
+              id="birthdate"
+              name="birthdate"
+              value={formData.birthdate}
+              onChange={handleChange}
+              placeholder="Date de naissance"
+              className="w-full p-2 border border-[rgba(123,78,46,0.3)] rounded-lg outline-none bg-white/80 text-center"
+              aria-required="true"
+              autoComplete="bday"
+            />
+          </div>
           <div className="flex flex-col gap-2 mt-2">
-            <Button
+            <button
               type="button"
               onClick={onCancel}
-              className="w-full bg-[var(--secondary-green)] text-[var(--secondary-brown)] font-medium py-2"
+              className="w-full bg-[var(--secondary-green)] text-[var(--secondary-brown)] font-medium py-2 rounded-md"
+              aria-label="Annuler la modification du profil"
             >
               Annuler
-            </Button>
-            <Button
+            </button>
+            <button
               type="submit"
-              className="w-full bg-[var(--primary-green)] text-[var(--primary-brown)] font-medium py-2"
+              className="w-full bg-[var(--primary-green)] text-[var(--primary-brown)] font-medium py-2 rounded-md"
+              aria-label="Sauvegarder les modifications du profil"
+              disabled={isLimitExceeded}
             >
               Sauvegarder
-            </Button>
+            </button>
           </div>
         </form>
       </div>
-    </div>
+    </section>
   );
 }
 

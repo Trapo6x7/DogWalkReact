@@ -63,12 +63,18 @@ const EditPasswordForm: React.FC<EditPasswordFormProps> = ({ onCancel }) => {
   };
 
   return (
-    <div className="w-full max-w-sm mx-auto px-1 md:px-4 relative">
+    <section
+      className="w-full max-w-sm mx-auto px-1 md:px-4 relative"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="edit-password-title"
+    >
       {/* Bouton de fermeture en haut à droite */}
       <button
         onClick={onCancel}
-        aria-label="Fermer la modale"
+        aria-label="Fermer la fenêtre de modification du mot de passe"
         className="absolute top-2 right-4 bg-transparent border-none text-[1.5rem] text-[#7B4E2E] cursor-pointer z-10"
+        type="button"
       >
         ×
       </button>
@@ -81,63 +87,82 @@ const EditPasswordForm: React.FC<EditPasswordFormProps> = ({ onCancel }) => {
         <form
           onSubmit={handleSubmit}
           className="flex flex-col gap-2 mt-1"
+          aria-labelledby="edit-password-title"
+          role="form"
         >
-          <h2 className="text-xl font-bold text-primary-brown text-center mb-2">
+          <h2 id="edit-password-title" className="text-xl font-bold text-primary-brown text-center mb-2">
             Modifier le mot de passe
           </h2>
-          {error && <p className="text-red-500 text-center text-sm font-semibold">{error}</p>}
-          {success && <p className="text-green-600 text-center text-sm font-semibold">{success}</p>}
+          {error && <p className="text-red-500 text-center text-sm font-semibold" role="alert" aria-live="polite">{error}</p>}
+          {success && <p className="text-green-600 text-center text-sm font-semibold" role="status" aria-live="polite">{success}</p>}
 
           <div className="flex flex-col gap-2">
-            <input
-              type="password"
-              id="oldPassword"
-              name="oldPassword"
-              value={oldPassword}
-              onChange={(e) => setOldPassword(e.target.value)}
-              required
-              placeholder="Mot de passe actuel"
-              className="w-full p-2 border border-[rgba(123,78,46,0.3)] rounded-lg outline-none bg-[rgba(255,255,255,0.8)] text-center"
-            />
-            <input
-              type="password"
-              id="newPassword"
-              name="newPassword"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              required
-              placeholder="Nouveau mot de passe"
-              className="w-full p-2 border border-[rgba(123,78,46,0.3)] rounded-lg outline-none bg-[rgba(255,255,255,0.8)] text-center"
-            />
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              placeholder="Confirmer le nouveau mot de passe"
-              className="w-full p-2 border border-[rgba(123,78,46,0.3)] rounded-lg outline-none bg-[rgba(255,255,255,0.8)] text-center"
-            />
+            <div className="flex flex-col gap-1">
+              <label htmlFor="oldPassword" className="sr-only">Mot de passe actuel</label>
+              <input
+                type="password"
+                id="oldPassword"
+                name="oldPassword"
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
+                required
+                placeholder="Mot de passe actuel"
+                className="w-full p-2 border border-[rgba(123,78,46,0.3)] rounded-lg outline-none bg-[rgba(255,255,255,0.8)] text-center"
+                aria-required="true"
+                autoComplete="current-password"
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="newPassword" className="sr-only">Nouveau mot de passe</label>
+              <input
+                type="password"
+                id="newPassword"
+                name="newPassword"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+                placeholder="Nouveau mot de passe"
+                className="w-full p-2 border border-[rgba(123,78,46,0.3)] rounded-lg outline-none bg-[rgba(255,255,255,0.8)] text-center"
+                aria-required="true"
+                autoComplete="new-password"
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="confirmPassword" className="sr-only">Confirmer le nouveau mot de passe</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                placeholder="Confirmer le nouveau mot de passe"
+                className="w-full p-2 border border-[rgba(123,78,46,0.3)] rounded-lg outline-none bg-[rgba(255,255,255,0.8)] text-center"
+                aria-required="true"
+                autoComplete="new-password"
+              />
+            </div>
           </div>
           <div className="flex flex-col gap-2 mt-2">
             <Button
               type="button"
               onClick={onCancel}
               className="w-full bg-[var(--secondary-green)] text-[var(--secondary-brown)] font-medium py-2"
+              aria-label="Annuler la modification du mot de passe"
             >
               Annuler
             </Button>
             <Button
               type="submit"
               className="w-full bg-[var(--primary-green)] text-[var(--primary-brown)] font-medium py-2"
+              aria-label="Sauvegarder le nouveau mot de passe"
             >
               Sauvegarder
             </Button>
           </div>
         </form>
       </div>
-    </div>
+    </section>
   );
 };
 
