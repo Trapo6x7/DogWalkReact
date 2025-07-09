@@ -1,4 +1,4 @@
-import { useState } from "react";
+import  { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Dogs } from "./Dogs";
 import Groups from "./Groups";
@@ -19,7 +19,7 @@ export function Welcome({ onLogout }: { onLogout: () => void }) {
     <>
       <Navbar onLogout={onLogout} />
       <main className="flex flex-col items-center justify-center min-h-screen w-full" role="main" aria-label="Accueil utilisateur">
-        <section className="flex flex-col md:flex-row gap-2 justify-center px-2 md:px-20 lg:px-32 xl:px-48 items-center w-full max-w-md mx-auto md:max-w-none" aria-label="Section profil et chiens">
+        <section className="flex flex-col md:flex-row gap-2 justify-center px-2 py-2 md:px-20 lg:px-32 xl:px-48 items-center w-full max-w-md mx-auto md:max-w-none" aria-label="Section profil et chiens">
           <article className="w-full max-w-full" aria-label="Profil utilisateur">
             <Me userData={user} />
           </article>
@@ -37,10 +37,11 @@ export function Welcome({ onLogout }: { onLogout: () => void }) {
           </article>
         </section>
 
-        <section className="flex flex-col md:flex-row gap-10 justify-center items-start py-10 px-2 w-full md:px-20 lg:px-32 xl:px-48" aria-label="Section groupes">
-          <div className="w-full max-w-7xl mx-auto flex flex-col md:flex-row gap-10">
+        <section className="flex flex-col md:flex-row gap-10 justify-center items-start py-2 px-2 w-full md:px-20 lg:px-32 xl:px-48" aria-label="Section groupes">
+          <article className="w-full max-w-full" aria-label="Groupes utilisateur">
             <Groups />
-          </div>
+         
+          <Footer onShowTerms={() => setShowTerms(true)} /></article>
         </section>
         <article className="w-full md:w-1/4 flex md:hidden justify-center items-center" aria-hidden="true">
           <img
@@ -49,8 +50,8 @@ export function Welcome({ onLogout }: { onLogout: () => void }) {
             className="w-[120px] lg:w-48 mx-auto"
           />
         </article>
-      </main>
-      <Footer onShowTerms={() => setShowTerms(true)} />
+
+      
       {showTerms && (
         <div className="fixed inset-0 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full p-4 relative">
@@ -67,6 +68,7 @@ export function Welcome({ onLogout }: { onLogout: () => void }) {
           </div>
         </div>
       )}
+      </main>
     </>
   );
 }
