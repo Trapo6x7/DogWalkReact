@@ -23,8 +23,8 @@ export function Navbar({ onLogout }: { onLogout: () => void }) {
   }, []);
   return (
     <header
-      className={`fixed left-0 z-40 md:bg-[#FBFFEE] transition-transform duration-300 flex flex-col items-center
-        ${isMobile ? "top-0 w-screen h-auto rounded-b-2xl" : "top-0 w-[110px] rounded-b-2xl h-auto py-2"}
+      className={`fixed left-0 z-40 transition-transform duration-300 flex flex-col items-center
+        ${isMobile ? "top-0 w-screen h-auto rounded-b-2xl" : "top-0 w-[110px] rounded-b-2xl h-auto py-2 bg-[#FBFFEE]"}
       `}
       role="banner"
       aria-label="Barre de navigation principale"
