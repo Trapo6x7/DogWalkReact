@@ -107,6 +107,7 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
   width: auto;
+  text-decoration: none;
 }
 
 .bg-card2{

@@ -6,9 +6,10 @@ import { ProfileCard } from "./ProfileCard";
 interface RegisterProps {
   onGoToLogin: () => void;
   onRegisterSuccess: () => void;
+  onShowTerms: () => void;
 }
 
-export function Register({ onGoToLogin, onRegisterSuccess }: RegisterProps) {
+export function Register({ onGoToLogin, onRegisterSuccess, onShowTerms }: RegisterProps) {
   const { login } = useAuth();
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -193,10 +194,20 @@ export function Register({ onGoToLogin, onRegisterSuccess }: RegisterProps) {
             <p className="text-red-600 text-center text-xs">{message}</p>
           </div>
           )}
-      <footer className="w-full flex flex-col items-center justify-center py-4" aria-label="Mentions légales inscription">
-        <p className="text-[0.625rem] text-brown/70 mb-2 text-center">
+          <footer
+            className="mt-2 text-center flex flex-col items-center justify-center w-full z-0 gap-3"
+            aria-label="Informations légales"
+          >
+        <p className="text-[0.625rem] text-brown/70 text-center">
           En vous inscrivant, vous acceptez nos conditions d'utilisation
         </p>
+        <button
+          type="button"
+          className="text-primary-green hover:text-primary-brown underline text-xs"
+          onClick={onShowTerms}
+        >
+          Voir les CGU
+        </button>
          <div className="flex justify-center items-center w-full pt-2">
         <img src="/dogwalklogobrown.png" alt="DogWalk Logo" className="w-12 h-12 object-contain" />
         </div>

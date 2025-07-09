@@ -1,11 +1,15 @@
+import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Dogs } from "./Dogs";
 import Groups from "./Groups";
 import { Me } from "./Me";
 import { Navbar } from "./Navbar";
+import Footer from "./Footer";
+import TermsAndConditions from "./TermsAndConditions";
 
 export function Welcome({ onLogout }: { onLogout: () => void }) {
   const { user, isLoggedIn } = useAuth();
+  const [showTerms, setShowTerms] = useState(false);
 
   if (!isLoggedIn) {
     return <p>Veuillez vous connecter.</p>;
@@ -46,6 +50,23 @@ export function Welcome({ onLogout }: { onLogout: () => void }) {
           />
         </article>
       </main>
+      <Footer onShowTerms={() => setShowTerms(true)} />
+      {showTerms && (
+        <div className="fixed inset-0 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full p-4 relative">
+            <button
+              className="absolute top-2 right-2 text-lg font-bold text-primary-brown hover:text-primary-green"
+              onClick={() => setShowTerms(false)}
+              aria-label="Fermer les conditions générales"
+            >
+              ×
+            </button>
+            <div className="overflow-y-auto max-h-[70vh]">
+              <TermsAndConditions onBack={() => setShowTerms(false)} />
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
