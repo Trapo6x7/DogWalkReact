@@ -48,17 +48,23 @@ const GroupList: React.FC<GroupListProps> = ({ groups, onShowDetails }) => {
           <div className="flex flex-col gap-2 md:gap-3 max-h-60 overflow-y-auto">
             {groups.length > 0 ? (
               groups.map((group) => (
-                <article key={group.id} className="py-2 md:py-3 border-b border-[rgba(123,78,46,0.1)] last:border-b-0" aria-label={`Groupe ${group.name}`}> 
-                  <h3 className="text-lg font-bold text-secondary-brown">{group.name}</h3>
-                  <p className="text-base text-secondary-brown">{group.description}</p>
-                  <button
-                    onClick={() => onShowDetails(group.id)}
-                    className="bg-[var(--secondary-green)] text-[var(--primary-brown)] w-full rounded px-2 py-1 mt-2 text-sm font-medium hover:bg-[#B7D336] transition border-none cursor-pointer"
-                    aria-label={`Voir les détails du groupe ${group.name}`}
-                    type="button"
-                  >
-                    Voir détails
-                  </button>
+                <article
+                  key={group.id}
+                  className="flex flex-row items-center py-2 md:py-3 border-b border-[rgba(123,78,46,0.1)] last:border-b-0 gap-4"
+                  aria-label={`Groupe ${group.name}`}
+                >
+                  <h3 className="text-lg font-bold text-secondary-brown w-1/4 min-w-[120px] text-center">{group.name}</h3>
+                  <p className="text-base text-secondary-brown w-1/2 min-w-[120px] justify-center">{group.description}</p>
+                  <div className="flex justify-center w-1/4 min-w-[120px]">
+                    <button
+                      onClick={() => onShowDetails(group.id)}
+                      className="bg-[var(--secondary-green)] text-[var(--primary-brown)] rounded px-2 py-1 text-sm font-medium hover:bg-[#B7D336] transition border-none cursor-pointer min-w-[110px]"
+                      aria-label={`Voir les détails du groupe ${group.name}`}
+                      type="button"
+                    >
+                      Voir détails
+                    </button>
+                  </div>
                 </article>
               ))
             ) : (
