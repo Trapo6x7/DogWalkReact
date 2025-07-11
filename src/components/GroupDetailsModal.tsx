@@ -219,7 +219,7 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({
   console.log("GroupDetailsModal group prop:", group);
   return (
     <section
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-2 md:p-0"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-neutral-white/50 backdrop-blur-sm p-2 md:p-0"
       role="dialog"
       aria-modal="true"
       aria-labelledby="group-details-title"
@@ -333,7 +333,7 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({
             <div className="text-center text-secondary-brown py-4">Chargement du profil...</div>
           )}
           {selectedUser && !loadingUser && (
-            <div style={{ position: "fixed", inset: 0, zIndex: 2000 }}>
+            <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-neutral-white/50 backdrop-blur-sm">
               {/* Z-index élevé pour que la modale profil soit toujours au-dessus de la carte et du reste */}
               {(() => {
                 console.log('DEBUG selectedUser.dogs:', selectedUser.dogs);

@@ -102,7 +102,7 @@ export function Dogs() {
               </div>
             </summary>
             <div className="mt-4 flex flex-col gap-2 px-4 pb-4 w-full" role="region" aria-labelledby="dogs-title-mobile">
-              <div className="w-full bg-white rounded-lg p-4 flex flex-col gap-4 max-h-[120px] overflow-y-auto">
+              <div className="w-full rounded-lg p-4 flex flex-col gap-4 max-h-[120px] overflow-y-auto">
                 {user?.dogs && user.dogs.length > 0 ? (
                   user.dogs.map((dog) => (
                     <article
@@ -328,12 +328,12 @@ export function Dogs() {
       {/* Modale AddDogs centrée */}
       {isAddModalOpen && (
         <section
-          className="fixed inset-0 flex items-center justify-center z-[1000] bg-black/30"
+          className="fixed inset-0 flex items-center justify-center z-[1000] bg-neutral-white/50 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
           aria-label="Fenêtre d'ajout de chien"
         >
-          <div className="rounded-xl p-8 min-w-[320px] max-w-[90vw] max-h-[90vh] overflow-y-auto bg-white">
+          <div className="rounded-xl p-8 w-full max-w-md max-h-[90vh] overflow-y-auto">
             <AddDogs onCancel={closeAddModal} onRefresh={refreshUser} />
           </div>
         </section>

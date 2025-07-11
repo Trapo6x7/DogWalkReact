@@ -207,7 +207,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onEd
     return <span className="break-all">{String(value)}</span>;
   };
   return (
-    <section className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm p-2 md:p-0" role="dialog" aria-modal="true" aria-labelledby="user-profile-title">
+    <section className="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-0" role="dialog" aria-modal="true" aria-labelledby="user-profile-title">
       <article className="relative bg-[#FBFFEE] p-2 md:p-6 rounded-lg w-full max-w-md mx-auto overflow-y-auto" aria-label="Carte profil utilisateur">
         <button
           className="absolute top-2 right-2 md:top-4 md:right-4 text-secondary-brown text-xl md:text-2xl bg-none border-none cursor-pointer z-10"

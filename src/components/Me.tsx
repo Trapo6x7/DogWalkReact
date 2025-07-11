@@ -270,20 +270,29 @@ export function Me({ userData }: MeProps) {
           </>
         )}
         {/* Modale UserProfileModal centrée */}
-        {isProfileModalOpen && (
-          <UserProfileModal
-            user={localUserData}
-            onClose={closeProfileModal}
-            onEdit={() => {
-              closeProfileModal();
-              openEditModal();
-            }}
-          />
-        )}
+{isProfileModalOpen && (
+  <section
+    className="fixed inset-0 z-50 flex items-center justify-center bg-neutral-white/50 backdrop-blur-sm"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Modale profil utilisateur"
+  >
+    <div className="w-full max-w-md mx-auto">
+      <UserProfileModal
+        user={localUserData}
+        onClose={closeProfileModal}
+        onEdit={() => {
+          closeProfileModal();
+          openEditModal();
+        }}
+      />
+    </div>
+  </section>
+)}
         {/* Modale EditProfileForm centrée */}
         {isEditModalOpen && (
           <section
-            className="fixed inset-0 z-50 flex items-center justify-center"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-neutral-white/50 backdrop-blur-sm"
             role="dialog"
             aria-modal="true"
             aria-labelledby="edit-profile-title"

@@ -215,7 +215,7 @@ export function Navbar({ onLogout }: { onLogout: () => void }) {
 
       {/* Modales centrées */}
       {showEditProfile && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-neutral-white/50 backdrop-blur-sm">
           <div className="w-full max-w-lg mx-4 flex items-center justify-center">
             <EditProfileForm
               onCancel={() => setShowEditProfile(false)}
@@ -228,7 +228,7 @@ export function Navbar({ onLogout }: { onLogout: () => void }) {
       )}
 
       {showAddDogForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-neutral-white/50 backdrop-blur-sm">
           <div className="w-full max-w-md flex items-center justify-center">
             <AddDogs
               onCancel={() => setShowAddDogForm(false)}
@@ -239,7 +239,7 @@ export function Navbar({ onLogout }: { onLogout: () => void }) {
       )}
 
       {showEditPassword && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-neutral-white/50 backdrop-blur-sm">
           <div className="p-6 w-full max-w-md flex items-center justify-center">
             <EditPasswordForm onCancel={() => setShowEditPassword(false)} />
           </div>

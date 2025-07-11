@@ -59,7 +59,7 @@ const WalkForm: React.FC<WalkFormProps> = ({ groupId, onClose, onCreated }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-neutral-white/50 backdrop-blur-sm">
       <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md relative">
         <button
           type="button"
