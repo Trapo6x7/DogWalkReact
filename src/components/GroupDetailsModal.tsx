@@ -59,19 +59,19 @@ const handleAcceptRequest = async (
       }
     );
     const data = await res.json();
-    console.log("PATCH group_request data:", data);
+    //
     if (!res.ok) throw new Error("Erreur lors de la mise à jour");
     // 2. POST sur groupRole (role: MEMBER)
-    console.log("request complet", request);
+    //
     const groupIri =
       data.walkGroup || request.walkGroup || request.group || request.groupId;
-    const userIri =
-      (request.user && request.user["@id"]) || request.user || request.userId;
+    const userId = request.user && request.user.id;
+    const userIri = userId ? `/api/users/${userId}` : null;
     if (!groupIri || !userIri)
       throw new Error(
         "Impossible de déterminer l'IRI du groupe ou de l'utilisateur pour le groupRole"
       );
-    console.log("avant POST groupRole", { groupIri, userIri });
+
     const roleRes = await fetch(
       `${import.meta.env.VITE_API_URL}/api/group_roles`,
       {
@@ -88,8 +88,8 @@ const handleAcceptRequest = async (
         }),
       }
     );
-    const roleData = await roleRes.json();
-    console.log("POST group_role data:", roleData);
+   
+    //
     if (!roleRes.ok) throw new Error("Erreur lors de la création du groupRole");
     setLocalGroupRequests((prev: any[]) =>
       prev.map((r) => {
@@ -183,27 +183,27 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({
   // Utilitaire pour récupérer l'id utilisateur courant (localStorage 'user' ou JWT 'authToken')
   function getCurrentUserId(): { id?: string; username?: string } {
     const userRaw = localStorage.getItem("user");
-    console.log("DEBUG localStorage user:", userRaw);
+    //
     if (userRaw) {
       try {
         const parsed = JSON.parse(userRaw);
-        console.log("DEBUG parsed user:", parsed);
+        //
         if (parsed && parsed.id) return { id: String(parsed.id) };
       } catch (e) {
-        console.log("DEBUG error parsing user:", e);
+        //
       }
     }
     const token = localStorage.getItem("authToken");
-    console.log("DEBUG localStorage authToken:", token);
+    //
     if (token) {
       try {
         const payload = JSON.parse(atob(token.split(".")[1]));
-        console.log("DEBUG parsed token payload:", payload);
+        //
         if (payload.id || payload.user_id || payload.sub)
           return { id: String(payload.id || payload.user_id || payload.sub) };
         if (payload.username) return { username: payload.username };
       } catch (e) {
-        console.log("DEBUG error parsing token:", e);
+        //
       }
     }
     return {};
@@ -216,7 +216,6 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({
     setLocalGroupRequests(group.groupRequests || []);
   }, [group.groupRequests]);
 
-  console.log("GroupDetailsModal group prop:", group);
   return (
     <section
       className="fixed inset-0 z-50 flex items-center justify-center bg-neutral-white/50 backdrop-blur-sm p-2 md:p-0"
@@ -336,7 +335,6 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({
             <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-neutral-white/50 backdrop-blur-sm">
               {/* Z-index élevé pour que la modale profil soit toujours au-dessus de la carte et du reste */}
               {(() => {
-                console.log('DEBUG selectedUser.dogs:', selectedUser.dogs);
                 return (
                   <UserProfileModal
                     user={selectedUser}
@@ -467,8 +465,6 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({
           {/* Afficher "Créer une balade" pour le créateur OU les membres (MEMBER) */}
           {(() => {
             const currentUser = getCurrentUserId();
-            console.log("DEBUG groupRoles:", group.groupRoles);
-            console.log("DEBUG currentUser:", currentUser);
             let userRoles: string[] = [];
             if (Array.isArray(group.groupRoles)) {
               userRoles = group.groupRoles
@@ -495,7 +491,6 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({
                 })
                 .map((role: any) => role.role);
             }
-            console.log("DEBUG userRoles for current user:", userRoles);
             const isMember = userRoles.some(
               (r) => r && r.toUpperCase() === "MEMBER"
             );
