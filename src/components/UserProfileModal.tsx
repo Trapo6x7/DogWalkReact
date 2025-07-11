@@ -265,10 +265,14 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onEd
             // On retire "createdGroups" de l'affichage, on veut "dogs" à la place
             if (key === 'createdGroups') return null;
 
-            const label = keyLabels[key] || key.charAt(0).toUpperCase() + key.slice(1);
+            const label = keyLabels[key] || capitalizeFirstLetter(key);
 
             // Formatage spécial pour la date de naissance
             let displayValue = renderValue(value, key);
+            // Capitalize value si string simple (hors objets, arrays, dates)
+            if (typeof value === 'string' && key !== 'birthdate') {
+              displayValue = <span>{capitalizeFirstLetter(value)}</span>;
+            }
             if (key === 'birthdate' && typeof value === 'string') {
               // Affiche la date au format JJ/MM/YYYY
               const date = new Date(value);

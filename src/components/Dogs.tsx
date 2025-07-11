@@ -4,6 +4,11 @@ import { useAuth } from "../context/AuthContext";
 import { useEffect, useState } from "react";
 import AddDogs from "./AddDogs";
 
+function capitalizeFirstLetter(str?: string): string {
+  if (!str) return "";
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
 export function Dogs() {
   const { user, refreshUser, token } = useAuth();
   const [allRaces, setAllRaces] = useState<{ id: number; name: string }[]>([]);
@@ -145,7 +150,7 @@ export function Dogs() {
                         />
                       </div>
                       <div className="flex flex-col flex-1 min-w-0">
-                        <span className="font-bold text-secondary-brown text-lg truncate" aria-label={`Nom du chien : ${dog.name}`}>{dog.name}</span>
+                    <span className="font-bold text-secondary-brown text-lg truncate" aria-label={`Nom du chien : ${dog.name}`}>{capitalizeFirstLetter(String(dog.name))}</span>
                         <span className="text-xs text-secondary-brown truncate" aria-label={`Race du chien : ${(() => {
                           if (!allRaces.length) return 'Chargement…';
                           if (!dog.race || (Array.isArray(dog.race) && dog.race.length === 0)) return 'Aucune race';
@@ -264,7 +269,7 @@ export function Dogs() {
                     />
                   </div>
                   <div className="flex flex-col flex-1 min-w-0">
-                    <span className="font-bold text-secondary-brown text-lg truncate" aria-label={`Nom du chien : ${dog.name}`}>{dog.name}</span>
+                    <span className="font-bold text-secondary-brown text-lg truncate" aria-label={`Nom du chien : ${dog.name}`}>{capitalizeFirstLetter(String(dog.name))}</span>
                     <span className="text-xs text-secondary-brown truncate" aria-label={`Race du chien : ${(() => {
                       if (!allRaces.length) return 'Chargement…';
                       if (!dog.race || (Array.isArray(dog.race) && dog.race.length === 0)) return 'Aucune race';
