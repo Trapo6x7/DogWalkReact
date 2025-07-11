@@ -8,13 +8,22 @@ import WalkForm from "./WalkForm";
 interface Group {
   id: number;
   name: string;
-  mixed: boolean;
   comment: string;
+  mixed: boolean;
   createdAt: string;
   updatedAt: string;
-  groupRoles: Array<{ role: string; user: { id: number; name: string } }>;
-  groupRequests: Array<{ id: number; user: { id: number; name: string } }>;
   walks: Array<{ id: number; location: string }>;
+  groupRequests?: Array<{
+    id: number;
+    user?: { id?: number; name?: string; email?: string };
+    status?: boolean;
+    createdAt?: string;
+  }>;
+  groupRoles?: Array<{
+    id: number;
+    user?: { id?: number; name?: string; email?: string };
+    role: string;
+  }>;
 }
 
 export default function Groups() {
@@ -28,7 +37,7 @@ export default function Groups() {
   const isCreator =
     selectedGroup && Array.isArray(selectedGroup.groupRoles)
       ? selectedGroup.groupRoles.some(
-          (role) => role.role === "CREATOR" && role.user?.id === userId
+          (role) => (role.role === "CREATOR" || role.role === "creator") && role.user?.id === userId
         )
       : false;
 
@@ -194,14 +203,51 @@ export default function Groups() {
       const walks = await fetchWalks(groupId);
 
       setSelectedGroup({
-        ...groupData,
-        walks,
-        updatedAt: groupData.updatedAt || new Date().toISOString(), // Ensure updatedAt is present
+        id: groupData.id,
+        name: groupData.name,
+        comment: groupData.comment,
+        mixed: groupData.mixed,
+        createdAt: groupData.createdAt,
+        updatedAt: groupData.updatedAt || new Date().toISOString(),
+        groupRequests: groupData.groupRequests ?? [],
+        groupRoles: Array.isArray(groupData.groupRoles)
+          ? groupData.groupRoles.map((role: any, idx: number) => ({
+              id: role.id ?? idx, // fallback idx if id missing
+              user: role.user,
+              role: role.role
+            }))
+          : [],
+        walks: walks ?? [],
       });
     } catch (error) {
       console.error("Erreur récupération détails groupe :", error);
     }
   };
+  // Suppression d'un groupe
+const handleDeleteGroup = async (groupId: number) => {
+  // console.log("handleDeleteGroup appelé avec groupId =", groupId, typeof groupId);
+  // if (!window.confirm("Supprimer ce groupe ? Cette action est irréversible.")) return;
+  try {
+    const url = `${import.meta.env.VITE_API_URL}/api/groups/${groupId}`;
+    console.log("URL DELETE :", url);
+    const response = await fetch(
+      url,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      }
+    );
+    if (!response.ok) throw new Error("Erreur lors de la suppression du groupe");
+    setGroups((prev) => prev.filter((g) => g.id !== groupId));
+    setSelectedGroup(null);
+    alert("Groupe supprimé !");
+  } catch (error) {
+    console.error("Erreur suppression groupe :", error);
+    alert("Impossible de supprimer le groupe.");
+  }
+};
   return (
     <>
       <main className="w-full flex flex-col md:flex-row gap-4 box-border mx-auto" role="main" aria-label="Gestion des groupes">
@@ -228,6 +274,7 @@ export default function Groups() {
             onCreateWalk={() => setShowWalkForm(true)}
             isCreator={isCreator}
             canRequestJoin={canRequestJoin}
+            onDeleteGroup={handleDeleteGroup}
           />
         )}
       </main>

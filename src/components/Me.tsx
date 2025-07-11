@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Button } from "./ui/button";
 import EditProfileForm from "./EditProfileForm";
+import UserProfileModal from "./UserProfileModal";
 import { UserData } from "../types/Interfaces";
 
 interface MeProps {
@@ -12,6 +13,7 @@ export function Me({ userData }: MeProps) {
   const { token, refreshUser } = useAuth();
   const [localUserData, setLocalUserData] = useState(userData);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   useEffect(() => {
     setLocalUserData(userData);
@@ -19,6 +21,8 @@ export function Me({ userData }: MeProps) {
 
   const openEditModal = () => setIsEditModalOpen(true);
   const closeEditModal = () => setIsEditModalOpen(false);
+  const openProfileModal = () => setIsProfileModalOpen(true);
+  const closeProfileModal = () => setIsProfileModalOpen(false);
 
   const handleSave = (updatedData: UserData) => {
     setLocalUserData(updatedData); // Met à jour les données locales
@@ -255,15 +259,26 @@ export function Me({ userData }: MeProps) {
                 {/* Footer Section - identique Dogs */}
                 <button
                   className="bg-[var(--primary-green)] text-[var(--primary-brown)] font-medium rounded-md w-full py-2 mt-2 hover:bg-[#B7D336] transition"
-                  onClick={openEditModal}
+                  onClick={openProfileModal}
                   type="button"
-                  aria-label="Modifier le profil utilisateur"
+                  aria-label="Voir le profil utilisateur"
                 >
-                  Modifier le profil
+                  Voir le profil
                 </button>
               </section>
             </section>
           </>
+        )}
+        {/* Modale UserProfileModal centrée */}
+        {isProfileModalOpen && (
+          <UserProfileModal
+            user={localUserData}
+            onClose={closeProfileModal}
+            onEdit={() => {
+              closeProfileModal();
+              openEditModal();
+            }}
+          />
         )}
         {/* Modale EditProfileForm centrée */}
         {isEditModalOpen && (
