@@ -34,7 +34,8 @@ interface GroupDetailsModalProps {
 // Accepter une demande d'ajout et créer un groupRole MEMBER
 const handleAcceptRequest = async (
   request: any,
-  setLocalGroupRequests: Function
+  setLocalGroupRequests: Function,
+  setLocalGroupRoles: Function
 ) => {
   try {
     const token = localStorage.getItem("authToken");
@@ -101,6 +102,17 @@ const handleAcceptRequest = async (
         return rId == groupRequestId ? { ...r, status: true } : r;
       })
     );
+    // Ajout immédiat du membre dans la liste des membres (groupRoles)
+    if (request.user && userIri) {
+      setLocalGroupRoles((prev: any[]) => [
+        ...prev,
+        {
+          id: Math.random(), // id temporaire
+          user: request.user,
+          role: "MEMBER"
+        }
+      ]);
+    }
   } catch (e) {
     alert("Erreur lors de l’acceptation de la demande.");
   }
@@ -163,6 +175,12 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({
   const [loadingUser, setLoadingUser] = useState(false);
   // State React pour masquer le bouton "Rejoindre ce groupe" dès le clic
   const [joinClicked, setJoinClicked] = useState(false);
+
+  // Ajout : state local pour groupRoles (pour affichage immédiat)
+  const [localGroupRoles, setLocalGroupRoles] = useState(group.groupRoles || []);
+  useEffect(() => {
+    setLocalGroupRoles(group.groupRoles || []);
+  }, [group.groupRoles]);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -273,7 +291,7 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({
           </h3>
           <ul className="flex flex-col items-center gap-2">
             {/* Créateur */}
-            {group.groupRoles && group.groupRoles.filter((role: any) => role.role && role.role.toUpperCase() === 'CREATOR').map((role: any) => (
+            {localGroupRoles && localGroupRoles.filter((role: any) => role.role && role.role.toUpperCase() === 'CREATOR').map((role: any) => (
               <li key={role.id || role.user?.id || Math.random()} className="flex flex-row items-center gap-2 cursor-pointer hover:underline"
                   onClick={async () => {
                     if (role.user && role.user.id) {
@@ -300,7 +318,7 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({
               </li>
             ))}
             {/* Membres (hors créateur) */}
-            {group.groupRoles && group.groupRoles.filter((role: any) => role.role && role.role.toUpperCase() !== 'CREATOR').map((role: any) => (
+            {localGroupRoles && localGroupRoles.filter((role: any) => role.role && role.role.toUpperCase() !== 'CREATOR').map((role: any) => (
               <li key={role.id || role.user?.id || Math.random()} className="flex flex-row items-center gap-2 cursor-pointer hover:underline"
                   onClick={async () => {
                     if (role.user && role.user.id) {
@@ -386,7 +404,7 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            handleAcceptRequest(req, setLocalGroupRequests);
+                        handleAcceptRequest(req, setLocalGroupRequests, setLocalGroupRoles);
                           }}
                         >
                           Accepter
@@ -446,9 +464,11 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({
               );
             })()
           ) : (
-            <p className="text-sm text-secondary-brown">
-              Aucune balade disponible.
-            </p>
+            <div className="flex justify-center">
+              <p className="text-sm text-secondary-brown">
+                Aucune balade disponible.
+              </p>
+            </div>
           )}
         </section>
     {/* Comments Section */}
