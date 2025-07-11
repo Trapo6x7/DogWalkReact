@@ -454,11 +454,11 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({
                   {/* Z-index bas pour que la carte reste sous la modale profil */}
                   {coordinates.length === 2 &&
                   coordinates.every((coord) => coord >= -90 && coord <= 90) ? (
-                    <LeafletMap coordinates={coordinates as [number, number]} />
+                    <LeafletMap coordinates={coordinates as [number, number]} walks={group.walks} />
                   ) : userCoordinates ? (
-                    <LeafletMap coordinates={userCoordinates} />
+                    <LeafletMap coordinates={userCoordinates} walks={group.walks} />
                   ) : (
-                    <LeafletMap coordinates={null} />
+                    <LeafletMap coordinates={null} walks={group.walks} />
                   )}
                 </div>
               );

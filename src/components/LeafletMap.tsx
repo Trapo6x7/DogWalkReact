@@ -26,6 +26,7 @@ interface LeafletMapProps {
 }
 
 export default function LeafletMap({ coordinates, value, onChange, height, walks }: LeafletMapProps) {
+  console.log('LeafletMap walks:', walks);
   function isWalkMarker(obj: any): obj is WalkMarker {
     return obj && typeof obj === 'object' && typeof obj.location === 'string';
   }
@@ -70,7 +71,6 @@ export default function LeafletMap({ coordinates, value, onChange, height, walks
         { enableHighAccuracy: true, timeout: 5000 }
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function LocationMarker() {
