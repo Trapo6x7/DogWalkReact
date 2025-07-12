@@ -258,7 +258,7 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({
             id="group-details-title"
             className="text-xl md:text-2xl font-bold text-secondary-brown text-center uppercase pb-6"
           >
-            Détails du groupe
+            Détails du groupe - {group.name}
           </h2>
           {/* <p className="text-[0.95rem] text-secondary-brown"><strong>Créateur :</strong> {group.creator_id.name}</p> */}
         </header>
@@ -267,9 +267,7 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({
           aria-label="Informations principales du groupe"
         >
           <div className="flex flex-col  md:justify-between mt-4 md:items-center gap-2 md:gap-3">
-            <p className="text-[0.95rem]">
-              <span className="font-bold uppercase" style={{ color: '#7B4E2E' }}>Nom :</span> <span className="text-black ps-3">{group.name}</span>
-            </p>
+     
             <p className="text-[0.95rem]">
               <span className="font-bold uppercase" style={{ color: '#7B4E2E' }}>Description :</span> <span className="text-black ps-3">{group.comment}</span>
             </p>
@@ -601,4 +599,5 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({
   );
 };
 
+export { handleAcceptRequest, handleRejectRequest };
 export default GroupDetailsModal;
