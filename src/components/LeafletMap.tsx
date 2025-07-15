@@ -33,7 +33,7 @@ export default function LeafletMap({ coordinates, value, onChange, height, walks
 
   // Mode interactif si onChange fourni
   const isPicker = typeof onChange === 'function';
-  // Parse value ou coordinates
+ 
   const parseValue = (val?: string | [number, number] | WalkMarker | null): [number, number] => {
     if (Array.isArray(val) && val.length === 2) return val;
     if (typeof val === 'string' && val.split(',').length === 2) {
