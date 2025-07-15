@@ -298,7 +298,7 @@ export function Me({ userData }: MeProps) {
             aria-labelledby="edit-profile-title"
             aria-label="Modale édition profil utilisateur"
           >
-            <div className="rounded-xl bg-white p-8 min-w-[320px] max-w-[90vw] max-h-[90vh] overflow-y-auto edit-profile-form">
+            <div className="rounded-xl p-8 min-w-[500px] max-w-[90vw] max-h-[90vh] overflow-y-auto edit-profile-form">
               <h2 id="edit-profile-title" className="sr-only">Modifier le profil</h2>
               <EditProfileForm
                 userData={localUserData}

@@ -36,7 +36,6 @@ function capitalizeFirstLetter(str?: string): string {
 }
 
 const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onEdit }) => {
-  console.log('UserProfileModal user:', user);
 
   // State to store fetched groupRoles details
   const [groupRolesDetails, setGroupRolesDetails] = useState<any[]>([]);
