@@ -98,7 +98,7 @@ const EditPasswordForm: React.FC<EditPasswordFormProps> = ({ onCancel }) => {
 
           <div className="flex flex-col gap-2">
             <div className="flex flex-col gap-1">
-              <label htmlFor="oldPassword" className="sr-only">Mot de passe actuel</label>
+              <label htmlFor="oldPassword" className="font-medium text-secondary-brown">Mot de passe actuel</label>
               <input
                 type="password"
                 id="oldPassword"
@@ -113,7 +113,7 @@ const EditPasswordForm: React.FC<EditPasswordFormProps> = ({ onCancel }) => {
               />
             </div>
             <div className="flex flex-col gap-1">
-              <label htmlFor="newPassword" className="sr-only">Nouveau mot de passe</label>
+              <label htmlFor="newPassword" className="font-medium text-secondary-brown">Nouveau mot de passe</label>
               <input
                 type="password"
                 id="newPassword"
@@ -128,7 +128,7 @@ const EditPasswordForm: React.FC<EditPasswordFormProps> = ({ onCancel }) => {
               />
             </div>
             <div className="flex flex-col gap-1">
-              <label htmlFor="confirmPassword" className="sr-only">Confirmer le nouveau mot de passe</label>
+              <label htmlFor="confirmPassword" className="font-medium text-secondary-brown">Confirmer le nouveau mot de passe</label>
               <input
                 type="password"
                 id="confirmPassword"

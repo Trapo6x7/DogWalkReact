@@ -159,7 +159,7 @@ export function EditProfileForm({
           </h2>
           {/* Nom */}
           <div className="flex flex-col gap-1">
-            <label htmlFor="name" className="sr-only">Nom</label>
+            <label htmlFor="name" className="font-medium text-secondary-brown">Nom</label>
             <input
               type="text"
               id="name"
@@ -174,7 +174,7 @@ export function EditProfileForm({
           </div>
           {/* Description */}
           <div className="flex flex-col gap-1">
-            <label htmlFor="description" className="sr-only">Description</label>
+            <label htmlFor="description" className="font-medium text-secondary-brown">Description</label>
             <textarea
               id="description"
               name="description"
@@ -195,7 +195,7 @@ export function EditProfileForm({
           </div>
           {/* Ville */}
           <div className="flex flex-col gap-1">
-            <label htmlFor="city" className="sr-only">Ville</label>
+            <label htmlFor="city" className="font-medium text-secondary-brown">Ville</label>
             <div className="flex gap-2 items-center">
               <input
                 type="text"
@@ -228,7 +228,7 @@ export function EditProfileForm({
           </div>
           {/* Email */}
           <div className="flex flex-col gap-1">
-            <label htmlFor="email" className="sr-only">Email</label>
+            <label htmlFor="email" className="font-medium text-secondary-brown">Email</label>
             <input
               type="email"
               id="email"
@@ -243,7 +243,7 @@ export function EditProfileForm({
           </div>
           {/* Date de naissance */}
           <div className="flex flex-col gap-1">
-            <label htmlFor="birthdate" className="sr-only">Date de naissance</label>
+            <label htmlFor="birthdate" className="font-medium text-secondary-brown">Date de naissance</label>
             <input
               type="date"
               id="birthdate"

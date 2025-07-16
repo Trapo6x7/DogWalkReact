@@ -28,25 +28,43 @@ const GroupCreateForm: React.FC<GroupCreateFormProps> = ({ onCreateGroup }) => {
               <h2 className="text-lg font-bold text-secondary-brown uppercase text-center mb-2">Créer un groupe</h2>
             </summary>
             <form className="flex flex-col gap-2 mt-4 px-2 pb-2" onSubmit={handleSubmit} aria-label="Créer un groupe" role="form">
-              <label htmlFor="group-name" className="sr-only">Nom du groupe</label>
-              <input
-                id="group-name"
-                type="text"
-                placeholder="Nom du groupe"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="p-2 rounded-md border border-[rgba(123,78,46,0.2)] text-sm w-full focus:outline-none focus:ring-2 focus:ring-[var(--primary-green)]"
-                aria-required="true"
-              />
-              <label htmlFor="group-description" className="sr-only">Description</label>
-              <textarea
-                id="group-description"
-                placeholder="Description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="p-2 rounded-md border border-[rgba(123,78,46,0.2)] text-sm min-h-[80px] w-full focus:outline-none focus:ring-2 focus:ring-[var(--primary-green)]"
-                aria-required="true"
-              />
+              <div className="relative w-full">
+                <input
+                  id="group-name"
+                  type="text"
+                  placeholder=" "
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="peer p-2 rounded-md border border-[rgba(123,78,46,0.2)] text-sm w-full focus:outline-none focus:ring-2 focus:ring-[var(--primary-green)]"
+                  aria-required="true"
+                />
+                <label
+                  htmlFor="group-name"
+                  className="absolute left-2 top-2 text-secondary-brown text-sm pointer-events-none transition-all
+                    peer-placeholder-shown:top-2 peer-placeholder-shown:text-sm
+                    peer-focus:top-0 peer-focus:text-xs peer-focus:text-[var(--primary-green)]"
+                >
+                  Nom du groupe
+                </label>
+              </div>
+              <div className="relative w-full">
+                <textarea
+                  id="group-description"
+                  placeholder=" "
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  className="peer p-2 rounded-md border border-[rgba(123,78,46,0.2)] text-sm min-h-[80px] w-full focus:outline-none focus:ring-2 focus:ring-[var(--primary-green)]"
+                  aria-required="true"
+                />
+                <label
+                  htmlFor="group-description"
+                  className="absolute left-2 top-2 text-secondary-brown text-sm pointer-events-none transition-all
+                    peer-placeholder-shown:top-2 peer-placeholder-shown:text-sm
+                    peer-focus:top-0 peer-focus:text-xs peer-focus:text-[var(--primary-green)]"
+                >
+                  Description
+                </label>
+              </div>
               <div className="flex items-center gap-2">
                 <input
                   type="checkbox"
@@ -73,25 +91,43 @@ const GroupCreateForm: React.FC<GroupCreateFormProps> = ({ onCreateGroup }) => {
         <div className="hidden md:block w-full max-w-md mx-auto my-4">
           <h2 className="text-xl font-bold text-secondary-brown uppercase text-center pb-4">Créer un groupe</h2>
           <form className="flex flex-col gap-4 mt-4" onSubmit={handleSubmit} aria-label="Créer un groupe" role="form">
-            <label htmlFor="group-name-desktop" className="sr-only">Nom du groupe</label>
-            <input
-              id="group-name-desktop"
-              type="text"
-              placeholder="Nom du groupe"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="p-2 rounded-md border border-[rgba(123,78,46,0.2)] text-base w-full focus:outline-none focus:ring-2 focus:ring-[var(--primary-green)]"
-              aria-required="true"
-            />
-            <label htmlFor="group-description-desktop" className="sr-only">Description</label>
-            <textarea
-              id="group-description-desktop"
-              placeholder="Description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="p-2 rounded-md border border-[rgba(123,78,46,0.2)] text-base min-h-[80px] w-full focus:outline-none focus:ring-2 focus:ring-[var(--primary-green)]"
-              aria-required="true"
-            />
+            <div className="relative w-full">
+              <input
+                id="group-name-desktop"
+                type="text"
+                placeholder=" "
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="peer p-2 rounded-md border border-[rgba(123,78,46,0.2)] text-base w-full focus:outline-none focus:ring-2 focus:ring-[var(--primary-green)]"
+                aria-required="true"
+              />
+              <label
+                htmlFor="group-name-desktop"
+                className="absolute left-2 top-2 text-secondary-brown text-base pointer-events-none transition-all
+                  peer-placeholder-shown:top-2 peer-placeholder-shown:text-base
+                  peer-focus:top-0 peer-focus:text-sm peer-focus:text-[var(--primary-green)]"
+              >
+                Nom du groupe
+              </label>
+            </div>
+            <div className="relative w-full">
+              <textarea
+                id="group-description-desktop"
+                placeholder=" "
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="peer p-2 rounded-md border border-[rgba(123,78,46,0.2)] text-base min-h-[80px] w-full focus:outline-none focus:ring-2 focus:ring-[var(--primary-green)]"
+                aria-required="true"
+              />
+              <label
+                htmlFor="group-description-desktop"
+                className="absolute left-2 top-2 text-secondary-brown text-base pointer-events-none transition-all
+                  peer-placeholder-shown:top-2 peer-placeholder-shown:text-base
+                  peer-focus:top-0 peer-focus:text-sm peer-focus:text-[var(--primary-green)]"
+              >
+                Description
+              </label>
+            </div>
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"

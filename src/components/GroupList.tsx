@@ -104,7 +104,7 @@ const GroupList: React.FC<GroupListProps> = ({ groups, onShowDetails, onJoinGrou
         {/* Desktop: list expanded */}
         <section className="hidden md:flex flex-col gap-2 md:gap-3 w-full mx-auto" role="region" aria-labelledby="group-list-title-desktop" aria-label="Liste des groupes desktop">
           <h2 id="group-list-title-desktop" className="text-xl font-bold text-secondary-brown uppercase text-center mb-7">Mes groupes</h2>
-              {/* Search bar for main list */}
+      {/* Search bar for main list */}
       <div className="w-full mb-2">
         <input
           type="text"

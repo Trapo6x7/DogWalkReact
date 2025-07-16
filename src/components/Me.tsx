@@ -272,7 +272,7 @@ export function Me({ userData }: MeProps) {
         {/* Modale UserProfileModal centrée */}
 {isProfileModalOpen && (
   <section
-    className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+    className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm"
     role="dialog"
     aria-modal="true"
     aria-label="Modale profil utilisateur"
@@ -292,7 +292,7 @@ export function Me({ userData }: MeProps) {
         {/* Modale EditProfileForm centrée */}
         {isEditModalOpen && (
           <section
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center  backdrop-blur-sm"
             role="dialog"
             aria-modal="true"
             aria-labelledby="edit-profile-title"

@@ -132,13 +132,13 @@ export function AddDogs({ onCancel, onRefresh }: AddDogsProps) {
               Ajouter un chien
             </h2>
             <div className="flex flex-col gap-1">
-              <label htmlFor="dog-name" className="font-medium text-secondary-brown">Nom</label>
+              <label htmlFor="dog-name" className="font-medium text-secondary-brown">Nom du chien</label>
               <input
                 id="dog-name"
                 type="text"
+                placeholder="Nom du chien"
                 value={dogName}
                 onChange={(e) => setDogName(e.target.value)}
-                placeholder="Nom du chien"
                 className="w-full p-2 border border-[#7B4E2E]/30 rounded-lg outline-none bg-white/80 text-center"
                 required
                 aria-required="true"
@@ -158,9 +158,7 @@ export function AddDogs({ onCancel, onRefresh }: AddDogsProps) {
                 <option value="">Sélectionner une race</option>
                 {races && races.length > 0 ? (
                   races.map((race) => (
-                    <option key={race.id} value={race.id}>
-                      {race.name}
-                    </option>
+                    <option key={race.id} value={race.id}>{race.name}</option>
                   ))
                 ) : (
                   <option>Chargement...</option>

@@ -136,7 +136,6 @@ export function Register({ onGoToLogin, onRegisterSuccess, onShowTerms }: Regist
                 <input
                   id="register-birthdate"
                   type="date"
-                  placeholder="Date de naissance"
                   value={birthdate}
                   onChange={(e) => setBirthdate(e.target.value)}
                   className="w-full p-2 border border-brown/30 rounded-lg outline-none bg-white/80 text-center focus:ring-2 focus:ring-primary-green"
