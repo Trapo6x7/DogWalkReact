@@ -106,7 +106,6 @@ button {
   background-color: var(--secondary-green);
   cursor: pointer;
   transition: border-color 0.25s;
-  width: auto;
   text-decoration: none;
 }
 

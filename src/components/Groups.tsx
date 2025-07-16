@@ -125,7 +125,17 @@ export default function Groups() {
         walks: createdGroup.walks ?? [],
       };
 
-      setGroups([...groups, newGroup]);
+      // Add current user as creator locally so it shows up immediately
+      const enhancedGroup = {
+        ...newGroup,
+        groupRoles: [
+          ...(newGroup.groupRoles || []),
+          { id: -1, user: { id: userId }, role: 'CREATOR' }
+        ],
+      };
+      setGroups([...groups, enhancedGroup]);
+      // Refresh from backend to synchronize data
+      fetchGroups();
     } catch (error) {
       console.error(error);
       alert("Impossible de créer le groupe. Réessaie plus tard.");
@@ -257,16 +267,26 @@ const handleDeleteGroup = async (groupId: number) => {
           </article>
           <article className="w-full" aria-label="Liste des groupes">
             <GroupList
-              groups={groups.map((group) => ({
-                id: group.id,
-                name: group.name,
-                description: group.comment || "Pas de description",
-              }))}
+              groups={groups
+                .filter((group) =>
+                  Array.isArray(group.groupRoles) &&
+                  group.groupRoles.some(
+                    (role) =>
+                      ['CREATOR', 'MEMBER'].includes(role.role?.toUpperCase() || '') &&
+                      role.user?.id === user?.id
+                  )
+                )
+                .map((group) => ({
+                   id: group.id,
+                   name: group.name,
+                   description: group.comment || 'Pas de description',
+                 }))}
               onShowDetails={handleShowDetails}
+              onJoinGroup={handleJoinGroup}
             />
           </article>
         </section>
-        {selectedGroup && (
+        {selectedGroup && (isCreator || isAlreadyMember) && (
           <GroupDetailsModal
             group={selectedGroup}
             onClose={() => setSelectedGroup(null)}

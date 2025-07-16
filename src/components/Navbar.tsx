@@ -22,17 +22,19 @@ export function Navbar({ onLogout }: { onLogout: () => void }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
   return (
-    <header
-      className={`fixed left-0 z-40 transition-transform duration-300 flex flex-col items-center
-        ${isMobile ? "top-0 w-screen h-auto rounded-b-2xl" : "top-0 w-[110px] rounded-b-2xl h-auto py-2 bg-[#FBFFEE]"}
-      `}
+      <header
+      className={`fixed left-0 z-40 transition-transform duration-300 ${
+        isMobile
+          ? "flex flex-col items-center top-0 w-screen h-auto rounded-b-2xl"
+        : "flex flex-row items-center justify-end top-0 w-screen h-16 pt-4"
+      }`}
       role="banner"
       aria-label="Barre de navigation principale"
     >
-      {/* Desktop vertical menu */}
+      {/* Desktop menu */}
       {!isMobile && (
-        <nav className="flex flex-col items-center w-full justify-center pt-2" aria-label="Menu principal" role="navigation">
-          <ul className="flex flex-col items-center w-full gap-4 list-none p-0 m-0">
+        <nav className="flex flex-row items-center justify-around w-full" aria-label="Menu principal" role="navigation">
+          <ul className="flex flex-row items-center justify-center w-full gap-4 list-none p-0 m-0">
             <li>
               <a
                 onClick={() => {
@@ -46,7 +48,7 @@ export function Navbar({ onLogout }: { onLogout: () => void }) {
                 aria-label="Modifier le profil utilisateur"
                 onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { setShowEditProfile(!showEditProfile); setShowAddDogForm(false); setShowEditPassword(false); } }}
               >
-                <img src="/usericon2.png" alt="Modifier le profil" className="h-[44px] w-[44px]" />
+                <img src="/usericon2.png" alt="Modifier le profil" className="h-9 w-9" />
               </a>
             </li>
             <li>
@@ -62,7 +64,7 @@ export function Navbar({ onLogout }: { onLogout: () => void }) {
                 aria-label="Ajouter un chien"
                 onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { setShowAddDogForm(!showAddDogForm); setShowEditProfile(false); setShowEditPassword(false); } }}
               >
-                <img src="/dogicon2.png" alt="Ajouter un chien" className="h-[44px] w-[44px]" />
+                <img src="/dogicon2.png" alt="Ajouter un chien" className="h-9 w-9" />
               </a>
             </li>
             <li>
@@ -78,7 +80,7 @@ export function Navbar({ onLogout }: { onLogout: () => void }) {
                 aria-label="Modifier le mot de passe"
                 onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { setShowEditPassword(!showEditPassword); setShowEditProfile(false); setShowAddDogForm(false); } }}
               >
-                <img src="/paramdogwalk.png" alt="Modifier le mot de passe" className="h-[44px] w-[44px]" />
+                <img src="/paramdogwalk.png" alt="Modifier le mot de passe" className="h-9 w-9" />
               </a>
             </li>
             <li>
@@ -93,21 +95,19 @@ export function Navbar({ onLogout }: { onLogout: () => void }) {
                 aria-label="Déconnexion"
                 onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { logout(); onLogout(); } }}
               >
-                <img src="/logout2.png" alt="Déconnexion" className="h-[44px] w-[44px]" />
+                <img src="/logout2.png" alt="Déconnexion" className="h-9 w-9" />
               </a>
             </li>
-            <li aria-hidden="true" >
-              <div className="w-10 h-[2px] bg-[#7B4E2E] opacity-30 mx-auto rounded-full"></div>
-            </li>
-            <li>
+     
+            {/* <li>
               <a className="flex items-center border-none cursor-pointer mt-4 mb-6 bg-transparent pb-4">
                 <img
                   src="/logoronddogwalk2.png"
                   alt="Dogwalk logo"
-                  className="h-12 w-12"
+                  className="w-10"
                 />
               </a>
-            </li>
+            </li> */}
           </ul>
         </nav>
       )}
