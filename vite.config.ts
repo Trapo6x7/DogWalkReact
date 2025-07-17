@@ -11,5 +11,43 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'), // alias @ fait référence au dossier src
     },
   },
+  server: {
+    proxy: {
+      // Proxy API requests to Symfony backend
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path: string) => path.replace(/^\/api/, '/api'),
+      },
+      // Proxy EasyAdmin interface to Symfony backend
+      '/admin': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        secure: false,
+      },
+      // Proxy static assets for EasyAdmin
+      '/bundles': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/assets': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/img': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/_assets': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
 });
 
