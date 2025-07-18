@@ -158,6 +158,28 @@ const handleRejectRequest = async (
   }
 };
 
+// Utilitaire pour récupérer l'id utilisateur courant (localStorage 'user' ou JWT 'authToken')
+function getCurrentUserId(): { id?: string; username?: string } {
+  const userRaw = localStorage.getItem("user");
+  if (userRaw) {
+    try {
+      const parsed = JSON.parse(userRaw);
+      if (parsed && parsed.id) return { id: String(parsed.id) };
+    } catch {}
+  }
+  const token = localStorage.getItem("authToken");
+  if (token) {
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      if (payload.id || payload.user_id || payload.sub) {
+        return { id: String(payload.id || payload.user_id || payload.sub) };
+      }
+      if (payload.username) return { username: payload.username };
+    } catch {}
+  }
+  return {};
+}
+
 const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({
   group,
   onClose,
@@ -198,34 +220,20 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({
     }
   }, []);
 
-  // Utilitaire pour récupérer l'id utilisateur courant (localStorage 'user' ou JWT 'authToken')
-  function getCurrentUserId(): { id?: string; username?: string } {
-    const userRaw = localStorage.getItem("user");
-    //
-    if (userRaw) {
-      try {
-        const parsed = JSON.parse(userRaw);
-        //
-        if (parsed && parsed.id) return { id: String(parsed.id) };
-      } catch (e) {
-        //
-      }
-    }
-    const token = localStorage.getItem("authToken");
-    //
-    if (token) {
-      try {
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        //
-        if (payload.id || payload.user_id || payload.sub)
-          return { id: String(payload.id || payload.user_id || payload.sub) };
-        if (payload.username) return { username: payload.username };
-      } catch (e) {
-        //
-      }
-    }
-    return {};
-  }
+  // State for current user ID fetched from API
+  const [currentUserId, setCurrentUserId] = useState<number | undefined>(undefined);
+
+  // Fetch current user ID
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+    fetch(`${import.meta.env.VITE_API_URL}/api/me`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => res.json())
+      .then(data => setCurrentUserId(data.id))
+      .catch(console.error);
+  }, []);
 
   const [localGroupRequests, setLocalGroupRequests] = useState(
     group.groupRequests || []
@@ -233,6 +241,61 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({
   useEffect(() => {
     setLocalGroupRequests(group.groupRequests || []);
   }, [group.groupRequests]);
+
+  // State to store IDs of blocked users by current user
+  const [blockedUserIds, setBlockedUserIds] = useState<number[]>([]);
+
+  // Fetch block list when currentUserId is known
+  useEffect(() => {
+    if (!currentUserId) return;
+    const blockerIri = `/api/users/${currentUserId}`;
+    const url = `${import.meta.env.VITE_API_URL}/api/block_lists?blocker=${encodeURIComponent(blockerIri)}`;
+    console.log('DEBUG: requesting block_list URL', url);
+    const token = localStorage.getItem('authToken');
+    fetch(url, {
+      headers: { Authorization: token ? `Bearer ${token}` : '' }
+    })
+      .then(res => {
+        console.log('DEBUG: block_list fetch status', res.status, res.statusText);
+        return res.json();
+      })
+      .then(data => {
+        console.log('DEBUG: raw block_list response', data);
+        // Some responses use 'hydra:member', others use 'member'
+        const members = data['hydra:member'] || data['member'] || [];
+        const ids = members.map((entry: any) => {
+          const b = entry.blocked;
+          if (typeof b === 'string') return parseInt(b.split('/').pop() || '', 10);
+          if (b.id) return b.id;
+          if (b['@id']) return parseInt(b['@id'].split('/').pop() || '', 10);
+          return undefined;
+        }).filter((id: number|undefined): id is number => typeof id === 'number');
+        console.log('DEBUG: extracted blockedUserIds', ids);
+        setBlockedUserIds(ids);
+      })
+      .catch(error => console.error('DEBUG: block_list fetch error', error));
+  }, [currentUserId]);
+
+  // Helper to extract numeric user ID from role.user or object
+  const getRoleUserId = (user: any): number | undefined => {
+    if (!user) return undefined;
+    // Numeric id or string id
+    if (user.id !== undefined) {
+      const idNum = typeof user.id === 'number' ? user.id : parseInt(String(user.id), 10);
+      if (!isNaN(idNum)) return idNum;
+    }
+    // Fallback to user_id field
+    if (user.user_id !== undefined) {
+      const uid = typeof user.user_id === 'number' ? user.user_id : parseInt(String(user.user_id), 10);
+      if (!isNaN(uid)) return uid;
+    }
+    // Try JSON-LD @id
+    if (user['@id']) {
+      const match = String(user['@id']).match(/\/(\d+)(?:$|\?)/);
+      if (match) return parseInt(match[1], 10);
+    }
+    return undefined;
+  };
 
   return (
     <section
@@ -289,7 +352,14 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({
           </h3>
           <ul className="flex flex-col items-center gap-2">
             {/* Créateur */}
-            {localGroupRoles && localGroupRoles.filter((role: any) => role.role && role.role.toUpperCase() === 'CREATOR').map((role: any) => (
+            {localGroupRoles && localGroupRoles
+              .filter((role: any) => role.role && role.role.toUpperCase() === 'CREATOR')
+              .filter((role: any) => {
+                const uid = getRoleUserId(role.user);
+                console.log('DEBUG: filtering CREATOR role.user', role.user, 'uid', uid, 'blockedUserIds', blockedUserIds);
+                return uid === undefined || !blockedUserIds.includes(uid);
+              })
+              .map((role: any) => (
               <li key={role.id || role.user?.id || Math.random()} className="flex flex-row items-center gap-2 cursor-pointer hover:underline"
                   onClick={async () => {
                     if (role.user && role.user.id) {
@@ -316,7 +386,14 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({
               </li>
             ))}
             {/* Membres (hors créateur) */}
-            {localGroupRoles && localGroupRoles.filter((role: any) => role.role && role.role.toUpperCase() !== 'CREATOR').map((role: any) => (
+            {localGroupRoles && localGroupRoles
+              .filter((role: any) => role.role && role.role.toUpperCase() !== 'CREATOR')
+              .filter((role: any) => {
+                const uid = getRoleUserId(role.user);
+                console.log('DEBUG: filtering MEMBER role.user', role.user, 'uid', uid, 'blockedUserIds', blockedUserIds);
+                return uid === undefined || !blockedUserIds.includes(uid);
+              })
+              .map((role: any) => (
               <li key={role.id || role.user?.id || Math.random()} className="flex flex-row items-center gap-2 cursor-pointer hover:underline"
                   onClick={async () => {
                     if (role.user && role.user.id) {
@@ -382,7 +459,7 @@ const GroupDetailsModal: React.FC<GroupDetailsModalProps> = ({
                 if (req.status == 1 || req.status === true) {
                   return null;
                 }
-                const key = req.id ?? req["@id"] ?? Math.random();
+                const key = req.id ?? req["@id"] ?? Math.random;
                 return (
                   <li
                     key={key}

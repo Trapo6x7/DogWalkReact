@@ -36,11 +36,73 @@ function capitalizeFirstLetter(str?: string): string {
 }
 
 const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onEdit }) => {
-
+  // State to track if the viewed user is blocked by current user
+  const [isBlocked, setIsBlocked] = useState(false);
   // State to store fetched groupRoles details
   const [groupRolesDetails, setGroupRolesDetails] = useState<any[]>([]);
   // State to store fetched dog races
   const [dogRaces, setDogRaces] = useState<Record<string, string>>({});
+  // State to store current logged-in user ID fetched from API
+  const [currentUserId, setCurrentUserId] = useState<number | undefined>(undefined);
+  // Compute viewed user ID from property or JSON-LD '@id'
+  const viewedUserId: number | undefined = user.id ?? (() => {
+    const ldId = (user as any)['@id'];
+    if (typeof ldId === 'string') {
+      const match = ldId.match(/\/(\d+)(?:$|\?)/);
+      if (match) return parseInt(match[1], 10);
+    }
+    return undefined;
+  })();
+
+  // Check block status
+  useEffect(() => {
+    if (currentUserId && viewedUserId) {
+      const blockerIri = `/api/users/${currentUserId}`;
+      const blockedIri = `/api/users/${viewedUserId}`;
+      const token = localStorage.getItem('authToken');
+      fetch(
+        `${import.meta.env.VITE_API_URL}/api/block_lists?blocker=${encodeURIComponent(blockerIri)}&blocked=${encodeURIComponent(blockedIri)}`,
+        { headers: { Authorization: token ? `Bearer ${token}` : '' } }
+      )
+        .then(res => res.json())
+        .then(data => {
+          console.log('UserProfileModal: block list fetch data', data);
+          const members = data['hydra:member'] || [];
+          const found = (members as any[]).some(entry => {
+            // Extract blocker ID
+            let bId: number | undefined;
+            if (entry.blocker === '/api/me' || entry.blocker?.['@id'] === '/api/me') {
+              bId = currentUserId;
+            } else if (entry.blocker?.id) {
+              bId = entry.blocker.id;
+            } else if (entry.blocker?.['@id']) {
+              bId = parseInt(entry.blocker['@id'].split('/').pop(), 10);
+            }
+            // Extract blocked ID
+            let blockedId: number | undefined;
+            if (entry.blocked === '/api/me' || entry.blocked?.['@id'] === '/api/me') {
+              blockedId = currentUserId;
+            } else if (entry.blocked?.id) {
+              blockedId = entry.blocked.id;
+            } else if (entry.blocked?.['@id']) {
+              blockedId = parseInt(entry.blocked['@id'].split('/').pop(), 10);
+            }
+            return bId === currentUserId && blockedId === viewedUserId;
+          });
+          if (found) setIsBlocked(true);
+        })
+        .catch(error => console.error('Block list fetch error', error));
+    }
+  }, [currentUserId, viewedUserId]);
+
+  // Close modal if blocked
+  useEffect(() => {
+    if (isBlocked) {
+      alert('Ce profil est inaccessible');
+      onClose();
+    }
+  }, [isBlocked, onClose]);
+
   // Fetch dog races if needed
   useEffect(() => {
     async function fetchDogRaces() {
@@ -100,6 +162,78 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onEd
     }
     fetchGroupRoles();
   }, [user.groupRoles]);
+
+  // Fetch current user ID from /api/me endpoint
+  useEffect(() => {
+    async function fetchCurrentUser() {
+      const token = localStorage.getItem('authToken');
+      if (!token) return;
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/me`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setCurrentUserId(data.id);
+        }
+      } catch (error) {
+        console.error('Erreur lors de la récupération de l\'utilisateur courant', error);
+      }
+    }
+    fetchCurrentUser();
+  }, []);
+
+  // Handler to block a user
+  const handleBlockUser = async () => {
+    console.log('UserProfileModal: handleBlockUser', { currentUserId, viewedUserId });
+    const token = localStorage.getItem('authToken');
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/block_lists`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/ld+json',
+          Authorization: token ? `Bearer ${token}` : ''
+        },
+        body: JSON.stringify({
+          blocker: `/api/users/${currentUserId}`,
+          blocked: `/api/users/${viewedUserId}`
+        }),
+      });
+      if (!res.ok) throw new Error('Impossible de bloquer');
+      alert('Utilisateur bloqué');
+    } catch (error) {
+      console.error(error);
+      alert('Erreur lors du blocage');
+    }
+  };
+
+  // Handler to report a user
+  const handleReportUser = async () => {
+    console.log('UserProfileModal: handleReportUser', { currentUserId, reportedUserId: viewedUserId });
+    const token = localStorage.getItem('authToken');
+    const url = `${import.meta.env.VITE_API_URL}/api/reports`;
+   const payload = { reporter: `/api/users/${currentUserId}`, reported: `/api/users/${viewedUserId}` };
+    console.log('UserProfileModal: Sending POST to', url, 'with', payload);
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/ld+json',
+          Authorization: token ? `Bearer ${token}` : ''
+        },
+        body: JSON.stringify(payload),
+        });
+      if (!res.ok) throw new Error('Impossible de signaler');
+      alert('Utilisateur signalé');
+    } catch (error) {
+      console.error(error);
+      alert('Erreur lors du signalement');
+    }
+  };
+
 
   // Helper to render arrays or objects nicely
   const renderValue = (value: any, key?: string) => {
@@ -294,6 +428,26 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onEd
           })}
         </section>
         <footer className="flex flex-col items-center gap-2 mt-4">
+          {currentUserId !== undefined && viewedUserId !== undefined && viewedUserId !== currentUserId && (
+            <>
+              <button
+                onClick={(e) => { e.stopPropagation(); handleBlockUser(); }}
+                className="bg-red-500 text-white font-medium rounded-md w-full py-2 hover:bg-red-600 transition"
+                type="button"
+                aria-label="Bloquer l'utilisateur"
+              >
+                Bloquer cet utilisateur
+              </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); handleReportUser(); }}
+                className="bg-yellow-400 text-white font-medium rounded-md w-full py-2 hover:bg-yellow-500 transition"
+                type="button"
+                aria-label="Signaler l'utilisateur"
+              >
+                Signaler cet utilisateur
+              </button>
+            </>
+          )}
           {onEdit && (
             <button
               className="bg-[var(--primary-green)] text-[var(--primary-brown)] font-medium rounded-md w-full py-2 hover:bg-[#B7D336] transition"
