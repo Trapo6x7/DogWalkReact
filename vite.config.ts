@@ -20,13 +20,13 @@ export default defineConfig({
         secure: false,
         rewrite: (path: string) => path.replace(/^\/api/, '/api'),
       },
-      // Proxy EasyAdmin interface to Symfony backend
+      // Proxy EasyAdmin
       '/admin': {
         target: 'http://localhost:8000',
         changeOrigin: true,
         secure: false,
       },
-      // Proxy static assets for EasyAdmin
+      // Proxy Assets EasyAdmin
       '/bundles': {
         target: 'http://localhost:8000',
         changeOrigin: true,
